@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.manage.dao.TItovMenuClassMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.manage.dto.TItovMenuClass" >
+    <id column="class_id" property="classId" jdbcType="INTEGER" />
+    <result column="class_name" property="className" jdbcType="VARCHAR" />
+    <result column="class_parentid" property="classParentid" jdbcType="INTEGER" />
+    <result column="class_url" property="classUrl" jdbcType="VARCHAR" />
+    <result column="class_levels" property="classLevels" jdbcType="INTEGER" />
+    <result column="class_note" property="classNote" jdbcType="VARCHAR" />
+    <result column="class_taxis" property="classTaxis" jdbcType="INTEGER" />
+    <result column="target" property="target" jdbcType="VARCHAR" />
+    <result column="rel" property="rel" jdbcType="VARCHAR" />
+    <result column="leaf" property="leaf" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    class_id,class_name,class_parentid,class_url,class_levels,class_note,class_taxis,target,rel,leaf
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.manage.dto.TItovMenuClass">
+    insert into t_itov_menu_class (
+        class_id,class_name,class_parentid,class_url,class_levels,class_note,class_taxis,target,rel
+    values (
+        #{classId,jdbcType=INTEGER},#{className,jdbcType=VARCHAR},#{classParentid,jdbcType=INTEGER},
+        #{classUrl,jdbcType=VARCHAR},#{classLevels,jdbcType=INTEGER},#{classNote,jdbcType=VARCHAR},
+        #{classTaxis,jdbcType=INTEGER},#{target,jdbcType=VARCHAR},#{rel,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.manage.dto.TItovMenuClass">
+    update t_itov_menu_class
+    <set>
+      <if test="classId != null">
+        class_id = #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="className != null">
+        class_name = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="classParentid != null">
+        class_parentid = #{classParentid,jdbcType=INTEGER},
+      </if>
+      <if test="classUrl != null">
+        class_url = #{classUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="classLevels != null">
+        class_levels = #{classLevels,jdbcType=INTEGER},
+      </if>
+      <if test="classNote != null">
+        class_note = #{classNote,jdbcType=VARCHAR},
+      </if>
+      <if test="classTaxis != null">
+        class_taxis = #{classTaxis,jdbcType=INTEGER},
+      </if>
+      <if test="target != null">
+        target = #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="rel != null">
+        rel = #{rel,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where class_id = #{classId,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_itov_menu_class
+     where class_id = #{classId,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select 
+    <include refid="Base_Column_List" />
+      from t_itov_menu_class
+     where class_id = #{classId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_itov_menu_class
+  </select>
+  
+  
+  <select id="selectMenuFirst" resultMap="BaseResultMap" parameterType="com.tmount.db.manage.dto.TItovMenuClass">
+    SELECT    menu.*  FROM  t_itov_menu_assgn_rule rule
+    inner join t_itov_menu_class  menu on rule.Class_ID=menu.Class_ID
+    where Class_Levels=#{classLevels,jdbcType=INTEGER} and rule.role_id=#{role_id,jdbcType=INTEGER}  order by Class_Levels, Class_Taxis
+  </select>
+  
+    <select id="selectMenuSecond" resultMap="BaseResultMap" parameterType="com.tmount.db.manage.dto.TItovMenuClass">
+    SELECT    menu.*  FROM  t_itov_menu_assgn_rule rule
+    inner join t_itov_menu_class  menu on rule.Class_ID=menu.Class_ID
+    where Class_ParentID=#{classParentid,jdbcType=INTEGER} and rule.role_id=#{role_id,jdbcType=INTEGER} order by Class_Levels, Class_Taxis
+  </select>
+  
+  
+  
+   <!-- 查询一级菜单 -->
+   <select id="selectMenuClassFirst" resultMap="BaseResultMap" parameterType="com.tmount.db.manage.dto.TItovMenuClass">
+    select * from t_itov_menu_class 
+   </select>
+   <!-- 查询二、三级菜单 -->
+   <select id="selectMenuClassSecond" resultMap="BaseResultMap" parameterType="com.tmount.db.manage.dto.TItovMenuClass">
+    select * from t_itov_menu_class where Class_ParentID=#{classParentid,jdbcType=INTEGER}
+   </select>
+</mapper>

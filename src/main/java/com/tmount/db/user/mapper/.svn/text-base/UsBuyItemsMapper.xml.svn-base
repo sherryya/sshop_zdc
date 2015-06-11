@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.user.dao.UsBuyItemsMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.user.dto.UsBuyItems" >
+    <id column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <id column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="BuyItemsResultMap" type="com.tmount.db.user.vo.UsUserBuyItemsView" >
+    <id column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <id column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="small_pic" property="smallPic" jdbcType="BIGINT"  />
+    <result column="items_name" property="itemsName" jdbcType="VARCHAR"  />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR"  />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    items_id, shop_id, user_id, discount, create_time
+  </sql>
+  <insert id="insertFromOrderDetail" parameterType="java.util.Map">
+    insert into us_buy_items (items_id, shop_id, user_id, 
+      discount, create_time)
+    select b.items_id, a.shop_id, a.user_id, b.price, b.op_time 
+      from re_user_order a, re_user_order_detail b
+     where a.order_no = b.order_no
+       and a.order_no=#{orderNo,jdbcType=BIGINT}
+       and not exists (select 1
+                         from us_buy_items c, re_user_order_detail d, re_user_order e
+                        where e.order_no=#{orderNo,jdbcType=BIGINT}
+                          and c.user_id = e.user_id
+                          and c.shop_id = e.shop_id
+                          and d.order_no = e.order_no
+                          and c.items_id = d.items_id)
+  </insert>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.user.dto.UsBuyItemsKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from us_buy_items
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <select id="selectCountBySelective" resultType="java.lang.Integer" parameterType="com.tmount.db.user.vo.UsBuyItemsInput" >
+    select 
+    	count(1)
+    from us_buy_items a,gd_items_info b
+    where a.shop_id = b.shop_id and a.items_id  = b.items_id      
+      <if test="itemsId != null" >
+      and a.items_id = #{itemsId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null" >
+      and a.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="userId != null" >
+      and a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+  </select>
+   <select id="selectBySelective" resultMap="BuyItemsResultMap" parameterType="com.tmount.db.user.vo.UsBuyItemsInput" >
+    select 
+    	a.user_id,a.shop_id,a.items_id, b.small_pic ,a.discount,a.create_time,b.items_name
+    from us_buy_items a,gd_items_info b
+    where a.shop_id = b.shop_id and a.items_id  = b.items_id      
+      <if test="itemsId != null" >
+      and a.items_id = #{itemsId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null" >
+      and a.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="userId != null" >
+      and a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      order by a.create_time desc
+      <if test="pageSize != null" >
+        LIMIT #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+      </if>   
+  </select>
+  <select id="selectBuyShopBySelective" resultMap="BuyItemsResultMap" parameterType="com.tmount.db.user.dto.UsBuyItemsKey" >
+    select 
+    	distinct b.shop_id,b.shop_name ,b.scan_pic
+    from us_buy_items a, gd_shop_info b
+    where a.shop_id = b.shop_id      
+      <if test="itemsId != null" >
+      and a.items_id = #{itemsId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null" >
+      and a.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="userId != null" >
+      and a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+     order by a.create_time desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.user.dto.UsBuyItemsKey" >
+    delete from us_buy_items
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.user.dto.UsBuyItems" >
+    insert into us_buy_items (items_id, shop_id, user_id, 
+      discount, create_time)
+    values (#{itemsId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{discount,jdbcType=DOUBLE}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.user.dto.UsBuyItems" >
+    insert into us_buy_items
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemsId != null" >
+        items_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemsId != null" >
+        #{itemsId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.user.dto.UsBuyItems" >
+    update us_buy_items
+    <set >
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.user.dto.UsBuyItems" >
+    update us_buy_items
+    set discount = #{discount,jdbcType=DOUBLE},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+</mapper>

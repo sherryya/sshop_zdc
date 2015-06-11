@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.message.dao.TItovMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.message.dto.TItovMessage" >
+    <result column="account_id" property="accountId" jdbcType="BIGINT" />
+    <result column="message_code" property="messageCode" jdbcType="VARCHAR" />
+    <result column="message_time" property="messageTime" jdbcType="TIMESTAMP" />
+    <result column="message_content" property="messageContent" jdbcType="VARCHAR" />
+    <result column="is_new" property="isNew" jdbcType="VARCHAR" />
+    <result column="message_option" property="messageOption" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    account_id,message_code,message_time,message_content,is_new,message_option
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.message.dto.TItovMessage">
+    insert into t_itov_message (
+        account_id,message_code,message_time,message_content,is_new,message_option)
+    values (
+        #{accountId,jdbcType=BIGINT},#{messageCode,jdbcType=VARCHAR},#{messageTime,jdbcType=TIMESTAMP},
+        #{messageContent,jdbcType=VARCHAR},#{isNew,jdbcType=VARCHAR},#{messageOption,jdbcType=VARCHAR}
+    )
+  </insert>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_itov_message
+    </select>
+    <select id="getNewMessage" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    SELECT  aa.count_sum as message_account,account_id,message_code,message_content,message_time,id FROM (
+ 		SELECT COUNT(*) AS count_sum,message_option
+ 		FROM t_itov_message  WHERE is_new='0' AND account_id =#{account_id,jdbcType=BIGINT}
+ 		GROUP BY message_option) aa,t_itov_message mes
+			 WHERE aa.message_option = mes.`message_option`
+			 AND   mes.is_new='0' AND mes.account_id = #{account_id,jdbcType=BIGINT}
+  </select>
+  <update id="updateIsNew" parameterType="java.lang.Long">
+    update t_itov_message
+    set is_new = '1'
+     where id=#{id,jdbcType=BIGINT}
+  </update>
+
+    <select id="getMessage" resultMap="BaseResultMap" parameterType="com.tmount.db.message.dto.TItovMessage" >
+    SELECT  aa.count_sum as message_account,account_id,message_code,message_content,message_time,id,is_new FROM (
+ 		SELECT COUNT(*) AS count_sum,message_option
+ 		FROM t_itov_message  WHERE account_id =#{accountId,jdbcType=BIGINT}
+ 		AND DATE_FORMAT(message_time,'%Y-%m-%d')=#{start_time,jdbcType=VARCHAR}
+ 		GROUP BY message_option) aa,t_itov_message mes
+			 WHERE aa.message_option = mes.`message_option`
+			 AND mes.account_id = #{accountId,jdbcType=BIGINT}
+			 AND DATE_FORMAT(message_time,'%Y-%m-%d')=#{start_time,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

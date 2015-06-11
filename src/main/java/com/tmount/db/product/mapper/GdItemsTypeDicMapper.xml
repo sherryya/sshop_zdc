@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdItemsTypeDicMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdItemsTypeDic" >
+    <id column="items_type" property="itemsType" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="orders" property="orders" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="level_no" property="levelNo" jdbcType="INTEGER" />
+    <result column="show_type" property="showType" jdbcType="INTEGER" />
+    <result column="data_type" property="dataType" jdbcType="INTEGER" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="type_exp" property="typeExp" jdbcType="VARCHAR" />
+    <result column="type_desc" property="typeDesc" jdbcType="VARCHAR" />
+    <result column="small_pic" property="smallPic" jdbcType="BIGINT" />
+    <result column="big_pic" property="bigPic" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="update_no" property="updateNo" jdbcType="INTEGER" />
+    <result column="items_count" property="itemsCount" jdbcType="INTEGER" />
+    <result column="items_tag" property="itemsTag" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ExtendResultMap" type="com.tmount.db.product.vo.GdItemstypeDicInfo" >
+    <id column="items_type" property="itemsType" jdbcType="INTEGER" />
+    <result column="orders" property="orders" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="level_no" property="levelNo" jdbcType="INTEGER" />
+    <result column="show_type" property="showType" jdbcType="INTEGER" />
+    <result column="data_type" property="dataType" jdbcType="INTEGER" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="type_desc" property="typeDesc" jdbcType="VARCHAR" />
+    <result column="small_pic" property="smallPic" jdbcType="BIGINT" />
+    <result column="big_pic" property="bigPic" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    items_type, company_id, orders, parent_id, level_no, show_type, data_type, type_name, 
+    type_exp, type_desc, small_pic, big_pic, update_time, state, update_no, items_count, 
+    items_tag
+  </sql>
+  <sql id="Extend_Column_List" >
+    items_type, orders, parent_id, level_no, show_type, data_type, type_name, 
+    type_desc, small_pic, big_pic
+	</sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_items_type_dic
+    where items_type = #{itemsType,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectItemsList" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.GdItemsTypeDic" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_items_type_dic
+    where company_id = #{companyId}
+      <if test="dataType != null" >
+        and data_type = #{dataType}
+      </if>    
+      <if test="levelNo != null" >
+        and level_no &lt;= #{levelNo}
+      </if>
+      <if test="typeName != null" >
+        and type_name = #{typeName,jdbcType=VARCHAR}
+      </if>
+    order by parent_id, orders
+  </select>
+
+  <update id="addItemsCount" parameterType="java.util.Map">
+    update gd_items_type_dic
+       set items_count = items_count + #{addCount,jdbcType=INTEGER}
+    <where>
+      <if test="itemsType != null" >
+        items_type in (select items_type from gd_items_type_flat where child_items = #{itemsType,jdbcType=INTEGER})
+      </if>
+      <if test="itemsId != null" >
+        items_type in (select items_type from gd_items_type_flat where child_items in (select items_type from gd_itemstype_rel where items_id = #{itemsId,jdbcType=BIGINT}))
+      </if>
+    </where>
+  </update>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from gd_items_type_dic
+    where items_type = #{itemsType,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.GdItemsTypeDic" >
+    insert into gd_items_type_dic (items_type, company_id, orders, 
+      parent_id, level_no, show_type, 
+      data_type, type_name, type_exp, 
+      type_desc, small_pic, big_pic, 
+      update_time, state, update_no, 
+      items_count, items_tag)
+    values (#{itemsType,jdbcType=INTEGER}, #{companyId,jdbcType=INTEGER}, #{orders,jdbcType=INTEGER}, 
+      #{parentId,jdbcType=INTEGER}, #{levelNo,jdbcType=INTEGER}, #{showType,jdbcType=INTEGER}, 
+      #{dataType,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR}, #{typeExp,jdbcType=VARCHAR}, 
+      #{typeDesc,jdbcType=VARCHAR}, #{smallPic,jdbcType=BIGINT}, #{bigPic,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{state,jdbcType=CHAR}, #{updateNo,jdbcType=INTEGER}, 
+      #{itemsCount,jdbcType=INTEGER}, #{itemsTag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.GdItemsTypeDic" >
+    insert into gd_items_type_dic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemsType != null" >
+        items_type,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="orders != null" >
+        orders,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="levelNo != null" >
+        level_no,
+      </if>
+      <if test="showType != null" >
+        show_type,
+      </if>
+      <if test="dataType != null" >
+        data_type,
+      </if>
+      <if test="typeName != null" >
+        type_name,
+      </if>
+      <if test="typeExp != null" >
+        type_exp,
+      </if>
+      <if test="typeDesc != null" >
+        type_desc,
+      </if>
+      <if test="smallPic != null" >
+        small_pic,
+      </if>
+      <if test="bigPic != null" >
+        big_pic,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="updateNo != null" >
+        update_no,
+      </if>
+      <if test="itemsCount != null" >
+        items_count,
+      </if>
+      <if test="itemsTag != null" >
+        items_tag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemsType != null" >
+        #{itemsType,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="orders != null" >
+        #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="levelNo != null" >
+        #{levelNo,jdbcType=INTEGER},
+      </if>
+      <if test="showType != null" >
+        #{showType,jdbcType=INTEGER},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeExp != null" >
+        #{typeExp,jdbcType=VARCHAR},
+      </if>
+      <if test="typeDesc != null" >
+        #{typeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="smallPic != null" >
+        #{smallPic,jdbcType=BIGINT},
+      </if>
+      <if test="bigPic != null" >
+        #{bigPic,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="updateNo != null" >
+        #{updateNo,jdbcType=INTEGER},
+      </if>
+      <if test="itemsCount != null" >
+        #{itemsCount,jdbcType=INTEGER},
+      </if>
+      <if test="itemsTag != null" >
+        #{itemsTag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.GdItemsTypeDic" >
+    update gd_items_type_dic
+    <set >
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="orders != null" >
+        orders = #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="levelNo != null" >
+        level_no = #{levelNo,jdbcType=INTEGER},
+      </if>
+      <if test="showType != null" >
+        show_type = #{showType,jdbcType=INTEGER},
+      </if>
+      <if test="dataType != null" >
+        data_type = #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null" >
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeExp != null" >
+        type_exp = #{typeExp,jdbcType=VARCHAR},
+      </if>
+      <if test="typeDesc != null" >
+        type_desc = #{typeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="smallPic != null" >
+        small_pic = #{smallPic,jdbcType=BIGINT},
+      </if>
+      <if test="bigPic != null" >
+        big_pic = #{bigPic,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="updateNo != null" >
+        update_no = #{updateNo,jdbcType=INTEGER},
+      </if>
+      <if test="itemsCount != null" >
+        items_count = #{itemsCount,jdbcType=INTEGER},
+      </if>
+      <if test="itemsTag != null" >
+        items_tag = #{itemsTag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where items_type = #{itemsType,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.GdItemsTypeDic" >
+    update gd_items_type_dic
+    set company_id = #{companyId,jdbcType=INTEGER},
+      orders = #{orders,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      level_no = #{levelNo,jdbcType=INTEGER},
+      show_type = #{showType,jdbcType=INTEGER},
+      data_type = #{dataType,jdbcType=INTEGER},
+      type_name = #{typeName,jdbcType=VARCHAR},
+      type_exp = #{typeExp,jdbcType=VARCHAR},
+      type_desc = #{typeDesc,jdbcType=VARCHAR},
+      small_pic = #{smallPic,jdbcType=BIGINT},
+      big_pic = #{bigPic,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=CHAR},
+      update_no = #{updateNo,jdbcType=INTEGER},
+      items_count = #{itemsCount,jdbcType=INTEGER},
+      items_tag = #{itemsTag,jdbcType=VARCHAR}
+    where items_type = #{itemsType,jdbcType=INTEGER}
+  </update>
+  <select id="selectByItemIdList" resultMap="ExtendResultMap" parameterType="com.tmount.db.product.vo.GdItemListInfo" >
+    select
+    <include refid="Extend_Column_List" />
+    from gd_items_type_dic 
+    where items_type in 
+    (
+	    select 
+	    distinct(items_type)
+	    from gd_items_type_flat
+	    where data_type=10 and child_items in
+	    (
+		    select items_type 
+		    from gd_itemstype_rel
+		    where items_id in
+			<foreach item="gdItemList" index="index" collection="list" open="("
+			separator="," close=")">
+			#{gdItemList.itemsId,jdbcType=BIGINT}
+			</foreach>
+		)
+	) order by parent_id, orders
+  </select>
+
+  <select id="selectAllItemsTypeList" resultMap="ExtendResultMap" >
+    select
+    <include refid="Extend_Column_List" />
+    from gd_items_type_dic 
+    where data_type=10 and items_type in 
+    (
+	    select 
+	    distinct(child_items)
+	    from gd_items_type_flat
+	) order by parent_id, orders
+  </select>
+  <select id="selectItemTypeShowCaseOther" resultMap="ExtendResultMap" >
+    SELECT
+	  items_type,
+	  type_name
+	FROM gd_items_type_dic
+	WHERE data_type = '10'
+	    AND parent_id = '-1'
+	    AND items_type 
+	    NOT IN
+	    (SELECT
+	     items_type
+	     FROM ad_showcase_dict)
+  </select>  
+  <select id="selectItemTypeShowCaseOtherCount" resultType="java.lang.Integer" >
+    SELECT
+	  count(1)
+	FROM gd_items_type_dic
+	WHERE data_type = '10'
+	    AND parent_id = '-1'
+	    AND items_type 
+	    NOT IN
+	    (SELECT
+	     items_type
+	     FROM ad_showcase_dict)
+  </select>    
+  <select id="selectItemTypeShowCaseALLCount" resultType="java.lang.Integer" >
+    SELECT
+	  count(1)
+	FROM gd_items_type_dic
+	WHERE data_type = '10'
+	    AND parent_id = '-1'
+  </select>  
+  <select id="selectItemTypeShowCaseALL" resultMap="ExtendResultMap" >
+    SELECT
+	  items_type,
+	  type_name
+	FROM gd_items_type_dic
+	WHERE data_type = '10'
+	    AND parent_id = '-1'
+  </select>   
+</mapper>

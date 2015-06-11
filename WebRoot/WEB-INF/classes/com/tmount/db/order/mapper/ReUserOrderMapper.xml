@@ -1,0 +1,704 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.ReUserOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.ReUserOrder" >
+    <id column="order_no" property="orderNo" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="login_accept" property="loginAccept" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="take_mode" property="takeMode" jdbcType="INTEGER" />
+    <result column="order_mode" property="orderMode" jdbcType="INTEGER" />
+    <result column="pay_way_id" property="payWayId" jdbcType="INTEGER" />
+    <result column="acount" property="acount" jdbcType="INTEGER" />
+    <result column="order_valid" property="orderValid" jdbcType="CHAR" />
+    <result column="order_end" property="orderEnd" jdbcType="CHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="fee_date" property="feeDate" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="secret_buy" property="secretBuy" jdbcType="INTEGER" />
+    <result column="activity" property="activity" jdbcType="CHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="final_pay_status" property="finalPayStatus" jdbcType="CHAR" />
+    <result column="pay_status" property="payStatus" jdbcType="CHAR" />
+    <result column="freight_fee" property="freightFee" jdbcType="DOUBLE" />
+    <result column="order_money" property="orderMoney" jdbcType="DOUBLE" />
+    <result column="pay_money" property="payMoney" jdbcType="DOUBLE" />
+    <result column="user_level" property="userLevel" jdbcType="INTEGER" />
+    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_no" property="updateNo" jdbcType="BIGINT" />
+    <result column="favour_fee" property="favourFee" jdbcType="DOUBLE" />
+  </resultMap>
+  <resultMap id="OrderStateStatMap" type="com.tmount.db.order.vo.OrderStateStat" >
+    <result column="state" property="state" jdbcType="BIGINT" />
+    <result column="state_name" property="stateName" jdbcType="VARCHAR" />
+    <result column="acount" property="acount" jdbcType="BIGINT" />
+    <result column="user_state_name" property="userStateName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_no, user_id, login_accept, shop_id, take_mode, order_mode, pay_way_id, acount, 
+    order_valid, order_end, state, create_date, fee_date, end_time, secret_buy, activity, 
+    price, final_pay_status, pay_status, freight_fee, order_money, pay_money, user_level, 
+    order_time, update_time, update_no,favour_fee
+  </sql>
+  <select id="selectorderStateStat" resultMap="OrderStateStatMap" parameterType="java.lang.Long" >
+    select 
+    a.state, b.state_name, b.user_state_name, count(1) acount
+    from re_user_order a, re_state_dic b
+    where a.user_id = #{userId,jdbcType=BIGINT}
+      and a.state = b.order_state
+    group by a.state, b.state_name,b.user_state_name
+    order by a.state
+  </select>
+  <select id="selectBySelective" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_user_order
+    <where>
+    <if test="userId != null">
+     and user_id = #{userId,jdbcType=INTEGER}
+    </if>
+    <if test="state != null">
+     and state = #{state,jdbcType=INTEGER}
+    </if>
+    <if test="orderValid != null">
+     and order_valid = #{orderValid,jdbcType=INTEGER}
+    </if>
+    <if test="orderEnd != null">
+     and order_end = #{orderEnd,jdbcType=INTEGER}
+    </if>
+    <if test="payStatus != null">
+     and pay_status = #{payStatus,jdbcType=CHAR}
+    </if>
+    <if test="endUpdateTime != null">
+         AND update_time &lt;= #{endUpdateTime,jdbcType=TIMESTAMP}
+    </if>
+    </where>
+    order by create_date desc
+    <if test="start != null">
+    limit #{start},#{end}
+    </if>
+  </select>
+  <select id="selectBySelectiveCount"  resultType="int" parameterType="java.util.Map">
+    select 
+    count(1)
+    from re_user_order
+    <where>
+    <if test="userId != null">
+     and user_id = #{userId,jdbcType=INTEGER}
+    </if>
+    <if test="state != null">
+     and state = #{state,jdbcType=INTEGER}
+    </if>
+    <if test="orderValid != null">
+     and order_valid = #{orderValid,jdbcType=INTEGER}
+    </if>
+    <if test="orderEnd != null">
+     and order_end = #{orderEnd,jdbcType=INTEGER}
+    </if>
+    <if test="payStatus != null">
+     and pay_status = #{payStatus,jdbcType=CHAR}
+    </if>
+    <if test="endUpdateTime != null">
+         AND update_time &lt;= #{endUpdateTime,jdbcType=TIMESTAMP}
+    </if>
+    </where>
+  </select>
+  <select id="selectUserOrderBySelective" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_user_order
+    where order_no in (select order_no from re_comment_log)
+    <if test="userId != null">
+     and user_id = #{userId,jdbcType=INTEGER}
+    </if>
+    <if test="state != null">
+     and state = #{state,jdbcType=INTEGER}
+    </if>
+    <if test="orderValid != null">
+     and order_valid = #{orderValid,jdbcType=INTEGER}
+    </if>
+    <if test="orderEnd != null">
+     and order_end = #{orderEnd,jdbcType=INTEGER}
+    </if>
+    <if test="payStatus != null">
+     and pay_status = #{payStatus,jdbcType=CHAR}
+    </if>
+    <if test="endUpdateTime != null">
+         AND update_time &lt;= #{endUpdateTime,jdbcType=TIMESTAMP}
+    </if>
+    order by create_date desc
+    <if test="start != null">
+    limit #{start},#{end}
+    </if>
+  </select>
+  <select id="selectUserOrderBySelectiveCount"  resultType="int" parameterType="java.util.Map">
+    select 
+    count(1)
+    from re_user_order
+    where order_no in (select order_no from re_comment_log)
+    <if test="userId != null">
+     and user_id = #{userId,jdbcType=INTEGER}
+    </if>
+    <if test="state != null">
+     and state = #{state,jdbcType=INTEGER}
+    </if>
+    <if test="orderValid != null">
+     and order_valid = #{orderValid,jdbcType=INTEGER}
+    </if>
+    <if test="orderEnd != null">
+     and order_end = #{orderEnd,jdbcType=INTEGER}
+    </if>
+    <if test="payStatus != null">
+     and pay_status = #{payStatus,jdbcType=CHAR}
+    </if>
+    <if test="endUpdateTime != null">
+         AND update_time &lt;= #{endUpdateTime,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    SELECT 
+    a.order_no, user_id, login_accept, shop_id, take_mode, order_mode, pay_way_id, acount, 
+    order_valid, order_end, state, create_date, fee_date, end_time, secret_buy, activity, 
+    price, final_pay_status, pay_status, freight_fee, order_money, pay_money, user_level, 
+    order_time, update_time, update_no,favour_fee,confirm_code AS confirmCode
+    FROM re_user_order a, re_user_order_add b
+    WHERE a.order_no = b.order_no
+    and a.order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+  <select id="selectOrderList" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select 
+    a.order_no, a.user_id, a.login_accept, a.shop_id, a.take_mode, a.order_mode, a.pay_way_id, a.acount, 
+    a.order_valid, a.order_end, a.state, a.create_date, a.fee_date, a.end_time, a.secret_buy, a.activity, 
+    a.price, a.final_pay_status, a.pay_status, a.freight_fee, a.order_money, a.pay_money, a.user_level, 
+    a.order_time, a.update_time, a.update_no,a.favour_fee,
+     b.company_name as companyName ,c.shop_name as shopName,d.user_account AS userAccount
+    from re_user_order a,gd_company_dic b,gd_shop_info c,us_user_info d
+    where b.company_id=c.company_id AND a.shop_id=c.shop_id AND a.user_id = d.user_id
+    <trim prefixOverrides="">  
+    	<choose>  
+            <when test="shopId != null">  
+                AND a.shop_id = #{shopId} 
+            </when> 
+        </choose> 
+        <choose>  
+            <when test="companyId != null">  
+                AND c.company_id = #{companyId} 
+            </when> 
+        </choose>
+        <choose>  
+            <when test="orderNo != null">  
+                AND a.order_no = #{orderNo} 
+            </when> 
+        </choose> 
+        <choose> 
+            <when test="payStatus != null">  
+                AND a.pay_staus = #{payStatus}  
+            </when>
+        </choose> 
+        <choose> 
+            <when test="orderStatus != null">  
+                AND a.state = #{orderStatus}  
+            </when>
+        </choose> 
+        <choose> 
+            <when test="userId != null">  
+                AND a.user_id = #{userId}  
+            </when>
+        </choose> 
+        <choose> 
+            <when test="orderStartTime != null">  
+            	
+                AND a.order_time &gt;= str_to_date(#{orderStartTime}, '%Y-%m-%d %h:%i:%s')
+            </when>
+        </choose> 
+        <choose> 
+            <when test="orderEndTime != null">  
+                 AND a.order_time &lt;= str_to_date(#{orderEndTime}, '%Y-%m-%d %h:%i:%s')
+            </when>
+        </choose> 
+    </trim>  
+    order by a.order_no desc
+  </select>
+  <select id="selectOrderListCount"  resultType="int" parameterType="java.util.Map">
+    select 
+    count(1)
+     from re_user_order a,gd_company_dic b,gd_shop_info c
+    where b.company_id=c.company_id AND a.shop_id=c.shop_id
+    <trim prefixOverrides="">  
+    	<choose>  
+            <when test="shopId != null">  
+                AND a.shop_id = #{shopId} 
+            </when> 
+        </choose> 
+        <choose>  
+            <when test="companyId != null">  
+                AND c.company_id = #{companyId} 
+            </when> 
+        </choose>
+        <choose>  
+            <when test="orderNo != null">  
+                AND a.order_no = #{orderNo} 
+            </when> 
+        </choose> 
+        <choose> 
+            <when test="payStatus != null">  
+                AND a.pay_staus = #{payStatus}  
+            </when>
+        </choose> 
+        <choose> 
+            <when test="orderStatus != null">  
+                AND a.state = #{orderStatus}  
+            </when>
+        </choose> 
+        <choose> 
+            <when test="userId != null">  
+                AND a.user_id = #{userId}  
+            </when>
+        </choose> 
+        <choose> 
+            <when test="orderStartTime != null">  
+            	
+                AND a.order_time &gt;= str_to_date(#{orderStartTime}, '%Y-%m-%d %h:%i:%s')
+            </when>
+        </choose> 
+        <choose> 
+            <when test="orderEndTime != null">  
+                 AND a.order_time &lt;= str_to_date(#{orderEndTime}, '%Y-%m-%d %h:%i:%s')
+            </when>
+        </choose> 
+    </trim>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from re_user_order
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </delete>
+   <update id="updateOrderStatus" parameterType="com.tmount.db.order.dto.ReUserOrder" >
+   update re_user_order set state = #{state,jdbcType=INTEGER},update_no = #{updateNo,jdbcType=BIGINT},updateTime = sysdate
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateOrderStatusByLogis" parameterType="com.tmount.db.order.dto.ReUserOrder" >
+   update re_user_order set state = #{state,jdbcType=INTEGER}
+   where order_no = #{orderNo,jdbcType=BIGINT} and state=20
+  </update>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReUserOrder" >
+    insert into re_user_order (order_no, user_id, login_accept, 
+      shop_id, take_mode, order_mode, 
+      pay_way_id, acount, order_valid, 
+      order_end, state, create_date, 
+      fee_date, end_time, secret_buy, 
+      activity, price, final_pay_status, 
+      pay_status, freight_fee, order_money, 
+      pay_money, user_level, order_time, 
+      update_time, update_no)
+    values (#{orderNo,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{loginAccept,jdbcType=BIGINT}, 
+      #{shopId,jdbcType=BIGINT}, #{takeMode,jdbcType=INTEGER}, #{orderMode,jdbcType=INTEGER}, 
+      #{payWayId,jdbcType=INTEGER}, #{acount,jdbcType=INTEGER}, #{orderValid,jdbcType=CHAR}, 
+      #{orderEnd,jdbcType=CHAR}, #{state,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{feeDate,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{secretBuy,jdbcType=INTEGER}, 
+      #{activity,jdbcType=CHAR}, #{price,jdbcType=DOUBLE}, #{finalPayStatus,jdbcType=CHAR}, 
+      #{payStatus,jdbcType=CHAR}, #{freightFee,jdbcType=DOUBLE}, #{orderMoney,jdbcType=DOUBLE}, 
+      #{payMoney,jdbcType=DOUBLE}, #{userLevel,jdbcType=INTEGER}, #{orderTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateNo,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReUserOrder" >
+    insert into re_user_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="loginAccept != null" >
+        login_accept,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="takeMode != null" >
+        take_mode,
+      </if>
+      <if test="orderMode != null" >
+        order_mode,
+      </if>
+      <if test="payWayId != null" >
+        pay_way_id,
+      </if>
+      <if test="acount != null" >
+        acount,
+      </if>
+      <if test="orderValid != null" >
+        order_valid,
+      </if>
+      <if test="orderEnd != null" >
+        order_end,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="feeDate != null" >
+        fee_date,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="secretBuy != null" >
+        secret_buy,
+      </if>
+      <if test="activity != null" >
+        activity,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="finalPayStatus != null" >
+        final_pay_status,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="freightFee != null" >
+        freight_fee,
+      </if>
+      <if test="orderMoney != null" >
+        order_money,
+      </if>
+      <if test="payMoney != null" >
+        pay_money,
+      </if>
+      <if test="userLevel != null" >
+        user_level,
+      </if>
+      <if test="orderTime != null" >
+        order_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateNo != null" >
+        update_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="loginAccept != null" >
+        #{loginAccept,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="takeMode != null" >
+        #{takeMode,jdbcType=INTEGER},
+      </if>
+      <if test="orderMode != null" >
+        #{orderMode,jdbcType=INTEGER},
+      </if>
+      <if test="payWayId != null" >
+        #{payWayId,jdbcType=INTEGER},
+      </if>
+      <if test="acount != null" >
+        #{acount,jdbcType=INTEGER},
+      </if>
+      <if test="orderValid != null" >
+        #{orderValid,jdbcType=CHAR},
+      </if>
+      <if test="orderEnd != null" >
+        #{orderEnd,jdbcType=CHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="feeDate != null" >
+        #{feeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="secretBuy != null" >
+        #{secretBuy,jdbcType=INTEGER},
+      </if>
+      <if test="activity != null" >
+        #{activity,jdbcType=CHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="finalPayStatus != null" >
+        #{finalPayStatus,jdbcType=CHAR},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=CHAR},
+      </if>
+      <if test="freightFee != null" >
+        #{freightFee,jdbcType=DOUBLE},
+      </if>
+      <if test="orderMoney != null" >
+        #{orderMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="payMoney != null" >
+        #{payMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="userLevel != null" >
+        #{userLevel,jdbcType=INTEGER},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateNo != null" >
+        #{updateNo,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.ReUserOrder" >
+    update re_user_order
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="takeMode != null" >
+        take_mode = #{takeMode,jdbcType=INTEGER},
+      </if>
+      <if test="orderMode != null" >
+        order_mode = #{orderMode,jdbcType=INTEGER},
+      </if>
+      <if test="payWayId != null" >
+        pay_way_id = #{payWayId,jdbcType=INTEGER},
+      </if>
+      <if test="acount != null" >
+        acount = #{acount,jdbcType=INTEGER},
+      </if>
+      <if test="orderValid != null" >
+        order_valid = #{orderValid,jdbcType=CHAR},
+      </if>
+      <if test="orderEnd != null" >
+        order_end = #{orderEnd,jdbcType=CHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="feeDate != null" >
+        fee_date = #{feeDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="secretBuy != null" >
+        secret_buy = #{secretBuy,jdbcType=INTEGER},
+      </if>
+      <if test="activity != null" >
+        activity = #{activity,jdbcType=CHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="finalPayStatus != null" >
+        final_pay_status = #{finalPayStatus,jdbcType=CHAR},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=CHAR},
+      </if>
+      <if test="freightFee != null" >
+        freight_fee = #{freightFee,jdbcType=DOUBLE},
+      </if>
+      <if test="orderMoney != null" >
+        order_money = #{orderMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="payMoney != null" >
+        pay_money = #{payMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="userLevel != null" >
+        user_level = #{userLevel,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateNo != null" >
+        update_no = #{updateNo,jdbcType=BIGINT},
+      </if>
+      <if test="favourFee != null" >
+        favour_fee = #{favourFee,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.ReUserOrder" >
+    update re_user_order
+    set user_id = #{userId,jdbcType=BIGINT},
+      login_accept = #{loginAccept,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      take_mode = #{takeMode,jdbcType=INTEGER},
+      order_mode = #{orderMode,jdbcType=INTEGER},
+      pay_way_id = #{payWayId,jdbcType=INTEGER},
+      acount = #{acount,jdbcType=INTEGER},
+      order_valid = #{orderValid,jdbcType=CHAR},
+      order_end = #{orderEnd,jdbcType=CHAR},
+      state = #{state,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      fee_date = #{feeDate,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      secret_buy = #{secretBuy,jdbcType=INTEGER},
+      activity = #{activity,jdbcType=CHAR},
+      price = #{price,jdbcType=DOUBLE},
+      final_pay_status = #{finalPayStatus,jdbcType=CHAR},
+      pay_status = #{payStatus,jdbcType=CHAR},
+      freight_fee = #{freightFee,jdbcType=DOUBLE},
+      order_money = #{orderMoney,jdbcType=DOUBLE},
+      pay_money = #{payMoney,jdbcType=DOUBLE},
+      user_level = #{userLevel,jdbcType=INTEGER},
+      order_time = #{orderTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_no = #{updateNo,jdbcType=BIGINT}
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+  
+  
+  <select id="selectConsumeOrderList" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT 
+    a.order_no, a.user_id, a.login_accept, a.shop_id, a.take_mode, a.order_mode, a.pay_way_id, a.acount, 
+    a.order_valid, a.order_end, a.state, a.create_date, a.fee_date, a.end_time, a.secret_buy, a.activity, 
+    a.price, a.final_pay_status, a.pay_status, a.freight_fee, a.order_money, a.pay_money, a.user_level, 
+    a.order_time, a.update_time, a.update_no,a.favour_fee,
+     b.company_name AS companyName ,c.shop_name AS shopName,d.user_account AS userAccount,e.confirm_code AS confirmCode
+    FROM re_user_order a,gd_company_dic b,gd_shop_info c,us_user_info d,re_user_order_add e,re_order_deliver f 
+    WHERE b.company_id=c.company_id AND a.shop_id=c.shop_id AND a.user_id = d.user_id AND e.order_no = a.order_no
+    AND a.order_no = f.order_no
+    <trim prefixOverrides="">  
+    	<choose>  
+            <when test="shopId != null">  
+                AND a.shop_id = #{shopId} 
+            </when> 
+        </choose> 
+        <choose>  
+            <when test="companyId != null">  
+                AND c.company_id = #{companyId} 
+            </when> 
+        </choose>
+        <choose>  
+            <when test="orderNo != null">  
+                AND a.order_no = #{orderNo} 
+            </when> 
+        </choose> 
+        <choose> 
+            <when test="payStatus != null">  
+                AND a.pay_staus = #{payStatus}  
+            </when>
+        </choose> 
+        <choose> 
+            <when test="orderStatus != null">  
+                AND a.state = #{orderStatus}  
+            </when>
+        </choose> 
+        <choose> 
+            <when test="userId != null">  
+                AND a.user_id = #{userId}  
+            </when>
+        </choose> 
+        <choose> 
+            <when test="orderStartTime != null">  
+            	
+                AND a.order_time &gt;= str_to_date(#{orderStartTime}, '%Y-%m-%d %h:%i:%s')
+            </when>
+        </choose> 
+        <choose> 
+            <when test="orderEndTime != null">  
+                 AND a.order_time &lt;= str_to_date(#{orderEndTime}, '%Y-%m-%d %h:%i:%s')
+            </when>
+        </choose> 
+        <choose> 
+            <when test="confirmCode != null">  
+                 AND e.confirm_code = #{confirmCode}#
+            </when>
+        </choose> 
+        <choose> 
+            <when test="userAccount != null">  
+                 AND d.user_account = #{userAccount}#
+            </when>
+        </choose> 
+    </trim>  
+    order by a.order_no desc
+  </select>
+  <select id="selectConsumeOrderListCount"  resultType="int" parameterType="java.util.Map">
+   SELECT 
+    count(1)
+    FROM re_user_order a,gd_company_dic b,gd_shop_info c,us_user_info d,re_user_order_add e,re_order_deliver f 
+    WHERE b.company_id=c.company_id AND a.shop_id=c.shop_id AND a.user_id = d.user_id AND e.order_no = a.order_no
+    AND a.order_no = f.order_no
+    <trim prefixOverrides="">  
+    	<choose>  
+            <when test="shopId != null">  
+                AND a.shop_id = #{shopId} 
+            </when> 
+        </choose> 
+        <choose>  
+            <when test="companyId != null">  
+                AND c.company_id = #{companyId} 
+            </when> 
+        </choose>
+        <choose>  
+            <when test="orderNo != null">  
+                AND a.order_no = #{orderNo} 
+            </when> 
+        </choose> 
+        <choose> 
+            <when test="payStatus != null">  
+                AND a.pay_staus = #{payStatus}  
+            </when>
+        </choose> 
+        <choose> 
+            <when test="orderStatus != null">  
+                AND a.state = #{orderStatus}  
+            </when>
+        </choose> 
+        <choose> 
+            <when test="userId != null">  
+                AND a.user_id = #{userId}  
+            </when>
+        </choose> 
+        <choose> 
+            <when test="orderStartTime != null">  
+            	
+                AND a.order_time &gt;= str_to_date(#{orderStartTime}, '%Y-%m-%d %h:%i:%s')
+            </when>
+        </choose> 
+        <choose> 
+            <when test="orderEndTime != null">  
+                 AND a.order_time &lt;= str_to_date(#{orderEndTime}, '%Y-%m-%d %h:%i:%s')
+            </when>
+        </choose> 
+        <choose> 
+            <when test="confirmCode != null">  
+                 AND e.confirm_code = #{confirmCode}#
+            </when>
+        </choose> 
+        <choose> 
+            <when test="userAccount != null">  
+                 AND d.user_account = #{userAccount}#
+            </when>
+        </choose> 
+    </trim>
+  </select>
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.SyDataTypeDicMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.SyDataTypeDic" >
+    <id column="data_type" property="dataType" jdbcType="INTEGER" />
+    <id column="use_type" property="useType" jdbcType="INTEGER" />
+    <result column="orders" property="orders" jdbcType="INTEGER" />
+    <result column="data_name" property="dataName" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="data_mark" property="dataMark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    data_type, use_type, orders, data_name, state, data_mark
+  </sql>
+  <select id="selectByUseType" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.SyDataTypeDic" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_data_type_dic
+    where use_type = #{useType,jdbcType=INTEGER}
+      and state = 'Y'
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.SyDataTypeDicKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_data_type_dic
+    where data_type = #{dataType,jdbcType=INTEGER}
+      and use_type = #{useType,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.product.dto.SyDataTypeDicKey" >
+    delete from sy_data_type_dic
+    where data_type = #{dataType,jdbcType=INTEGER}
+      and use_type = #{useType,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.SyDataTypeDic" >
+    insert into sy_data_type_dic (data_type, use_type, orders, 
+      data_name, state, data_mark
+      )
+    values (#{dataType,jdbcType=INTEGER}, #{useType,jdbcType=INTEGER}, #{orders,jdbcType=INTEGER}, 
+      #{dataName,jdbcType=VARCHAR}, #{state,jdbcType=CHAR}, #{dataMark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.SyDataTypeDic" >
+    insert into sy_data_type_dic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dataType != null" >
+        data_type,
+      </if>
+      <if test="useType != null" >
+        use_type,
+      </if>
+      <if test="orders != null" >
+        orders,
+      </if>
+      <if test="dataName != null" >
+        data_name,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="dataMark != null" >
+        data_mark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dataType != null" >
+        #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="useType != null" >
+        #{useType,jdbcType=INTEGER},
+      </if>
+      <if test="orders != null" >
+        #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="dataName != null" >
+        #{dataName,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="dataMark != null" >
+        #{dataMark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.SyDataTypeDic" >
+    update sy_data_type_dic
+    <set >
+      <if test="orders != null" >
+        orders = #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="dataName != null" >
+        data_name = #{dataName,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="dataMark != null" >
+        data_mark = #{dataMark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where data_type = #{dataType,jdbcType=INTEGER}
+      and use_type = #{useType,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.SyDataTypeDic" >
+    update sy_data_type_dic
+    set orders = #{orders,jdbcType=INTEGER},
+      data_name = #{dataName,jdbcType=VARCHAR},
+      state = #{state,jdbcType=CHAR},
+      data_mark = #{dataMark,jdbcType=VARCHAR}
+    where data_type = #{dataType,jdbcType=INTEGER}
+      and use_type = #{useType,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.sys.dao.SyErrLogMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.sys.dto.SyErrLog" >
+    <id column="login_accept" property="loginAccept" jdbcType="BIGINT" />
+    <result column="function_code" property="functionCode" jdbcType="VARCHAR" />
+    <result column="oper_id" property="operId" jdbcType="BIGINT" />
+    <result column="err_code" property="errCode" jdbcType="VARCHAR" />
+    <result column="err_desc" property="errDesc" jdbcType="VARCHAR" />
+    <result column="staff_id" property="staffId" jdbcType="INTEGER" />
+    <result column="op_time" property="opTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    login_accept, function_code, oper_id, err_code, err_desc, staff_id, op_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_err_log
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sy_err_log
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.sys.dto.SyErrLog" >
+    insert into sy_err_log (login_accept, function_code, oper_id, 
+      err_code, err_desc, staff_id, 
+      op_time)
+    values (#{loginAccept,jdbcType=BIGINT}, #{functionCode,jdbcType=VARCHAR}, #{operId,jdbcType=BIGINT}, 
+      #{errCode,jdbcType=VARCHAR}, #{errDesc,jdbcType=VARCHAR}, #{staffId,jdbcType=INTEGER}, 
+      #{opTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.sys.dto.SyErrLog" >
+    insert into sy_err_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loginAccept != null" >
+        login_accept,
+      </if>
+      <if test="functionCode != null" >
+        function_code,
+      </if>
+      <if test="operId != null" >
+        oper_id,
+      </if>
+      <if test="errCode != null" >
+        err_code,
+      </if>
+      <if test="errDesc != null" >
+        err_desc,
+      </if>
+      <if test="staffId != null" >
+        staff_id,
+      </if>
+      <if test="opTime != null" >
+        op_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loginAccept != null" >
+        #{loginAccept,jdbcType=BIGINT},
+      </if>
+      <if test="functionCode != null" >
+        #{functionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=BIGINT},
+      </if>
+      <if test="errCode != null" >
+        #{errCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errDesc != null" >
+        #{errDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="staffId != null" >
+        #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="opTime != null" >
+        #{opTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.sys.dto.SyErrLog" >
+    update sy_err_log
+    <set >
+      <if test="functionCode != null" >
+        function_code = #{functionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operId != null" >
+        oper_id = #{operId,jdbcType=BIGINT},
+      </if>
+      <if test="errCode != null" >
+        err_code = #{errCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errDesc != null" >
+        err_desc = #{errDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="staffId != null" >
+        staff_id = #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="opTime != null" >
+        op_time = #{opTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.sys.dto.SyErrLog" >
+    update sy_err_log
+    set function_code = #{functionCode,jdbcType=VARCHAR},
+      oper_id = #{operId,jdbcType=BIGINT},
+      err_code = #{errCode,jdbcType=VARCHAR},
+      err_desc = #{errDesc,jdbcType=VARCHAR},
+      staff_id = #{staffId,jdbcType=INTEGER},
+      op_time = #{opTime,jdbcType=TIMESTAMP}
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+  </update>
+</mapper>

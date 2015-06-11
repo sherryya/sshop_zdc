@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.SyResourceSizeDicMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.SyResourceSizeDic" >
+    <id column="pic_size_id" property="picSizeId" jdbcType="INTEGER" />
+    <result column="pic_size_type" property="picSizeType" jdbcType="VARCHAR" />
+    <result column="store_type" property="storeType" jdbcType="INTEGER" />
+    <result column="pic_size_name" property="picSizeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pic_size_id, pic_size_type, store_type, pic_size_name
+  </sql>
+  <select id="selectByStoreType" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_resource_size_dic
+    where store_type = #{storeType,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_resource_size_dic
+    where pic_size_id = #{picSizeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sy_resource_size_dic
+    where pic_size_id = #{picSizeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.SyResourceSizeDic" >
+    insert into sy_resource_size_dic (pic_size_id, pic_size_type, store_type, 
+      pic_size_name)
+    values (#{picSizeId,jdbcType=INTEGER}, #{picSizeType,jdbcType=VARCHAR}, #{storeType,jdbcType=INTEGER}, 
+      #{picSizeName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.SyResourceSizeDic" >
+    insert into sy_resource_size_dic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="picSizeId != null" >
+        pic_size_id,
+      </if>
+      <if test="picSizeType != null" >
+        pic_size_type,
+      </if>
+      <if test="storeType != null" >
+        store_type,
+      </if>
+      <if test="picSizeName != null" >
+        pic_size_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="picSizeId != null" >
+        #{picSizeId,jdbcType=INTEGER},
+      </if>
+      <if test="picSizeType != null" >
+        #{picSizeType,jdbcType=VARCHAR},
+      </if>
+      <if test="storeType != null" >
+        #{storeType,jdbcType=INTEGER},
+      </if>
+      <if test="picSizeName != null" >
+        #{picSizeName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.SyResourceSizeDic" >
+    update sy_resource_size_dic
+    <set >
+      <if test="picSizeType != null" >
+        pic_size_type = #{picSizeType,jdbcType=VARCHAR},
+      </if>
+      <if test="storeType != null" >
+        store_type = #{storeType,jdbcType=INTEGER},
+      </if>
+      <if test="picSizeName != null" >
+        pic_size_name = #{picSizeName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where pic_size_id = #{picSizeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.SyResourceSizeDic" >
+    update sy_resource_size_dic
+    set pic_size_type = #{picSizeType,jdbcType=VARCHAR},
+      store_type = #{storeType,jdbcType=INTEGER},
+      pic_size_name = #{picSizeName,jdbcType=VARCHAR}
+    where pic_size_id = #{picSizeId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.driver.dao.DriverMapper">
+	<resultMap id="BaseResultMap" type="com.tmount.db.driver.dto.User">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="username" property="username" jdbcType="VARCHAR" />
+		<id column="password" property="password" jdbcType="VARCHAR" />
+		<id column="driver_id" property="driver_id" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BaseResultMap_driver_sign" type="com.tmount.db.user.dto.UsDriversSign">
+		<id column="ds_id" property="ds_id" jdbcType="INTEGER" />
+		<id column="ds_drivers_id" property="ds_drivers_id" jdbcType="INTEGER" />
+		<id column="ds_car_id" property="ds_car_id" jdbcType="INTEGER" />
+		<id column="ds_type" property="ds_type" jdbcType="INTEGER" />
+	    <id column="ds_time" property="ds_time" jdbcType="TIMESTAMP" />
+	</resultMap>
+    <resultMap id="BaseResultMap_driverInfo" type="com.tmount.db.user.dto.UsDriversInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="car" property="car" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BaseResultMap_carInfo" type="com.tmount.db.car.dto.CarInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="carnum" property="carnum" jdbcType="VARCHAR" />
+		<id column="carname" property="carname" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BaseResultMap_terminal" type="com.tmount.db.util.dto.CommonBean">
+		<id column="car_id" property="car_id" jdbcType="INTEGER" />
+		<id column="terminal_deviceuid" property="terminal_deviceuid" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,username,password,driver_id
+	</sql>
+	<sql id="Base_Column_List_driver_sign">
+	ds_id,	ds_drivers_id,ds_car_id,ds_type,ds_time
+	</sql>
+	<select id="getUser" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.driver.dto.User">
+		select 	<include refid="Base_Column_List" /> from tbl_user where 
+		username=#{username,jdbcType=VARCHAR}  
+	</select>
+	<!-- 得到是否签到信息    得到最后的操作记录-->
+	<select id="getDriverSignInfo" resultMap="BaseResultMap_driver_sign"
+		parameterType="com.tmount.db.driver.dto.User">
+		select 	<include refid="Base_Column_List_driver_sign" /> from t_itov_drivers_sign where 
+		ds_drivers_id=#{driver_id,jdbcType=BIGINT}    order by ds_time desc 
+	</select>
+	<!-- 通过驾驶员ID 得到驾驶员所驾驶的车辆 -->
+	<select id="getCarInfoByDriverID" resultMap="BaseResultMap_driverInfo"
+		parameterType="com.tmount.db.user.dto.UsDriversInfo">
+		select 	id ,car from tbl_driverinfo where id=#{id,jdbcType=BIGINT} 
+	</select>
+	<!-- 得到车辆基本信息 -->
+	<select id="getCarInfoByCarID" resultMap="BaseResultMap_carInfo"
+		parameterType="java.lang.String" >
+	   select id,carnum,carname from tbl_carinfo where id = #{cars,jdbcType=BIGINT}
+	</select>
+	<!-- 通过车ID 得到设备 uid -->
+	<select id="getDeviceUID" resultMap="BaseResultMap_terminal"
+		parameterType="java.lang.Integer" >
+	   select id car_id ,deviceuid terminal_deviceuid from tbl_terminal_user where carid = #{car_id,jdbcType=BIGINT}
+	</select>
+</mapper>

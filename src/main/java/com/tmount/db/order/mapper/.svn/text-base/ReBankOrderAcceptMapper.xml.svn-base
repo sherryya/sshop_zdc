@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.ReBankOrderAcceptMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.ReBankOrderAccept" >
+    <id column="bank_accept" property="bankAccept" jdbcType="BIGINT" />
+    <id column="order_no" property="orderNo" jdbcType="BIGINT" />
+    <result column="org_id" property="orgId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    bank_accept, order_no, org_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.order.dto.ReBankOrderAcceptKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_bank_order_accept
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.order.dto.ReBankOrderAcceptKey" >
+    delete from re_bank_order_accept
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReBankOrderAccept" >
+    insert into re_bank_order_accept (bank_accept, order_no, org_id
+      )
+    values (#{bankAccept,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, #{orgId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReBankOrderAccept" >
+    insert into re_bank_order_accept
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bankAccept != null" >
+        bank_accept,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bankAccept != null" >
+        #{bankAccept,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.ReBankOrderAccept" >
+    update re_bank_order_accept
+    <set >
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.ReBankOrderAccept" >
+    update re_bank_order_accept
+    set org_id = #{orgId,jdbcType=INTEGER}
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+<select id="selectByBankAccept"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+  	select bank_accept, org_id, order_no
+  	from re_bank_order_accept
+  	where bank_accept = #{bankAccept,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByBankAndOrder" parameterType="com.tmount.db.order.dao.ReBankOrderAcceptMapper" >
+    delete from re_bank_order_accept
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+    and order_no =  #{orderNo,jdbcType=BIGINT}
+  </delete>
+   <select id="countPayStatusByBankAccept" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+  	select count(1) 
+  	from re_bank_order_accept a,re_user_order b
+  	where a.order_no = b.order_no
+  	and b.pay_status = 'Y'
+  	and a.bank_accept = #{bankAccept,jdbcType=BIGINT}
+  </select>
+</mapper>

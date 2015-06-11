@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.ptt.dao.PttCallLogMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.ptt.dto.TItovPttCallLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="callid" property="callid" jdbcType="VARCHAR" />
+    <result column="callfrom" property="callfrom" jdbcType="VARCHAR" />
+    <result column="callto" property="callto" jdbcType="VARCHAR" />
+    <result column="direction" property="direction" jdbcType="VARCHAR" />
+    <result column="calldatetime" property="calldatetime" jdbcType="TIMESTAMP" />
+    <result column="callduration" property="callduration" jdbcType="VARCHAR" />
+    <result column="errorcode" property="errorcode" jdbcType="VARCHAR" />
+    <result column="agentid" property="agentid" jdbcType="INTEGER" />
+    <result column="agentstate" property="agentstate" jdbcType="INTEGER" />
+    <result column="starttime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="endettime" property="endettime" jdbcType="TIMESTAMP" />
+    <result column="recordid" property="recordid" jdbcType="VARCHAR" />
+    <result column="recordurl" property="recordurl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,callid,callfrom,callto,direction,calldatetime,callduration,errorcode,agentid,agentstate,starttime,endettime
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.ptt.dto.TItovPttCallLog">
+    insert into t_itov_ptt_call_log (id,callid,callfrom,callto,direction,calldatetime,callduration,errorcode,agentid,agentstate,starttime,endettime)
+    values (
+        #{id,jdbcType=BIGINT},#{callid,jdbcType=VARCHAR},#{callfrom,jdbcType=VARCHAR},
+        #{callto,jdbcType=VARCHAR},#{direction,jdbcType=VARCHAR},#{calldatetime,jdbcType=TIMESTAMP},
+        #{callduration,jdbcType=VARCHAR},#{errorcode,jdbcType=VARCHAR},#{agentid,jdbcType=INTEGER},
+        #{agentstate,jdbcType=INTEGER},#{starttime,jdbcType=TIMESTAMP},#{endettime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.ptt.dto.TItovPttCallLog">
+    update t_itov_ptt_call_log
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="callid != null">
+        callid = #{callid,jdbcType=VARCHAR},
+      </if>
+      <if test="callfrom != null">
+        callfrom = #{callfrom,jdbcType=VARCHAR},
+      </if>
+      <if test="callto != null">
+        callto = #{callto,jdbcType=VARCHAR},
+      </if>
+      <if test="direction != null">
+        direction = #{direction,jdbcType=VARCHAR},
+      </if>
+      <if test="calldatetime != null">
+        calldatetime = #{calldatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="callduration != null">
+        callduration = #{callduration,jdbcType=VARCHAR},
+      </if>
+      <if test="errorcode != null">
+        errorcode = #{errorcode,jdbcType=VARCHAR},
+      </if>
+      <if test="agentid != null">
+        agentid = #{agentid,jdbcType=INT},
+      </if>
+      <if test="agentstate != null">
+        agentstate = #{agentstate,jdbcType=INT},
+      </if>
+      <if test="starttime != null">
+        starttime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endettime != null">
+        endettime = #{endettime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="recordid != null">
+        recordid = #{recordid,jdbcType=VARCHAR},
+      </if>
+       <if test="recordurl != null">
+        recordurl = #{recordurl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT},
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_itov_ptt_call_log
+     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+      from t_itov_ptt_call_log
+     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_itov_ptt_call_log
+    </select>
+     <select id="selectByCallId" resultMap="BaseResultMap" parameterType="com.tmount.db.ptt.dto.TItovPttCallLog">
+    select 
+    <include refid="Base_Column_List" />
+      from t_itov_ptt_call_log
+     where callid = #{callid,jdbcType=VARCHAR}
+  </select>
+    <update id="update" parameterType="com.tmount.db.ptt.dto.TItovPttCallLog">
+    update t_itov_ptt_call_log
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="callid != null">
+        callid = #{callid,jdbcType=VARCHAR},
+      </if>
+      <if test="callfrom != null">
+        callfrom = #{callfrom,jdbcType=VARCHAR},
+      </if>
+      <if test="callto != null">
+        callto = #{callto,jdbcType=VARCHAR},
+      </if>
+      <if test="direction != null">
+        direction = #{direction,jdbcType=VARCHAR},
+      </if>
+      <if test="calldatetime != null">
+        calldatetime = #{calldatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="callduration != null">
+        callduration = #{callduration,jdbcType=VARCHAR},
+      </if>
+      <if test="errorcode != null">
+        errorcode = #{errorcode,jdbcType=VARCHAR},
+      </if>
+      <if test="agentid != null">
+        agentid = #{agentid,jdbcType=INTEGER},
+      </if>
+      <if test="agentstate != null">
+        agentstate = #{agentstate,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null">
+        starttime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endettime != null">
+        endettime = #{endettime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="recordid != null">
+        recordid = #{recordid,jdbcType=VARCHAR},
+      </if>
+       <if test="recordurl != null">
+        recordurl = #{recordurl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where callid = #{callid,jdbcType=VARCHAR}
+  </update>
+  
+  
+  
+   <select id="selectCountByCallFrom" resultType="java.lang.Integer" parameterType="com.tmount.db.ptt.dto.TItovPttCallLog" >
+   SELECT count(1) FROM itov.t_itov_ptt_call_log  where callfrom=#{callfrom,jdbcType=VARCHAR}  and callduration!=0  and agentid is not null 
+  </select> 
+  
+  <select id="selectListByCallFrom" resultMap="BaseResultMap" parameterType="com.tmount.db.ptt.dto.TItovPttCallLog" >
+       SELECT  <include refid="Base_Column_List" />  FROM itov.t_itov_ptt_call_log  where callfrom=#{callfrom,jdbcType=VARCHAR}  and callduration!=0  and agentid is not null  order by id asc  
+       LIMIT #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select> 
+</mapper>

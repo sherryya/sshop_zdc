@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.sys.dao.SyHotWordsMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.sys.dto.SyHotWords" >
+    <id column="hotwords_id" property="hotwordsId" jdbcType="INTEGER" />
+    <result column="hotwords_name" property="hotwordsName" jdbcType="VARCHAR" />
+    <result column="acount" property="acount" jdbcType="INTEGER" />
+    <result column="http_url" property="httpUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    hotwords_id, hotwords_name, acount, http_url
+  </sql>
+  <select id="selectMaxId" resultType="Integer">
+    select max(hotwords_id)
+    from sy_hot_words
+  </select>
+  <select id="selectItemList" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select 
+    <include refid="Base_Column_List" />
+    from sy_hot_words
+    <where>
+        <if test="hotwordsId != null">  
+            AND hotwords_id = #{hotwordsId,jdbcType=INTEGER}
+        </if> 
+        <if test="hotwordsName != null">  
+            AND hotwords_name like CONCAT('%',#{hotwordsName,jdbcType=VARCHAR},'%')  
+        </if> 
+        <if test="httpUrl != null">  
+            AND http_url = #{httpUrl,jdbcType=VARCHAR}  
+        </if>
+        <if test="acountMin != null">
+            AND acount &gt;= #{acountMin} 
+        </if>
+        <if test="acountMax != null">  
+            AND acount &lt;= #{acountMax} 
+        </if>
+    </where>  
+  </select>
+  <select id="selectItemListCount" resultType="int" parameterType="java.util.Map">
+    select 
+    count(1)
+    from sy_hot_words
+    <where>
+        <if test="hotwordsId != null">  
+            AND hotwords_id = #{hotwordsId,jdbcType=INTEGER}
+        </if> 
+        <if test="hotwordsName != null">  
+            AND hotwords_name like CONCAT('%',#{hotwordsName,jdbcType=VARCHAR},'%')  
+        </if> 
+        <if test="httpUrl != null">  
+            AND http_url = #{httpUrl,jdbcType=VARCHAR}  
+        </if>
+        <if test="acountMin != null">
+            AND acount &gt;= #{acountMin} 
+        </if>
+        <if test="acountMax != null">  
+            AND acount &lt;= #{acountMax} 
+        </if>
+    </where>  
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sy_hot_words
+    order by acount
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_hot_words
+    where hotwords_id = #{hotwordsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sy_hot_words
+    where hotwords_id = #{hotwordsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.sys.dto.SyHotWords" >
+    insert into sy_hot_words (hotwords_id, hotwords_name, acount, 
+      http_url)
+    values (#{hotwordsId,jdbcType=INTEGER}, #{hotwordsName,jdbcType=VARCHAR}, #{acount,jdbcType=INTEGER}, 
+      #{httpUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.sys.dto.SyHotWords" >
+    insert into sy_hot_words
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hotwordsId != null" >
+        hotwords_id,
+      </if>
+      <if test="hotwordsName != null" >
+        hotwords_name,
+      </if>
+      <if test="acount != null" >
+        acount,
+      </if>
+      <if test="httpUrl != null" >
+        http_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hotwordsId != null" >
+        #{hotwordsId,jdbcType=INTEGER},
+      </if>
+      <if test="hotwordsName != null" >
+        #{hotwordsName,jdbcType=VARCHAR},
+      </if>
+      <if test="acount != null" >
+        #{acount,jdbcType=INTEGER},
+      </if>
+      <if test="httpUrl != null" >
+        #{httpUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.sys.dto.SyHotWords" >
+    update sy_hot_words
+    <set >
+      <if test="hotwordsName != null" >
+        hotwords_name = #{hotwordsName,jdbcType=VARCHAR},
+      </if>
+      <if test="acount != null" >
+        acount = #{acount,jdbcType=INTEGER},
+      </if>
+      <if test="httpUrl != null" >
+        http_url = #{httpUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where hotwords_id = #{hotwordsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.sys.dto.SyHotWords" >
+    update sy_hot_words
+    set hotwords_name = #{hotwordsName,jdbcType=VARCHAR},
+      acount = #{acount,jdbcType=INTEGER},
+      http_url = #{httpUrl,jdbcType=VARCHAR}
+    where hotwords_id = #{hotwordsId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdPicResRelMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdPicResRel" >
+    <id column="order_no" property="orderNo" jdbcType="INTEGER" />
+    <id column="record_id" property="recordId" jdbcType="BIGINT" />
+    <id column="table_name" property="tableName" jdbcType="VARCHAR" />
+    <result column="store_type" property="storeType" jdbcType="INTEGER" />
+    <result column="pic_size_type" property="picSizeType" jdbcType="VARCHAR" />
+    <result column="res_type" property="resType" jdbcType="INTEGER" />
+    <result column="res_id" property="resId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_no, record_id, table_name, store_type, pic_size_type, res_type, res_id
+  </sql>
+
+  <delete id="deleteByResId" parameterType="com.tmount.db.product.dto.GdPicResRel" >
+    delete from gd_pic_res_rel
+   where res_id = #{resId,jdbcType=BIGINT}
+  </delete>
+
+  <delete id="deleteByResIdAndStoreType" parameterType="com.tmount.db.product.dto.GdPicResRel" >
+    delete from gd_pic_res_rel
+   where table_name = #{tableName,jdbcType=VARCHAR}
+     and record_id = #{recordId,jdbcType=BIGINT}
+     and store_type = #{storeType,jdbcType=INTEGER}
+  </delete>
+
+  <select id="selectSelective" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.GdPicResRel" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_pic_res_rel
+    <where>
+       <if test="tableName != null">
+         table_name = #{tableName,jdbcType=VARCHAR}
+       </if>
+       <if test="recordId != null">
+         and record_id = #{recordId,jdbcType=BIGINT}
+       </if>
+       <if test="orderNo != null">
+         and order_no = #{orderNo,jdbcType=INTEGER}
+       </if>
+       <if test="storeType != null">
+         and store_type = #{storeType,jdbcType=INTEGER}
+       </if>
+       <if test="picSizeType != null">
+         and pic_size_type = #{picSizeType,jdbcType=INTEGER}
+       </if>
+    </where>
+    order by order_no
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.GdPicResRelKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_pic_res_rel
+    where order_no = #{orderNo,jdbcType=INTEGER}
+      and record_id = #{recordId,jdbcType=BIGINT}
+      and table_name = #{tableName,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.product.dto.GdPicResRelKey" >
+    delete from gd_pic_res_rel
+    where order_no = #{orderNo,jdbcType=INTEGER}
+      and record_id = #{recordId,jdbcType=BIGINT}
+      and table_name = #{tableName,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.GdPicResRel" >
+    insert into gd_pic_res_rel (order_no, record_id, table_name, 
+      store_type, pic_size_type, res_type, 
+      res_id)
+    values (#{orderNo,jdbcType=INTEGER}, #{recordId,jdbcType=BIGINT}, #{tableName,jdbcType=VARCHAR}, 
+      #{storeType,jdbcType=INTEGER}, #{picSizeType,jdbcType=VARCHAR}, #{resType,jdbcType=INTEGER}, 
+      #{resId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.GdPicResRel" >
+    insert into gd_pic_res_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="recordId != null" >
+        record_id,
+      </if>
+      <if test="tableName != null" >
+        table_name,
+      </if>
+      <if test="storeType != null" >
+        store_type,
+      </if>
+      <if test="picSizeType != null" >
+        pic_size_type,
+      </if>
+      <if test="resType != null" >
+        res_type,
+      </if>
+      <if test="resId != null" >
+        res_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=INTEGER},
+      </if>
+      <if test="recordId != null" >
+        #{recordId,jdbcType=BIGINT},
+      </if>
+      <if test="tableName != null" >
+        #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeType != null" >
+        #{storeType,jdbcType=INTEGER},
+      </if>
+      <if test="picSizeType != null" >
+        #{picSizeType,jdbcType=VARCHAR},
+      </if>
+      <if test="resType != null" >
+        #{resType,jdbcType=INTEGER},
+      </if>
+      <if test="resId != null" >
+        #{resId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.GdPicResRel" >
+    update gd_pic_res_rel
+    <set >
+      <if test="storeType != null" >
+        store_type = #{storeType,jdbcType=INTEGER},
+      </if>
+      <if test="picSizeType != null" >
+        pic_size_type = #{picSizeType,jdbcType=VARCHAR},
+      </if>
+      <if test="resType != null" >
+        res_type = #{resType,jdbcType=INTEGER},
+      </if>
+      <if test="resId != null" >
+        res_id = #{resId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where order_no = #{orderNo,jdbcType=INTEGER}
+      and record_id = #{recordId,jdbcType=BIGINT}
+      and table_name = #{tableName,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.GdPicResRel" >
+    update gd_pic_res_rel
+    set store_type = #{storeType,jdbcType=INTEGER},
+      pic_size_type = #{picSizeType,jdbcType=VARCHAR},
+      res_type = #{resType,jdbcType=INTEGER},
+      res_id = #{resId,jdbcType=BIGINT}
+    where order_no = #{orderNo,jdbcType=INTEGER}
+      and record_id = #{recordId,jdbcType=BIGINT}
+      and table_name = #{tableName,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.user.dao.UsInvoiceCfgMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.user.dto.UsInvoiceCfg" >
+    <id column="orders" property="orders" jdbcType="INTEGER" />
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="invoice_title" property="invoiceTitle" jdbcType="VARCHAR" />
+    <result column="invoice_content" property="invoiceContent" jdbcType="VARCHAR" />
+    <result column="identification" property="identification" jdbcType="VARCHAR" />
+    <result column="mark" property="mark" jdbcType="VARCHAR" />
+    <result column="op_time" property="opTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    orders, user_id, invoice_title, invoice_content, identification, mark, op_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.user.dto.UsInvoiceCfgKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from us_invoice_cfg
+    where orders = #{orders,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <select id="selectUserInvoiceOrders" parameterType="java.lang.Long" resultType="java.lang.Integer">
+  	select ifnull(max(orders),0)+1 as orders 
+  	from us_invoice_cfg
+  	where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from us_invoice_cfg
+    where  user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.user.dto.UsInvoiceCfgKey" >
+    delete from us_invoice_cfg
+    where orders = #{orders,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.user.dto.UsInvoiceCfg" >
+    insert into us_invoice_cfg (orders, user_id, invoice_title, 
+      invoice_content, identification, mark, 
+      op_time)
+    values (#{orders,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, #{invoiceTitle,jdbcType=VARCHAR}, 
+      #{invoiceContent,jdbcType=VARCHAR}, #{identification,jdbcType=VARCHAR}, #{mark,jdbcType=VARCHAR}, 
+      #{opTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.user.dto.UsInvoiceCfg" >
+    insert into us_invoice_cfg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orders != null" >
+        orders,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="invoiceTitle != null" >
+        invoice_title,
+      </if>
+      <if test="invoiceContent != null" >
+        invoice_content,
+      </if>
+      <if test="identification != null" >
+        identification,
+      </if>
+      <if test="mark != null" >
+        mark,
+      </if>
+      <if test="opTime != null" >
+        op_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orders != null" >
+        #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="invoiceTitle != null" >
+        #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceContent != null" >
+        #{invoiceContent,jdbcType=VARCHAR},
+      </if>
+      <if test="identification != null" >
+        #{identification,jdbcType=VARCHAR},
+      </if>
+      <if test="mark != null" >
+        #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="opTime != null" >
+        #{opTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.user.dto.UsInvoiceCfg" >
+    update us_invoice_cfg
+    <set >
+      <if test="invoiceTitle != null" >
+        invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceContent != null" >
+        invoice_content = #{invoiceContent,jdbcType=VARCHAR},
+      </if>
+      <if test="identification != null" >
+        identification = #{identification,jdbcType=VARCHAR},
+      </if>
+      <if test="mark != null" >
+        mark = #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="opTime != null" >
+        op_time = #{opTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where orders = #{orders,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.user.dto.UsInvoiceCfg" >
+    update us_invoice_cfg
+    set invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
+      invoice_content = #{invoiceContent,jdbcType=VARCHAR},
+      identification = #{identification,jdbcType=VARCHAR},
+      mark = #{mark,jdbcType=VARCHAR},
+      op_time = #{opTime,jdbcType=TIMESTAMP}
+    where orders = #{orders,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+</mapper>

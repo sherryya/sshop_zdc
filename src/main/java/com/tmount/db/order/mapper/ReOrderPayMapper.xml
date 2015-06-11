@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.ReOrderPayMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.ReOrderPay" >
+    <id column="order_no" property="orderNo" jdbcType="BIGINT" />
+    <id column="pay_id" property="payId" jdbcType="BIGINT" />
+    <result column="pay_type" property="payType" jdbcType="INTEGER" />
+    <result column="pay_money" property="payMoney" jdbcType="DOUBLE" />
+    <result column="pay_evk_money" property="payEvkMoney" jdbcType="DOUBLE" />
+    <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_no, pay_id, pay_type, pay_money, pay_evk_money, pay_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.order.dto.ReOrderPayKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_order_pay
+    where order_no = #{orderNo,jdbcType=BIGINT}
+      and pay_id = #{payId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="long" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_order_pay
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.order.dto.ReOrderPayKey" >
+    delete from re_order_pay
+    where order_no = #{orderNo,jdbcType=BIGINT}
+      and pay_id = #{payId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReOrderPay" >
+    insert into re_order_pay (order_no, pay_id, pay_type, 
+      pay_money, pay_evk_money, pay_date
+      )
+    values (#{orderNo,jdbcType=BIGINT}, #{payId,jdbcType=BIGINT}, #{payType,jdbcType=INTEGER}, 
+      #{payMoney,jdbcType=DOUBLE}, #{payEvkMoney,jdbcType=DOUBLE}, #{payDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReOrderPay" >
+    insert into re_order_pay
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="payId != null" >
+        pay_id,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="payMoney != null" >
+        pay_money,
+      </if>
+      <if test="payEvkMoney != null" >
+        pay_evk_money,
+      </if>
+      <if test="payDate != null" >
+        pay_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="payId != null" >
+        #{payId,jdbcType=BIGINT},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="payMoney != null" >
+        #{payMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="payEvkMoney != null" >
+        #{payEvkMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="payDate != null" >
+        #{payDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.ReOrderPay" >
+    update re_order_pay
+    <set >
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="payMoney != null" >
+        pay_money = #{payMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="payEvkMoney != null" >
+        pay_evk_money = #{payEvkMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="payDate != null" >
+        pay_date = #{payDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where order_no = #{orderNo,jdbcType=BIGINT}
+      and pay_id = #{payId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.ReOrderPay" >
+    update re_order_pay
+    set pay_type = #{payType,jdbcType=INTEGER},
+      pay_money = #{payMoney,jdbcType=DOUBLE},
+      pay_evk_money = #{payEvkMoney,jdbcType=DOUBLE},
+      pay_date = #{payDate,jdbcType=TIMESTAMP}
+    where order_no = #{orderNo,jdbcType=BIGINT}
+      and pay_id = #{payId,jdbcType=BIGINT}
+  </update>
+</mapper>

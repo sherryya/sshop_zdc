@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.ReCommentLogMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.ReCommentLog" >
+    <id column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <id column="order_no" property="orderNo" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    items_id, order_no, user_id, shop_id
+  </sql>
+  <insert id="insertFromOrderDetail" parameterType="java.util.Map">
+    insert into re_comment_log (items_id, order_no, user_id,  shop_id)
+    select b.items_id, a.order_no, a.user_id, a.shop_id 
+      from re_user_order a, re_user_order_detail b
+     where a.order_no = b.order_no
+       and a.order_no=#{orderNo,jdbcType=BIGINT}
+  </insert>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.order.dto.ReCommentLogKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_comment_log
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.order.dto.ReCommentLogKey" >
+    delete from re_comment_log
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReCommentLog" >
+    insert into re_comment_log (items_id, order_no, user_id, 
+      shop_id)
+    values (#{itemsId,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{shopId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReCommentLog" >
+    insert into re_comment_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemsId != null" >
+        items_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemsId != null" >
+        #{itemsId,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.ReCommentLog" >
+    update re_comment_log
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.ReCommentLog" >
+    update re_comment_log
+    set user_id = #{userId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT}
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+</mapper>

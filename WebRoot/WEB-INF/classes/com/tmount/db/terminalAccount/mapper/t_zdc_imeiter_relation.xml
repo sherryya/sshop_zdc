@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.terminalAccount.dao.TZdcImeiterRelationMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.terminalAccount.dto.TZdcImeiterRelation" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="imei" property="imei" jdbcType="VARCHAR" />
+    <result column="terminal" property="terminal" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,imei,terminal
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.terminalAccount.dto.TZdcImeiterRelation">
+    insert into t_zdc_imeiter_relation (
+        imei,terminal)
+    values (
+       #{imei,jdbcType=VARCHAR},#{terminal,jdbcType=VARCHAR}
+    )
+  </insert>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.terminalAccount.dto.TZdcImeiterRelation">
+    delete from t_zdc_imeiter_relation
+     where  terminal = #{terminal,jdbcType=VARCHAR} and imei != #{imei,jdbcType=VARCHAR}
+  </delete>
+  <select id="selectByIMEI" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+      from t_zdc_imeiter_relation
+     where imei = #{imei,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_zdc_imeiter_relation
+    </select>
+    
+    
+   <select id="selectByTerminal" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+      from t_zdc_imeiter_relation
+     where terminal = #{terminal,jdbcType=VARCHAR}
+  </select>
+  
+  
+    
+  <update id="updateByTerID" parameterType="java.lang.String">
+    update t_zdc_imeiter_relation
+     set   imei = #{imei,jdbcType=VARCHAR}
+    where terminal = #{terminal,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.market.dao.AcActionInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.market.dto.AcActionInfo" >
+    <id column="actions_id" property="actionsId" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="actions_name" property="actionsName" jdbcType="VARCHAR" />
+    <result column="actions_descrip" property="actionsDescrip" jdbcType="VARCHAR" />
+    <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+    <result column="orders" property="orders" jdbcType="INTEGER" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="op_no" property="opNo" jdbcType="INTEGER" />
+    <result column="pic_id" property="picId" jdbcType="BIGINT" />
+    <result column="http_url" property="httpUrl" jdbcType="VARCHAR" />
+    <result column="web_url" property="webUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    actions_id, shop_id, company_id, actions_name, actions_descrip, begin_time, orders, end_time, 
+    create_time, update_time, op_no, pic_id, http_url,web_url
+  </sql>
+  <select id="selectActionList" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+   <include refid="Base_Column_List" />
+    from ac_action_info
+   <where>
+       <if test="companyId != null">
+         company_id = #{companyId,jdbcType=INTEGER}
+       </if>
+       <if test="shopId != null">
+        and shop_id = #{shopId,jdbcType=DECIMAL}
+       </if>
+   </where>
+    <if test="start != null">
+    limit #{start},#{end}
+    </if>
+  </select>
+
+  <select id="selectActionListCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select
+    count(1)
+    from ac_action_info
+   <where>
+       <if test="companyId != null">
+         company_id = #{companyId,jdbcType=INTEGER}
+       </if>
+       <if test="shopId != null">
+        and shop_id = #{shopId,jdbcType=DECIMAL}
+       </if>
+   </where>
+  </select>
+  <select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.tmount.db.market.dto.AcActionInfo" >
+    select 
+    <include refid="Base_Column_List" />
+    from ac_action_info
+    <where>
+      <if test="shopId != null" >
+          shop_id = #{shopId,jdbcType=DECIMAL}
+      </if>
+      <if test="companyId != null" >
+          company_id = #{companyId,jdbcType=DECIMAL}
+      </if>
+      <if test="beginTime != null" >
+        and begin_time >= #{beginTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null" >
+        and end_time &lt;= #{endTime,jdbcType=TIMESTAMP}
+      </if>
+     </where>
+   order by orders desc
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ac_action_info
+    where actions_id = #{actionsId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from ac_action_info
+    where actions_id = #{actionsId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.market.dto.AcActionInfo" >
+    insert into ac_action_info (actions_id, shop_id, company_id, actions_name, 
+      actions_descrip, begin_time, orders, 
+      end_time, create_time, update_time, 
+      op_no, pic_id, http_url,web_url
+      )
+    values (#{actionsId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, #{companyId,jdbcType=INTEGER}, #{actionsName,jdbcType=VARCHAR}, 
+      #{actionsDescrip,jdbcType=VARCHAR}, #{beginTime,jdbcType=TIMESTAMP}, #{orders,jdbcType=INTEGER}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{opNo,jdbcType=INTEGER}, #{picId,jdbcType=BIGINT}, #{httpUrl,jdbcType=VARCHAR}, #{webUrl,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.market.dto.AcActionInfo" >
+    insert into ac_action_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="actionsId != null" >
+        actions_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="actionsName != null" >
+        actions_name,
+      </if>
+      <if test="actionsDescrip != null" >
+        actions_descrip,
+      </if>
+      <if test="beginTime != null" >
+        begin_time,
+      </if>
+      <if test="orders != null" >
+        orders,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="opNo != null" >
+        op_no,
+      </if>
+      <if test="picId != null" >
+        pic_id,
+      </if>
+      <if test="httpUrl != null" >
+        http_url,
+      </if>
+      <if test="webUrl != null" >
+        web_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="actionsId != null" >
+        #{actionsId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="actionsName != null" >
+        #{actionsName,jdbcType=VARCHAR},
+      </if>
+      <if test="actionsDescrip != null" >
+        #{actionsDescrip,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null" >
+        #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orders != null" >
+        #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opNo != null" >
+        #{opNo,jdbcType=INTEGER},
+      </if>
+      <if test="picId != null" >
+        #{picId,jdbcType=BIGINT},
+      </if>
+      <if test="httpUrl != null" >
+        #{httpUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="webUrl != null" >
+        #{webUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.market.dto.AcActionInfo" >
+    update ac_action_info
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="actionsName != null" >
+        actions_name = #{actionsName,jdbcType=VARCHAR},
+      </if>
+      <if test="actionsDescrip != null" >
+        actions_descrip = #{actionsDescrip,jdbcType=VARCHAR},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orders != null" >
+        orders = #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opNo != null" >
+        op_no = #{opNo,jdbcType=INTEGER},
+      </if>
+      <if test="picId != null" >
+        pic_id = #{picId,jdbcType=BIGINT},
+      </if>
+      <if test="httpUrl != null" >
+        http_url = #{httpUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="webUrl != null" >
+        web_url = #{webUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where actions_id = #{actionsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.market.dto.AcActionInfo" >
+    update ac_action_info
+    set shop_id = #{shopId,jdbcType=BIGINT},
+      company_id = #{companyId,jdbcType=INTEGER},
+      actions_name = #{actionsName,jdbcType=VARCHAR},
+      actions_descrip = #{actionsDescrip,jdbcType=VARCHAR},
+      begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      orders = #{orders,jdbcType=INTEGER},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      op_no = #{opNo,jdbcType=INTEGER},
+      pic_id = #{picId,jdbcType=BIGINT},
+      http_url = #{httpUrl,jdbcType=VARCHAR},
+      web_url = #{webUrl,jdbcType=VARCHAR}
+    where actions_id = #{actionsId,jdbcType=BIGINT}
+  </update>
+</mapper>

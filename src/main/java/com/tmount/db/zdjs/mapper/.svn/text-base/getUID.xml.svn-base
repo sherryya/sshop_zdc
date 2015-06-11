@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.zdjs.dao.GetUIDMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.zdjs.dto.GetUID" >
+    <id column="account_id" property="account_id" jdbcType="BIGINT" />
+    <result column="terminal_deviceuid" property="terminal_deviceuid" jdbcType="VARCHAR" />
+    <result column="account_name" property="account_name" jdbcType="VARCHAR" />
+    <result column="carSeriesName" property="carSeriesName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    account_id,terminal_deviceuid,account_name,carSeriesName
+  </sql>
+  <select id="selectAll" resultMap="BaseResultMap">
+	SELECT a.`account_id`, t.`terminal_deviceuid` ,a.`account_name`,g.`carSeriesName` FROM `t_itov_user` u 
+	INNER JOIN `t_itov_terminal`  t ON u.`user_id`=t.`user_id` 
+	INNER JOIN `t_itov_account` a ON a.`account_id`=u.`account_id`  
+	INNER JOIN `t_itov_terminal_car` c ON c.`user_id`=u.`user_id`
+	INNER JOIN `t_itov_car`  car ON car.`car_id`=c.`car_id`  
+	INNER JOIN `t_itov_car_brand_golo3` g ON  g.`id`=car.`car_type`
+  </select>
+</mapper>

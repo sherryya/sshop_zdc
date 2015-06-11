@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.mileage.dao.TZdcObdOriginalMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.mileage.dto.TZdcObdOriginal" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
+    <result column="obd_code" property="obdCode" jdbcType="VARCHAR" />
+    <result column="obd_make_date" property="obdMakeDate" jdbcType="VARCHAR" />
+    <result column="crt_date" property="crtDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,device_id,obd_code,obd_make_date,crt_date
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.mileage.dto.TZdcObdOriginal">
+    insert into t_zdc_obd_original (
+        device_id,obd_code,obd_make_date)
+    values (
+        #{deviceId,jdbcType=VARCHAR},#{obdCode,jdbcType=VARCHAR},
+        #{obdMakeDate,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.mileage.dto.TZdcObdOriginal">
+    update t_zdc_obd_original
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="deviceId != null">
+        device_id = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="obdCode != null">
+        obd_code = #{obdCode,jdbcType=VARCHAR},
+      </if>
+      <if test="obdMakeDate != null">
+        obd_make_date = #{obdMakeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="crtDate != null">
+        crt_date = #{crtDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT},
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_zdc_obd_original
+     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+      from t_zdc_obd_original
+     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      t_zdc_obd_original
+    </select>
+</mapper>

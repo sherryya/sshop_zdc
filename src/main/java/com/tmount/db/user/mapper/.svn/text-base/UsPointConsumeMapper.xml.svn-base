@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.user.dao.UsPointConsumeMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.user.dto.UsPointConsume" >
+    <id column="login_accept" property="loginAccept" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="mark_way_id" property="markWayId" jdbcType="INTEGER" />
+    <result column="ori_id" property="oriId" jdbcType="BIGINT" />
+    <result column="use_point" property="usePoint" jdbcType="DOUBLE" />
+    <result column="use_date" property="useDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    login_accept, user_id, mark_way_id, ori_id, use_point, use_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from us_point_consume
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+  </select>
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from us_point_consume
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from us_point_consume
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.user.dto.UsPointConsume" >
+    insert into us_point_consume (login_accept, user_id, mark_way_id, 
+      ori_id, use_point, use_date
+      )
+    values (#{loginAccept,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{markWayId,jdbcType=INTEGER}, 
+      #{oriId,jdbcType=BIGINT}, #{usePoint,jdbcType=DOUBLE}, #{useDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.user.dto.UsPointConsume" >
+    insert into us_point_consume
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loginAccept != null" >
+        login_accept,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="markWayId != null" >
+        mark_way_id,
+      </if>
+      <if test="oriId != null" >
+        ori_id,
+      </if>
+      <if test="usePoint != null" >
+        use_point,
+      </if>
+      <if test="useDate != null" >
+        use_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loginAccept != null" >
+        #{loginAccept,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="markWayId != null" >
+        #{markWayId,jdbcType=INTEGER},
+      </if>
+      <if test="oriId != null" >
+        #{oriId,jdbcType=BIGINT},
+      </if>
+      <if test="usePoint != null" >
+        #{usePoint,jdbcType=DOUBLE},
+      </if>
+      <if test="useDate != null" >
+        #{useDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.user.dto.UsPointConsume" >
+    update us_point_consume
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="markWayId != null" >
+        mark_way_id = #{markWayId,jdbcType=INTEGER},
+      </if>
+      <if test="oriId != null" >
+        ori_id = #{oriId,jdbcType=BIGINT},
+      </if>
+      <if test="usePoint != null" >
+        use_point = #{usePoint,jdbcType=DOUBLE},
+      </if>
+      <if test="useDate != null" >
+        use_date = #{useDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.user.dto.UsPointConsume" >
+    update us_point_consume
+    set user_id = #{userId,jdbcType=BIGINT},
+      mark_way_id = #{markWayId,jdbcType=INTEGER},
+      ori_id = #{oriId,jdbcType=BIGINT},
+      use_point = #{usePoint,jdbcType=DOUBLE},
+      use_date = #{useDate,jdbcType=TIMESTAMP}
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+  </update>
+</mapper>

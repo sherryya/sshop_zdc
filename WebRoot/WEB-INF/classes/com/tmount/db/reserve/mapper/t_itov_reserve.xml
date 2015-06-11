@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.reserve.dao.TItovReserveMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.reserve.dto.TItovReserve" >
+    <id column="phone_no" property="phoneNo" jdbcType="VARCHAR" />
+    <result column="reserve_code" property="reserveCode" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+   <resultMap id="BaseResultMap11" type="com.tmount.db.reserve.dto.TItovReserve" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="phone_no" property="phoneNo" jdbcType="VARCHAR" />
+    <result column="reserve_code" property="reserveCode" jdbcType="VARCHAR" />
+    <result column="car_brands" property="brand" jdbcType="VARCHAR" />
+    <result column="car_model" property="model" jdbcType="VARCHAR" />
+    <result column="car_style" property="style" jdbcType="VARCHAR" />
+    <result column="name" property="realname" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="is_deal" property="isdeal" jdbcType="INTEGER" />
+    <result column="crt_date" property="crtDate" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMap12" type="com.tmount.db.reserve.dto.TItovReservePlan" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="begin_time" property="begin_time" jdbcType="VARCHAR" />
+    <result column="end_time" property="end_time" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    phone_no,reserve_code
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.reserve.dto.TItovReserve">
+    insert into t_itov_reserve (phone_no,reserve_code,name,address,car_brands,car_model,car_style,note)
+    values (
+        #{phoneNo,jdbcType=VARCHAR},#{reserveCode,jdbcType=VARCHAR},#{realname,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{brand,jdbcType=VARCHAR},#{model,jdbcType=VARCHAR},#{style,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.reserve.dto.TItovReserve">
+    update t_itov_reserve
+    <set>
+      <if test="phoneNo != null">
+        phone_no = #{phoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="reserveCode != null">
+        reserve_code = #{reserveCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where phone_no = #{phoneNo,jdbcType=VARCHAR},
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_itov_reserve
+     where phone_no = #{phoneNo,jdbcType=VARCHAR}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+      from t_itov_reserve
+     where phone_no = #{phoneNo,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_itov_reserve
+    </select>
+    <select id="getCountByPhoneNo" resultType="java.lang.Integer"  parameterType="java.lang.String">
+    select count(1)
+      from t_itov_reserve
+     where phone_no = #{phoneNo,jdbcType=VARCHAR}
+    </select>
+
+
+<!-- 查询预约信息 -->
+	
+   <select id="selectReserveByWhere" resultMap="BaseResultMap11" parameterType="com.tmount.db.reserve.dto.TItovReserve">
+      SELECT r.id,r.`name`, r.`address`, r.note, r.`phone_no`,r.`is_deal`,r.`car_brands`,r.`car_model`,r.`car_style`,r.`reserve_code`,r.`crt_date` 
+      FROM `t_itov_reserve` r
+	  where r.is_deal like #{isdeal_query,jdbcType=VARCHAR} 
+	  and r.reserve_code like CONCAT('%',#{reserveCode,jdbcType=VARCHAR},'%')  
+	  and  r.phone_no like CONCAT ('%',#{phoneNo,jdbcType=VARCHAR},'%')  
+	  and  r.name like CONCAT ('%',#{realname,jdbcType=VARCHAR},'%')  
+	  ORDER BY r.`id` ASC  LIMIT  #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select> 
+   <!-- 查询所有预约信息   数量  -->
+  <select id="selectReserveSizeByWhere" resultType="java.lang.Integer" parameterType="com.tmount.db.reserve.dto.TItovReserve">
+	  SELECT count(r.id) 
+      FROM `t_itov_reserve` r
+	   where r.is_deal like #{isdeal_query,jdbcType=VARCHAR} 
+	  and  r.phone_no like CONCAT ('%',#{phoneNo,jdbcType=VARCHAR},'%')  
+	  and  r.name like CONCAT ('%',#{realname,jdbcType=VARCHAR},'%')  
+  </select> 
+  
+  
+  
+  <!-- 查询预约计划信息 -->
+	
+   <select id="selectReservePlanByWhere" resultMap="BaseResultMap12" parameterType="com.tmount.db.reserve.dto.TItovReservePlan">
+
+	  select r.id,r.num,r.content,r.begin_time,r.end_time  from t_itov_reserve_content r
+	  where 1=1 
+	  <if test="begin_time !=null and begin_time !=''">
+	  <![CDATA[ and DATE_FORMAT(r.begin_time,'%Y-%m-%d')>= DATE_FORMAT(#{begin_time,jdbcType=VARCHAR},'%Y-%m-%d') ]]>                
+      </if>
+	   
+	  <if test="end_time !=null and end_time !=''">
+	  <![CDATA[AND DATE_FORMAT(r.end_time,'%Y-%m-%d')<=  DATE_FORMAT(#{end_time,jdbcType=VARCHAR},'%Y-%m-%d')]]>
+      </if> 
+	   
+	  
+  </select> 
+   <!-- 查询所有预约计划信息   数量  -->
+  <select id="selectReservePlanSizeByWhere" resultType="java.lang.Integer" parameterType="com.tmount.db.reserve.dto.TItovReservePlan">
+	   
+	  select count(r.id) from t_itov_reserve_content r  where 1=1 
+	 <!--   <if test="begin_time !='%'">
+	  and DATE_FORMAT(r.begin_time,'%Y-%m-%d')<![CDATA[>=]]>DATE_FORMAT(#{begin_time,jdbcType=VARCHAR},'%Y-%m-%d') 
+	  </if>
+	  <if test="end_time !='%'">
+	  AND DATE_FORMAT(r.end_time,'%Y-%m-%d')<![CDATA[<=]]>DATE_FORMAT(#{end_time,jdbcType=VARCHAR},'%Y-%m-%d')
+	  </if>  
+	  -->
+  </select> 
+  
+  
+   <insert id="saveReservePlan" parameterType="com.tmount.db.reserve.dto.TItovReservePlan">
+    insert into t_itov_reserve_content (
+        content,num,begin_time,end_time
+        )
+    values (
+        #{content,jdbcType=VARCHAR},
+        #{num,jdbcType=INTEGER},
+        #{begin_time,jdbcType=VARCHAR},
+        #{end_time,jdbcType=VARCHAR}
+    )
+  </insert>
+  
+  
+    
+    
+    
+    
+  <resultMap id="BaseResultMap1" type="com.tmount.db.manage.dto.TItov_city_manage" >
+    <id column="id" property="pId" jdbcType="VARCHAR" />
+    <result column="name" property="pName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMap2" type="com.tmount.db.manage.dto.TItov_city_manage" >
+    <id column="code" property="cId" jdbcType="VARCHAR" />
+    <result column="name" property="cName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap3" type="com.tmount.db.manage.dto.TItov_city_manage" >
+    <id column="id" property="dId" jdbcType="VARCHAR" />
+    <result column="name" property="dName" jdbcType="VARCHAR" />
+  </resultMap>  
+
+  <!-- 查询所有省份-->
+  <select id="selectByWhere" resultMap="BaseResultMap1">
+  
+	SELECT  DISTINCT b.`car_order_str` as id ,b.`car_brands` as name FROM `t_itov_car_brand` b
+
+  </select> 
+  
+  <!-- 查询指定的城市-->
+  <select id="selectCityByWhere" resultMap="BaseResultMap2" parameterType="com.tmount.db.manage.dto.TItov_city_manage">
+	SELECT DISTINCT car_model_str as code ,car_model as name FROM t_itov_car_brand WHERE car_order_str=#{pId,jdbcType=VARCHAR}
+  </select> 
+  
+    <!-- 查询指定的区县-->
+  <select id="selectCountryByWhere" resultMap="BaseResultMap3" parameterType="com.tmount.db.manage.dto.TItov_city_manage">
+	SELECT DISTINCT `car_style` as id , `car_style` as name FROM `t_itov_car_brand` where  car_model_str=#{cId,jdbcType=VARCHAR}
+  </select> 
+<!--  --> 
+    
+    
+    
+    
+    
+</mapper>

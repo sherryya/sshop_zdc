@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.GdShopLogisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.GdShopLogistics" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <id column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="province_code" property="provinceCode" jdbcType="INTEGER" />
+    <result column="area_code" property="areaCode" jdbcType="INTEGER" />
+    <result column="city_code" property="cityCode" jdbcType="INTEGER" />
+    <result column="send_end_time" property="sendEndTime" jdbcType="TIMESTAMP" />
+    <result column="send_start_time" property="sendStartTime" jdbcType="TIMESTAMP" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="CHAR" />
+  </resultMap>
+  <resultMap id="gdShopLogisticsExplMap" type="com.tmount.db.order.vo.GdShopLogisticsExpl" extends="BaseResultMap">
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_id, shop_id, province_code, area_code, city_code, send_end_time, send_start_time, 
+    user_name, mobile, contact_phone, address, post_code
+  </sql>
+  <select id="selectMaxIdByShopId" resultType="Integer" parameterType="java.lang.Long">
+    select max(order_id)
+    from gd_shop_logistics
+    where shop_id = #{shopId,jdbcType=BIGINT}
+  </select>
+  <select id="selectListByShopId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select order_id, shop_id, province_code, area_code, city_code, send_end_time, send_start_time, 
+    user_name, mobile, contact_phone, address, post_code
+    from gd_shop_logistics
+    where shop_id = #{shopId,jdbcType=BIGINT}
+  </select>
+  <select id="selectItemList" resultMap="gdShopLogisticsExplMap"  parameterType="java.util.Map">
+    select 
+    a.order_id, a.shop_id, a.province_code, a.area_code, a.city_code, a.send_end_time, a.send_start_time, 
+    a.user_name, a.mobile, a.contact_phone, a.address, a.post_code, b.city_name province_name, c.city_name city_name, d.city_name area_name
+    from gd_shop_logistics a, sy_city_dict b, sy_city_dict c, sy_city_dict d
+    <where>
+       a.province_code = b.city_code
+       and a.city_code = c.city_code
+       and a.area_code = d.city_code
+        <if test="shopId != null">  
+            AND shop_id = #{shopId,jdbcType=BIGINT}
+        </if> 
+        <if test="orderId != null">  
+            and order_id = #{orderId,jdbcType=INTEGER}
+        </if> 
+        <if test="cityCode != null">  
+            and city_code = #{cityCode,jdbcType=INTEGER}
+        </if> 
+    </where>
+    order by order_id
+  </select>
+  <select id="selectItemListCount" resultType="int" parameterType="java.util.Map">
+    select 
+    count(1)
+    from gd_shop_logistics a, sy_city_dict b, sy_city_dict c, sy_city_dict d
+    <where>
+       a.province_code = b.city_code
+       and a.city_code = c.city_code
+       and a.area_code = d.city_code
+        <if test="shopId != null">  
+            AND shop_id = #{shopId,jdbcType=BIGINT}
+        </if> 
+        <if test="orderId != null">  
+            and order_id = #{orderId,jdbcType=INTEGER}
+        </if> 
+        <if test="cityCode != null">  
+            and city_code = #{cityCode,jdbcType=INTEGER}
+        </if> 
+    </where>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.order.dto.GdShopLogisticsKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_shop_logistics
+    where order_id = #{orderId,jdbcType=INTEGER}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.order.dto.GdShopLogisticsKey" >
+    delete from gd_shop_logistics
+    where order_id = #{orderId,jdbcType=INTEGER}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.GdShopLogistics" >
+    insert into gd_shop_logistics (order_id, shop_id, province_code, 
+      area_code, city_code, send_end_time, 
+      send_start_time, user_name, mobile, 
+      contact_phone, address, post_code
+      )
+    values (#{orderId,jdbcType=INTEGER}, #{shopId,jdbcType=BIGINT}, #{provinceCode,jdbcType=INTEGER}, 
+      #{areaCode,jdbcType=INTEGER}, #{cityCode,jdbcType=INTEGER}, #{sendEndTime,jdbcType=TIMESTAMP}, 
+      #{sendStartTime,jdbcType=TIMESTAMP}, #{userName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{contactPhone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{postCode,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.GdShopLogistics" >
+    insert into gd_shop_logistics
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="provinceCode != null" >
+        province_code,
+      </if>
+      <if test="areaCode != null" >
+        area_code,
+      </if>
+      <if test="cityCode != null" >
+        city_code,
+      </if>
+      <if test="sendEndTime != null" >
+        send_end_time,
+      </if>
+      <if test="sendStartTime != null" >
+        send_start_time,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="contactPhone != null" >
+        contact_phone,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="postCode != null" >
+        post_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="provinceCode != null" >
+        #{provinceCode,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=INTEGER},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=INTEGER},
+      </if>
+      <if test="sendEndTime != null" >
+        #{sendEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendStartTime != null" >
+        #{sendStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null" >
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        #{postCode,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.GdShopLogistics" >
+    update gd_shop_logistics
+    <set >
+      <if test="provinceCode != null" >
+        province_code = #{provinceCode,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null" >
+        area_code = #{areaCode,jdbcType=INTEGER},
+      </if>
+      <if test="cityCode != null" >
+        city_code = #{cityCode,jdbcType=INTEGER},
+      </if>
+      <if test="sendEndTime != null" >
+        send_end_time = #{sendEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendStartTime != null" >
+        send_start_time = #{sendStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null" >
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        post_code = #{postCode,jdbcType=CHAR},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.GdShopLogistics" >
+    update gd_shop_logistics
+    set province_code = #{provinceCode,jdbcType=INTEGER},
+      area_code = #{areaCode,jdbcType=INTEGER},
+      city_code = #{cityCode,jdbcType=INTEGER},
+      send_end_time = #{sendEndTime,jdbcType=TIMESTAMP},
+      send_start_time = #{sendStartTime,jdbcType=TIMESTAMP},
+      user_name = #{userName,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      post_code = #{postCode,jdbcType=CHAR}
+    where order_id = #{orderId,jdbcType=INTEGER}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+  </update>
+</mapper>

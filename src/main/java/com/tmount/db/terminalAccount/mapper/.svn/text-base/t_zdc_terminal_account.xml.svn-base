@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.terminalAccount.dao.TZdcTerminalAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.terminalAccount.dto.TZdcTerminalAccount" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="account_id_ter" property="accountIdTer" jdbcType="BIGINT" />
+    <result column="account_id_tel" property="accountIdTel" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,account_id_ter,account_id_tel
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.terminalAccount.dto.TZdcTerminalAccount">
+    insert into t_zdc_terminal_account (
+        id,account_id_ter,account_id_tel)
+    values (
+        #{id,jdbcType=BIGINT},#{accountIdTer,jdbcType=BIGINT},#{accountIdTel,jdbcType=BIGINT}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.terminalAccount.dto.TZdcTerminalAccount">
+    update t_zdc_terminal_account
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="accountIdTer != null">
+        account_id_ter = #{accountIdTer,jdbcType=BIGINT},
+      </if>
+      <if test="accountIdTel != null">
+        account_id_tel = #{accountIdTel,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT},
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_zdc_terminal_account
+     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+      from t_zdc_terminal_account
+     where account_id_ter = #{account_id_ter,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      t_zdc_terminal_account
+  </select>
+   <delete id="deleteByUserId" parameterType="java.lang.Long">
+    delete from t_zdc_terminal_account
+     where account_id_tel = #{account_id_ter,jdbcType=BIGINT}
+  </delete>
+</mapper>

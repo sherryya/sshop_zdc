@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.advertise.dao.AdShowpageDictMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.advertise.dto.AdShowpageDict" >
+    <id column="eff_date" property="effDate" jdbcType="TIMESTAMP" />
+    <id column="page_id" property="pageId" jdbcType="BIGINT" />
+    <id column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <id column="show_id" property="showId" jdbcType="BIGINT" />
+    <result column="show_template_id" property="showTemplateId" jdbcType="INTEGER" />
+    <result column="exp_date" property="expDate" jdbcType="TIMESTAMP" />
+    <result column="site_count" property="siteCount" jdbcType="INTEGER" />
+    <result column="page_no" property="pageNo" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="CHAR" />
+  </resultMap>
+  <resultMap id="AdShowpageDictVo" type="com.tmount.db.advertise.vo.AdShowpageDictVo" >
+    <id column="eff_date" property="effDate" jdbcType="TIMESTAMP" />
+    <id column="page_id" property="pageId" jdbcType="BIGINT" />
+    <id column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <id column="show_id" property="showId" jdbcType="BIGINT" />
+    <result column="show_template_id" property="showTemplateId" jdbcType="INTEGER" />
+    <result column="exp_date" property="expDate" jdbcType="TIMESTAMP" />
+    <result column="site_count" property="siteCount" jdbcType="INTEGER" />
+    <result column="page_no" property="pageNo" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+     <result column="show_name" property="showName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    eff_date, page_id, shop_id, show_id, show_template_id, exp_date, site_count, state,page_no
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.advertise.dto.AdShowpageDictKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from ad_showpage_dict
+    where eff_date = #{effDate,jdbcType=TIMESTAMP}
+      and page_id = #{pageId,jdbcType=BIGINT}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+      and show_id = #{showId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPageId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ad_showpage_dict
+    where page_id = #{pageId,jdbcType=BIGINT}
+  </select>  
+  <select id="selectPageByShowId" resultMap="AdShowpageDictVo" parameterType="com.tmount.db.advertise.vo.AdShowpageDictVo" >
+		SELECT
+		  d.shop_name,
+		  c.show_name,
+		  a.page_id,
+		  a.site_count,
+		  a.eff_date ,
+		  a.exp_date ,
+		  a.page_no
+		FROM ad_showpage_dict a,
+		  ad_showcase_dict c,
+		  gd_shop_info d
+		WHERE a.shop_id = d.shop_id
+		    AND a.show_id = c.show_id
+		<trim suffixOverrides=",">
+	    	<if test="showId != null">
+				and a.show_id = #{showId,jdbcType=BIGINT}
+			</if>
+			<if test="siteCount != null">
+				and a.site_count = #{siteCount,jdbcType=INTEGER}
+			</if>
+			<if test="pageNo != null and pageNo!=''">
+				and a.page_no = #{pageNo,jdbcType=INTEGER}
+			</if>
+	    </trim>
+		ORDER BY a.page_id   
+  </select>  
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.advertise.dto.AdShowpageDictKey" >
+    delete from ad_showpage_dict
+    where eff_date = #{effDate,jdbcType=TIMESTAMP}
+      and page_id = #{pageId,jdbcType=BIGINT}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+      and show_id = #{showId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByPageId" parameterType="com.tmount.db.advertise.dto.AdShowpageDictKey" >
+    delete from ad_showpage_dict
+    where  page_id = #{pageId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.advertise.dto.AdShowpageDict" >
+    insert into ad_showpage_dict (eff_date, page_id, shop_id, 
+      show_id, show_template_id, exp_date, 
+      site_count, state,page_no)
+    values (#{effDate,jdbcType=TIMESTAMP}, #{pageId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, 
+      #{showId,jdbcType=BIGINT}, #{showTemplateId,jdbcType=INTEGER}, #{expDate,jdbcType=TIMESTAMP}, 
+      #{siteCount,jdbcType=INTEGER}, #{state,jdbcType=CHAR},#{pageNo,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertAll" parameterType="com.tmount.db.advertise.dto.AdShowpageDict" >
+    insert into ad_showpage_dict (eff_date, page_id, shop_id, 
+      show_id, show_template_id, exp_date, 
+      site_count, state,page_no)
+    values (#{effDate,jdbcType=TIMESTAMP},#{pageId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, 
+      #{showId,jdbcType=BIGINT}, #{showTemplateId,jdbcType=INTEGER}, #{expDate,jdbcType=TIMESTAMP}, 
+      #{siteCount,jdbcType=INTEGER}, #{state,jdbcType=CHAR},#{pageNo,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.advertise.dto.AdShowpageDict" >
+    insert into ad_showpage_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="effDate != null" >
+        eff_date,
+      </if>
+      <if test="pageId != null" >
+        page_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="showId != null" >
+        show_id,
+      </if>
+      <if test="showTemplateId != null" >
+        show_template_id,
+      </if>
+      <if test="expDate != null" >
+        exp_date,
+      </if>
+      <if test="siteCount != null" >
+        site_count,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="effDate != null" >
+        #{effDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pageId != null" >
+        #{pageId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="showId != null" >
+        #{showId,jdbcType=BIGINT},
+      </if>
+      <if test="showTemplateId != null" >
+        #{showTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="expDate != null" >
+        #{expDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="siteCount != null" >
+        #{siteCount,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.advertise.dto.AdShowpageDict" >
+    update ad_showpage_dict
+    <set >
+      <if test="showTemplateId != null" >
+        show_template_id = #{showTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="expDate != null" >
+        exp_date = #{expDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="siteCount != null" >
+        site_count = #{siteCount,jdbcType=INTEGER},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+    </set>
+    where eff_date = #{effDate,jdbcType=TIMESTAMP}
+      and page_id = #{pageId,jdbcType=BIGINT}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+      and show_id = #{showId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.advertise.dto.AdShowpageDict" >
+    update ad_showpage_dict
+    set show_template_id = #{showTemplateId,jdbcType=INTEGER},
+      exp_date = #{expDate,jdbcType=TIMESTAMP},
+      site_count = #{siteCount,jdbcType=INTEGER},
+      state = #{state,jdbcType=CHAR}
+    where eff_date = #{effDate,jdbcType=TIMESTAMP}
+      and page_id = #{pageId,jdbcType=BIGINT}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+      and show_id = #{showId,jdbcType=BIGINT}
+  </update>
+   <select id="selectByPrimaryKeyCount" resultType="java.lang.Integer" parameterType="java.lang.Long" >
+    select 
+    count(1)
+    from ad_showpage_dict
+    where show_id = #{showId,jdbcType=BIGINT}
+  </select>
+  <select id="selectCheckDate" resultType="java.lang.Integer" parameterType="com.tmount.db.advertise.dto.AdShowpageDict">
+	SELECT
+	  COUNT(*)
+	FROM ad_showpage_dict
+	WHERE 
+		page_no = #{pageNo,jdbcType=INTEGER}
+		and 
+		show_id = #{showId,jdbcType=BIGINT}
+		and
+		((DATE_FORMAT(#{effDate,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S') &gt; eff_date
+	         AND DATE_FORMAT(#{expDate,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S') &lt; exp_date)
+	     OR (DATE_FORMAT(#{expDate,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S')BETWEEN eff_date
+	         AND exp_date)
+	     OR (DATE_FORMAT(#{effDate,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S')BETWEEN eff_date
+	         AND exp_date)
+	     OR ((eff_date BETWEEN DATE_FORMAT(#{effDate,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S')
+	          AND DATE_FORMAT(#{expDate,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S'))
+	         AND (exp_date BETWEEN DATE_FORMAT(#{effDate,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S')
+	              AND DATE_FORMAT(#{expDate,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S'))))		 
+  </select>
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.zdc.dao.NewTotalInfoGainnerMapper">
+	<resultMap id="BaseResultMap" type="com.tmount.db.zdc.dto.NewsRollSub">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="author" property="author" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="pubDate" property="pubDate" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+
+	</resultMap>
+
+	<resultMap id="BaseResultMap_BYID" type="com.tmount.db.zdc.dto.NewDetailSub">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="author" property="author" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+		<result column="pubDate" property="pubDate" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,title,author,description,pubDate,type
+	</sql>
+	<sql id="Full_Column_List">
+		id,title,author,description,content,pubDate,type
+	</sql>
+
+	<!-- 查询全部滚动数据 -->
+	<select id="selectForNews" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		<!-- from t_zdc_news limit 50 -->
+		FROM t_zdc_news_total order by pubDate desc limit 20
+		<!-- from t_zdc_news limit 100 -->
+	</select>
+
+	<!-- 根据ID查询单条数据 -->
+	<select id="selectForNewsByID" resultMap="BaseResultMap_BYID"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Full_Column_List" />
+		FROM t_zdc_news_total WHERE id=#{id,jdbcType=BIGINT} order by pubDate desc limit 1
+	</select>
+
+	<!-- 根据ID查询单条数据 -->
+	<select id="selectForNewsByType" resultMap="BaseResultMap_BYID"
+		parameterType="java.lang.String">
+		<!-- select
+		<include refid="Base_Column_List" />
+		FROM t_zdc_news_total where id in (select min(id) from
+		t_zdc_news_total group by title) and type=#{type,jdbcType=VARCHAR}
+		ORDER BY pubDate DESC LIMIT 100 -->
+				
+		SELECT  	<include refid="Base_Column_List" />   
+		 FROM t_zdc_news_total WHERE TYPE=#{type,jdbcType=VARCHAR}  ORDER BY pubDate DESC LIMIT 20
+	</select>
+</mapper>

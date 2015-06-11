@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.sys.dao.ReMegSendEndMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.sys.dto.ReMegSendEnd" >
+    <id column="mesg_id" property="mesgId" jdbcType="BIGINT" />
+    <result column="send_phone" property="sendPhone" jdbcType="VARCHAR" />
+    <result column="mesg_content" property="mesgContent" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="staff_id" property="staffId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    mesg_id, send_phone, mesg_content, state, staff_id, create_time, send_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_meg_send_end
+    where mesg_id = #{mesgId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from re_meg_send_end
+    where mesg_id = #{mesgId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.sys.dto.ReMegSendEnd" >
+    insert into re_meg_send_end (mesg_id, send_phone, mesg_content, 
+      state, staff_id, create_time, 
+      send_time)
+    values (#{mesgId,jdbcType=BIGINT}, #{sendPhone,jdbcType=VARCHAR}, #{mesgContent,jdbcType=VARCHAR}, 
+      #{state,jdbcType=CHAR}, #{staffId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{sendTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.sys.dto.ReMegSendEnd" >
+    insert into re_meg_send_end
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mesgId != null" >
+        mesg_id,
+      </if>
+      <if test="sendPhone != null" >
+        send_phone,
+      </if>
+      <if test="mesgContent != null" >
+        mesg_content,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="staffId != null" >
+        staff_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="sendTime != null" >
+        send_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mesgId != null" >
+        #{mesgId,jdbcType=BIGINT},
+      </if>
+      <if test="sendPhone != null" >
+        #{sendPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="mesgContent != null" >
+        #{mesgContent,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="staffId != null" >
+        #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendTime != null" >
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.sys.dto.ReMegSendEnd" >
+    update re_meg_send_end
+    <set >
+      <if test="sendPhone != null" >
+        send_phone = #{sendPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="mesgContent != null" >
+        mesg_content = #{mesgContent,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="staffId != null" >
+        staff_id = #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendTime != null" >
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where mesg_id = #{mesgId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.sys.dto.ReMegSendEnd" >
+    update re_meg_send_end
+    set send_phone = #{sendPhone,jdbcType=VARCHAR},
+      mesg_content = #{mesgContent,jdbcType=VARCHAR},
+      state = #{state,jdbcType=CHAR},
+      staff_id = #{staffId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      send_time = #{sendTime,jdbcType=TIMESTAMP}
+    where mesg_id = #{mesgId,jdbcType=BIGINT}
+  </update>
+</mapper>

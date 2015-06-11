@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.manage.dao.TItov_cityManageMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.manage.dto.TItov_city_manage" >
+    <id column="id" property="pId" jdbcType="VARCHAR" />
+    <result column="name" property="pName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMap2" type="com.tmount.db.manage.dto.TItov_city_manage" >
+    <id column="code" property="cId" jdbcType="VARCHAR" />
+    <result column="name" property="cName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap3" type="com.tmount.db.manage.dto.TItov_city_manage" >
+    <id column="id" property="dId" jdbcType="VARCHAR" />
+    <result column="name" property="dName" jdbcType="VARCHAR" />
+  </resultMap>  
+
+  <!-- 查询所有省份-->
+  <select id="selectByWhere" resultMap="BaseResultMap">
+  
+	SELECT id,name from t_province
+  </select> 
+
+  <!-- 查询指定的城市-->
+  <select id="selectCityByWhere" resultMap="BaseResultMap2" parameterType="com.tmount.db.manage.dto.TItov_city_manage">
+	SELECT code,name from t_city where pid=#{pId,jdbcType=VARCHAR}
+  </select> 
+  
+    <!-- 查询指定的区县-->
+  <select id="selectCountryByWhere" resultMap="BaseResultMap3" parameterType="com.tmount.db.manage.dto.TItov_city_manage">
+	SELECT	id,name from t_town where code=#{cId,jdbcType=VARCHAR}
+  </select> 
+  
+    <!-- 查询全部的城市-->
+  <select id="selectCityByWhereAll" resultMap="BaseResultMap2" parameterType="com.tmount.db.manage.dto.TItov_city_manage">
+	SELECT code,name from t_city 
+  </select> 
+  
+      <!-- 查询全部的城市-->
+  <select id="selectCountryByWhereAll" resultMap="BaseResultMap3" parameterType="com.tmount.db.manage.dto.TItov_city_manage">
+	SELECT	id,name from t_town
+  </select> 
+  
+  
+
+  <!-- 查询所有用户表       终端用户-->
+  <select id="selectByWhere1" resultMap="BaseResultMap" parameterType="com.tmount.db.manage.dto.TItov_personal_manage">
+  
+  SELECT p.`account_id`,p.`personal_email`,p.`personal_id`,p.`personal_tel`,p.`personal_qq`,p.`personal_real_name`,p.`personal_sex`,
+  p.`personal_tel`,a.`nickname`,a.`account_type`,a.`account_name`,a.`account_role_id` 
+  FROM `t_itov_account` a INNER JOIN `t_itov_personal` p ON a.`account_id`=p.`account_id`  
+  WHERE account_type=#{account_type,jdbcType=INTEGER}     AND a.`account_name` LIKE  CONCAT ('%',#{account_name,jdbcType=VARCHAR},'%') 
+  ORDER BY p.`account_id` ASC  LIMIT  #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select> 
+   <!-- 查询所有用户表 数量      终端用户-->
+  <select id="selectSizeByWhere1" resultType="java.lang.Integer" parameterType="com.tmount.db.manage.dto.TItov_personal_manage">
+  
+  SELECT COUNT( p.`account_id`)
+  FROM `t_itov_account` a INNER JOIN `t_itov_personal` p ON a.`account_id`=p.`account_id`  
+  WHERE account_type=#{account_type,jdbcType=INTEGER}    
+  AND a.`account_name` LIKE  CONCAT ('%',#{account_name,jdbcType=VARCHAR},'%')
+  </select> 
+<!-- 通过用户ID 查询用户基本信息 -->
+  <select id="selectByAccountID" resultMap="BaseResultMap" parameterType="com.tmount.db.manage.dto.TItov_personal_manage">
+  
+  SELECT p.`account_id`,p.`personal_email`,p.`personal_id`,p.`personal_tel`,p.`personal_qq`,p.`personal_real_name`,p.`personal_sex`,
+  p.`personal_tel`,a.`nickname`,a.`account_type`,a.`account_name`,a.`account_role_id` ,e.`agentstate`,e.`voipAccount`,p.personal_age
+  FROM `t_itov_account` a INNER JOIN `t_itov_personal` p ON a.`account_id`=p.`account_id`  INNER JOIN `t_itov_ptt_emp_agent`  e ON e.`account_id`=p.`account_id`
+  WHERE a.`account_id`=#{account_id,jdbcType=INTEGER} 
+ 
+  </select>
+  <!-- 修改用户基本信息 -->
+  <update id="updatePersonalByAccountID" parameterType="com.tmount.db.manage.dto.TItov_personal_manage">
+    update t_itov_personal
+    <set>
+      <if test="personal_real_name != null">
+        personal_real_name = #{personal_real_name,jdbcType=VARCHAR},
+      </if>
+      <if test="personal_sex != null">
+        personal_sex = #{personal_sex,jdbcType=VARCHAR},
+      </if>
+      <if test="personal_email != null">
+        personal_email = #{personal_email,jdbcType=VARCHAR},
+      </if>
+      <if test="personal_qq != null">
+        personal_qq = #{personal_qq,jdbcType=VARCHAR},
+      </if>
+      <if test="personal_age != null">
+        personal_age = #{personal_age,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where account_id = #{account_id,jdbcType=BIGINT}
+  </update>
+  
+<!--   SELECT menu.* FROM itov.t_itov_account a inner join t_itov_menu_assgn_rule rule
+on a.account_role_id=rule.Role_ID inner join t_itov_menu_class  menu on rule.Class_ID=menu.Class_ID
+where rule.Role_ID=1  order by Class_Levels, Class_Taxis  -->
+  
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generator>
+	<context>
+		<jdbcConnection
+			url="jdbc:mysql://125.211.221.231:10094/zdc?generateSimpleParameterMetadata=true"
+			user="root"
+			password="toor@!456"/>
+		
+		<model targetProject="D:\Users\dell\Workspaces\MyEclipse\sshop_dev\src\main\java"
+			tableTargetPackage="com.tmount.db.car.dto"
+			jointableTargetPackage="com.tmount.db.car.dto"/>
+
+		<mapping targetProject="D:\Users\dell\Workspaces\MyEclipse\sshop_dev\src\main\java"
+			tableTargetPackage="com.tmount.db.car.mapper"
+			jointableTargetPackage="com.tmount.db.car.mapper"/>
+	
+		<dao targetProject="D:\Users\dell\Workspaces\MyEclipse\sshop_dev\src\main\java"
+			tableTargetPackage="com.tmount.db.car.dao"
+			jointableTargetPackage="com.tmount.db.car.dao"/>
+	</context>
+	<sqlMaps>
+		<!-- 为了以后规范管理，要求一个sqlMap XML文件中，只能有对一个表的处理 -->
+		<sqlMap resource="sy_resource_size_dic.xml"/>
+	</sqlMaps>
+</generator>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.role.dao.ARoleDictMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.role.dto.ARoleDict" >
+    <id column="role_code" property="roleCode" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="parent_role_code" property="parentRoleCode" jdbcType="INTEGER" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="create_login" property="createLogin" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="role_desc" property="roleDesc" jdbcType="VARCHAR" />
+    <result column="parent_role_name" property="parentRoleName" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    role_code, company_id, parent_role_code, role_name, create_login, create_date, role_desc,
+    (select role_name from a_role_dict a where a.parent_role_code = role_code ) parent_role_name 
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	select a.role_code,a.role_name,a.parent_role_code ,b.company_name,a.company_id,
+	(select role_name from a_role_dict where a.parent_role_code = role_code
+	) parent_role_name
+	,a.role_desc
+	from a_role_dict a,gd_company_dic b
+	where a.company_id=b.company_id and role_code = #{roleCode,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from a_role_dict
+    where role_code = #{roleCode,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.role.dto.ARoleDict" >
+    insert into a_role_dict ( company_id, parent_role_code, 
+      role_name, create_login, create_date, 
+      role_desc)
+    values ( #{companyId,jdbcType=INTEGER}, #{parentRoleCode,jdbcType=INTEGER}, 
+      #{roleName,jdbcType=VARCHAR}, #{createLogin,jdbcType=INTEGER}, now(), 
+      #{roleDesc,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.role.dto.ARoleDict" >
+    insert into a_role_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleCode != null" >
+        role_code,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="parentRoleCode != null" >
+        parent_role_code,
+      </if>
+      <if test="roleName != null" >
+        role_name,
+      </if>
+      <if test="createLogin != null" >
+        create_login,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="roleDesc != null" >
+        role_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleCode != null" >
+        #{roleCode,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="parentRoleCode != null" >
+        #{parentRoleCode,jdbcType=INTEGER},
+      </if>
+      <if test="roleName != null" >
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="createLogin != null" >
+        #{createLogin,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roleDesc != null" >
+        #{roleDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.role.dto.ARoleDict" >
+    update a_role_dict
+    <set >
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="parentRoleCode != null" >
+        parent_role_code = #{parentRoleCode,jdbcType=INTEGER},
+      </if>
+      <if test="roleName != null" >
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="createLogin != null" >
+        create_login = #{createLogin,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roleDesc != null" >
+        role_desc = #{roleDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where role_code = #{roleCode,jdbcType=INTEGER}
+  </update>
+	<update id="updateByPrimaryKey" parameterType="com.tmount.db.role.dto.ARoleDict" >
+		update a_role_dict
+		set company_id = #{companyId,jdbcType=INTEGER},
+		  parent_role_code = #{parentRoleCode,jdbcType=INTEGER},
+		  role_name = #{roleName,jdbcType=VARCHAR},
+		  create_login = #{createLogin,jdbcType=INTEGER},
+		  create_date = #{createDate,jdbcType=TIMESTAMP},
+		  role_desc = #{roleDesc,jdbcType=VARCHAR}
+		where role_code = #{roleCode,jdbcType=INTEGER}
+    </update>
+  
+ 	<select id="queryRoleForList" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+		select a.role_code,a.role_name,a.parent_role_code ,b.company_name,
+		(select role_name from a_role_dict where a.parent_role_code = role_code
+		) parent_role_name
+		from a_role_dict a,gd_company_dic b where a.company_id=b.company_id
+		<if test="_parameter != null and _parameter != ''">
+			AND a.company_id = #{_parameter,jdbcType=INTEGER}
+		</if>		
+	</select>
+	
+	<select id="queryRoleByOpStrffIdForList" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+		select 
+		a.role_code,
+		a.role_name,
+		a.parent_role_code ,
+		b.company_name, 
+		(select role_name from a_role_dict where a.parent_role_code = role_code ) parent_role_name 
+		from a_role_dict a,gd_company_dic b ,a_loginrole_rel c
+		where a.company_id=b.company_id 
+		and a.role_code=c.role_code 
+		<if test="_parameter != null and _parameter != ''">
+			AND c.staff_id = #{_parameter,jdbcType=INTEGER}
+		</if>		
+	</select>
+	
+	<select id="queryChildRole" resultMap="BaseResultMap">
+		select a.role_code,a.role_name,a.parent_role_code ,b.company_name,
+		(select role_name from a_role_dict where a.parent_role_code = role_code ) parent_role_name
+		from a_role_dict a,gd_company_dic b
+		where a.parent_role_code = #{roleCode,jdbcType=INTEGER} and a.company_id=b.company_id
+	</select>
+	
+	<select id="queryCountByRoleCode" resultType="java.lang.Integer" >
+		select count(*)
+		from a_role_dict
+		where role_code = #{roleCode,jdbcType=INTEGER}
+	</select>
+</mapper>

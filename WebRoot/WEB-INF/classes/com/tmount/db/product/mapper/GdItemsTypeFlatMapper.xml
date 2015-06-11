@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdItemsTypeFlatMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdItemsTypeFlat" >
+    <id column="child_items" property="childItems" jdbcType="INTEGER" />
+    <id column="items_type" property="itemsType" jdbcType="INTEGER" />
+    <result column="level_no" property="levelNo" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    child_items, items_type, level_no
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.GdItemsTypeFlatKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_items_type_flat
+    where child_items = #{childItems,jdbcType=INTEGER}
+      and items_type = #{itemsType,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByChildItems" parameterType="java.lang.Integer" >
+    delete from gd_items_type_flat
+    where child_items = #{childItems,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.product.dto.GdItemsTypeFlatKey" >
+    delete from gd_items_type_flat
+    where child_items = #{childItems,jdbcType=INTEGER}
+      and items_type = #{itemsType,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.GdItemsTypeFlat" >
+    insert into gd_items_type_flat (child_items, items_type, level_no
+      )
+    values (#{childItems,jdbcType=INTEGER}, #{itemsType,jdbcType=INTEGER}, #{levelNo,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.GdItemsTypeFlat" >
+    insert into gd_items_type_flat
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="childItems != null" >
+        child_items,
+      </if>
+      <if test="itemsType != null" >
+        items_type,
+      </if>
+      <if test="levelNo != null" >
+        level_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="childItems != null" >
+        #{childItems,jdbcType=INTEGER},
+      </if>
+      <if test="itemsType != null" >
+        #{itemsType,jdbcType=INTEGER},
+      </if>
+      <if test="levelNo != null" >
+        #{levelNo,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.GdItemsTypeFlat" >
+    update gd_items_type_flat
+    <set >
+      <if test="levelNo != null" >
+        level_no = #{levelNo,jdbcType=INTEGER},
+      </if>
+    </set>
+    where child_items = #{childItems,jdbcType=INTEGER}
+      and items_type = #{itemsType,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.GdItemsTypeFlat" >
+    update gd_items_type_flat
+    set level_no = #{levelNo,jdbcType=INTEGER}
+    where child_items = #{childItems,jdbcType=INTEGER}
+      and items_type = #{itemsType,jdbcType=INTEGER}
+  </update>
+  <select id="selectByItemId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    a.child_items, a.items_type, a.level_no
+    from gd_items_type_flat a,gd_itemstype_rel b
+    where a.child_items=b.items_type and b.items_id = #{itemsId,jdbcType=BIGINT} and b.data_type=10
+      order by a.level_no desc
+  </select>
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.feedback.dao.TZdcFeedbackMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.feedback.dto.TZdcFeedback" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="feedback_type" property="feedbackType" jdbcType="INTEGER" />
+    <result column="feedback_info" property="feedbackInfo" jdbcType="VARCHAR" />
+    <result column="is_deal" property="isDeal" jdbcType="INTEGER" />
+    <result column="crt_date" property="crtDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  
+<!-- add by qgy 2015-3-17 新增几个字段为了不与之前的代码冲突 -->  
+  <resultMap id="BaseResultMap1" type="com.tmount.db.feedback.dto.TZdcFeedback" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="BIGINT" />
+    <result column="nickname" property="nickName" jdbcType="VARCHAR" />
+    <result column="account_type" property="accountType" jdbcType="INTEGER" />
+    <result column="feedback_type" property="feedbackType" jdbcType="INTEGER" />
+    <result column="feedback_info" property="feedbackInfo" jdbcType="VARCHAR" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="is_deal" property="isDeal" jdbcType="INTEGER" />
+    <result column="crt_date" property="crtDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id,account_id,feedback_type,feedback_info,is_deal,crt_date
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.feedback.dto.TZdcFeedback">
+    insert into t_zdc_feedback (
+        account_id,feedback_type,feedback_info,is_deal)
+    values (
+        #{accountId,jdbcType=BIGINT},#{feedbackType,jdbcType=INTEGER},
+        #{feedbackInfo,jdbcType=VARCHAR},#{isDeal,jdbcType=INTEGER}
+    )
+  </insert>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_zdc_feedback
+     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+      from t_zdc_feedback
+     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_zdc_feedback
+    </select>
+    
+    <!-- 查询所有反馈信息-->
+  <select id="selectByWhere" resultMap="BaseResultMap1" parameterType="com.tmount.db.feedback.dto.TZdcFeedback">
+	  SELECT f.id,f.account_id,u.nickname,u.account_name, u.account_type, f.feedback_type,f.feedback_info,f.is_deal,f.crt_date
+	  FROM `t_zdc_terminal_account` t INNER JOIN `t_zdc_feedback` f ON t.account_id_ter=f.account_id INNER JOIN t_itov_account u ON t.account_id_tel=u.account_id
+	  where f.feedback_type like #{feedbackType_query,jdbcType=VARCHAR}  and f.is_deal like #{isDeal_query,jdbcType=VARCHAR}   
+	  and  u.account_name like CONCAT ('%',#{accountName,jdbcType=VARCHAR},'%')  
+	  ORDER BY f.`id` ASC  LIMIT  #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select> 
+   <!-- 查询所有反馈信息   数量  -->
+  <select id="selectSizeByWhere" resultType="java.lang.Integer" parameterType="com.tmount.db.feedback.dto.TZdcFeedback">
+  	  SELECT count( f.`id`)
+ 	  FROM `t_zdc_terminal_account` t INNER JOIN `t_zdc_feedback` f ON t.account_id_ter=f.account_id INNER JOIN t_itov_account u ON t.account_id_tel=u.account_id	  where f.feedback_type like #{feedbackType_query,jdbcType=VARCHAR}  and f.is_deal like #{isDeal_query,jdbcType=VARCHAR}   
+	  and  u.account_name like CONCAT ('%',#{accountName,jdbcType=VARCHAR},'%')  
+  </select> 
+</mapper>

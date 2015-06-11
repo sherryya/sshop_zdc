@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.terminalAccount.dao.TZdcDevicesMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.terminalAccount.dto.TZdcDevices" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,device_id
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.terminalAccount.dto.TZdcDevices">
+    insert into t_zdc_devices (
+        device_id)
+    values (
+      #{deviceId,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.terminalAccount.dto.TZdcDevices">
+    update t_zdc_devices
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="deviceId != null">
+        device_id = #{deviceId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_zdc_devices
+     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByDeviceId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+      from t_zdc_devices
+     where device_id = #{deviceId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_zdc_devices
+    </select>
+</mapper>

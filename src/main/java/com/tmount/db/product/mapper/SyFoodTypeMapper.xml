@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.SyFoodTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.SyFoodType" >
+    <id column="food_type_id" property="foodTypeId" jdbcType="INTEGER" />
+    <result column="food_type_name" property="foodTypeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    food_type_id, food_type_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_food_type
+    where food_type_id = #{foodTypeId,jdbcType=INTEGER}
+  </select>
+</mapper>

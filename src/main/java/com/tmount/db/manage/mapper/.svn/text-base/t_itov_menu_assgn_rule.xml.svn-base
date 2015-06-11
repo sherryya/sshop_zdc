@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.manage.dao.TItovMenuAssgnRuleMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.manage.dto.TItovMenuAssgnRule" >
+    <id column="rule_id" property="ruleId" jdbcType="BIGINT" />
+    <result column="pro_id" property="proId" jdbcType="INTEGER" />
+    <result column="class_id" property="classId" jdbcType="INTEGER" />
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="role_crt_date" property="roleCrtDate" jdbcType="VARCHAR" />
+  </resultMap>
+   <sql id="Base_Column_List" >
+    rule_id,pro_id,class_id,role_id,user_id,role_crt_date
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.manage.dto.TItovMenuAssgnRule">
+    insert into t_itov_menu_assgn_rule (
+       pro_id,class_id,role_id,user_id,role_crt_date)
+    values (
+       #{proId,jdbcType=INTEGER},#{classId,jdbcType=INTEGER},
+        #{roleId,jdbcType=INTEGER},#{userId,jdbcType=VARCHAR},#{roleCrtDate,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.manage.dto.TItovMenuAssgnRule">
+    update t_itov_menu_assgn_rule
+    <set>
+
+      <if test="proId != null">
+        pro_id = #{proId,jdbcType=INTEGER},
+      </if>
+      <if test="classId != null">
+        class_id = #{classId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCrtDate != null">
+        role_crt_date = #{roleCrtDate,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where rule_id = #{ruleId,jdbcType=BIGINT}
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_itov_menu_assgn_rule
+     where rule_id = #{ruleId,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+    from t_itov_menu_assgn_rule
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_itov_menu_assgn_rule
+    </select> 
+</mapper>

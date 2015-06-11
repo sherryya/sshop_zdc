@@ -1,0 +1,24 @@
+	1.2:
+  		修改文件：	com\xxx\shop\mapping\GdShopItemsRelMapper.xml
+  			解决问题：排序方式改成从大到小倒叙排列。
+  		修改文件：	com\xxx\shop\mapping\GdItemsItemRelMapper.xml
+  			解决问题：排序方式改成从大到小倒叙排列。
+		修改文件：	test\ConnUtil.java
+			解决问题：修改了排序字段的值，把原来的0改成了123456789012345。
+  		修改文件：	com\xxx\shop\model\GdShopItemsRelInfo.java
+  			解决问题：增加输出字段orders_time。
+  		增加文件：	com\xxx\shop\model\GdSubItemInfo.java	
+  			解决问题：子商品增加输出字段orders_time。
+  		修改文件：	com\xxx\shop\dao\GdItemsItemRelMapper.java
+  			解决问题：修改返回类型为GdSubItemInfo。
+  		修改文件：	com\xxx\shop\service\GoodsService.java
+  			解决问题：修改返回类型为GdSubItemInfo。
+  		修改文件：	com\xxx\shop\web\GetGdItemsItemRelListByItemsIdServlet.java
+  			解决问题：增加返回值orders_time。
+  		修改文件：	com\xxx\shop\web\GetGdShopItemsRelListBySitemsTypeServlet.java
+  			解决问题：增加返回值orders_time。
+  			
+  			
+  			
+  			
+  		

@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.staff.dao.AStaffInfoMapper">
+	<resultMap id="StaffInfoMap" type="com.tmount.db.staff.dto.AStaffInfo">
+		<id column="staff_id" property="staffId" jdbcType="INTEGER" />
+		<result column="dept_code" property="deptCode" jdbcType="INTEGER" />
+		<result column="company_id" property="companyId" jdbcType="INTEGER" />
+		<result column="shop_id" property="shopId" jdbcType="BIGINT" />
+		<result column="op_no" property="opNo" jdbcType="VARCHAR" />
+		<result column="op_password" property="opPassword" jdbcType="VARCHAR" />
+		<result column="staff_name" property="staffName" jdbcType="VARCHAR" />
+		<result column="id_type" property="idType" jdbcType="CHAR" />
+		<result column="id_no" property="idNo" jdbcType="CHAR" />
+		<result column="mobile_no" property="mobileNo" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="work_date" property="workDate" jdbcType="TIMESTAMP" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="valid_flag" property="validFlag" jdbcType="CHAR" />
+		<result column="staff_position" property="staffPosition"
+			jdbcType="VARCHAR" />
+		<result column="staff_desc" property="staffDesc" jdbcType="VARCHAR" />
+		<result column="create_staff_id" property="createStaffId"
+			jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+		<result column="user_avatar" property="userAvatar" jdbcType="BIGINT" />
+		<result column="dept_name" property="deptName" jdbcType="VARCHAR" />
+		<result column="company_name" property="companyName" jdbcType="VARCHAR" />
+		<result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+		<result column="role_name" property="roleName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		staff_id, dept_code, company_id, shop_id, op_no,
+		op_password, staff_name,
+		id_type,
+		id_no, mobile_no, email, work_date,
+		address, valid_flag, staff_position,
+		staff_desc,
+		create_staff_id,
+		create_time, nick_name, user_avatar,
+		dept_name
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="StaffInfoMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from a_staff_info
+		where staff_id = #{staffId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		a_staff_info
+		where staff_id = #{staffId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.tmount.db.staff.dto.AStaffInfo">
+		insert into a_staff_info
+		(staff_id, dept_code, company_id,
+		shop_id, op_no, op_password,
+		staff_name, id_type, id_no,
+		mobile_no, email, work_date,
+		address,
+		valid_flag, staff_position,
+		staff_desc, create_staff_id, create_time,
+		nick_name, user_avatar)
+		values (#{staffId,jdbcType=INTEGER},
+		#{deptCode,jdbcType=INTEGER},
+		#{companyId,jdbcType=INTEGER},
+		#{shopId,jdbcType=BIGINT}, #{opNo,jdbcType=VARCHAR},
+		#{opPassword,jdbcType=VARCHAR},
+		#{staffName,jdbcType=VARCHAR},
+		#{idType,jdbcType=CHAR},
+		#{idNo,jdbcType=CHAR},
+		#{mobileNo,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+		#{workDate,jdbcType=TIMESTAMP},
+		#{address,jdbcType=VARCHAR},
+		#{validFlag,jdbcType=CHAR},
+		#{staffPosition,jdbcType=VARCHAR},
+		#{staffDesc,jdbcType=VARCHAR}, #{createStaffId,jdbcType=INTEGER},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{nickName,jdbcType=VARCHAR},
+		#{userAvatar,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.tmount.db.staff.dto.AStaffInfo">
+		insert into a_staff_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="staffId != null">
+				staff_id,
+			</if>
+			<if test="deptCode != null">
+				dept_code,
+			</if>
+			<if test="companyId != null">
+				company_id,
+			</if>
+			<if test="shopId != null">
+				shop_id,
+			</if>
+			<if test="opNo != null">
+				op_no,
+			</if>
+			<if test="opPassword != null">
+				op_password,
+			</if>
+			<if test="staffName != null">
+				staff_name,
+			</if>
+			<if test="idType != null">
+				id_type,
+			</if>
+			<if test="idNo != null">
+				id_no,
+			</if>
+			<if test="mobileNo != null">
+				mobile_no,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="workDate != null">
+				work_date,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="validFlag != null">
+				valid_flag,
+			</if>
+			<if test="staffPosition != null">
+				staff_position,
+			</if>
+			<if test="staffDesc != null">
+				staff_desc,
+			</if>
+			<if test="createStaffId != null">
+				create_staff_id,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="nickName != null">
+				nick_name,
+			</if>
+			<if test="userAvatar != null">
+				user_avatar,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="staffId != null">
+				#{staffId,jdbcType=INTEGER},
+			</if>
+			<if test="deptCode != null">
+				#{deptCode,jdbcType=INTEGER},
+			</if>
+			<if test="companyId != null">
+				#{companyId,jdbcType=INTEGER},
+			</if>
+			<if test="shopId != null">
+				#{shopId,jdbcType=BIGINT},
+			</if>
+			<if test="opNo != null">
+				#{opNo,jdbcType=VARCHAR},
+			</if>
+			<if test="opPassword != null">
+				#{opPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="staffName != null">
+				#{staffName,jdbcType=VARCHAR},
+			</if>
+			<if test="idType != null">
+				#{idType,jdbcType=CHAR},
+			</if>
+			<if test="idNo != null">
+				#{idNo,jdbcType=CHAR},
+			</if>
+			<if test="mobileNo != null">
+				#{mobileNo,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="workDate != null">
+				#{workDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="validFlag != null">
+				#{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="staffPosition != null">
+				#{staffPosition,jdbcType=VARCHAR},
+			</if>
+			<if test="staffDesc != null">
+				#{staffDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="createStaffId != null">
+				#{createStaffId,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="nickName != null">
+				#{nickName,jdbcType=VARCHAR},
+			</if>
+			<if test="userAvatar != null">
+				#{userAvatar,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.staff.dto.AStaffInfo">
+		update a_staff_info
+		<set>
+			<if test="deptCode != null">
+				dept_code = #{deptCode,jdbcType=INTEGER},
+			</if>
+			<if test="companyId != null">
+				company_id = #{companyId,jdbcType=INTEGER},
+			</if>
+			<if test="shopId != null">
+				shop_id = #{shopId,jdbcType=BIGINT},
+			</if>
+			<if test="opNo != null">
+				op_no = #{opNo,jdbcType=VARCHAR},
+			</if>
+			<if test="opPassword != null">
+				op_password = #{opPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="staffName != null">
+				staff_name = #{staffName,jdbcType=VARCHAR},
+			</if>
+			<if test="idType != null">
+				id_type = #{idType,jdbcType=CHAR},
+			</if>
+			<if test="idNo != null">
+				id_no = #{idNo,jdbcType=CHAR},
+			</if>
+			<if test="mobileNo != null">
+				mobile_no = #{mobileNo,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="workDate != null">
+				work_date = #{workDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="validFlag != null">
+				valid_flag = #{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="staffPosition != null">
+				staff_position = #{staffPosition,jdbcType=VARCHAR},
+			</if>
+			<if test="staffDesc != null">
+				staff_desc = #{staffDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="createStaffId != null">
+				create_staff_id = #{createStaffId,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="nickName != null">
+				nick_name = #{nickName,jdbcType=VARCHAR},
+			</if>
+			<if test="userAvatar != null">
+				user_avatar = #{userAvatar,jdbcType=BIGINT},
+			</if>
+		</set>
+		where staff_id = #{staffId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.tmount.db.staff.dto.AStaffInfo">
+		update
+		a_staff_info
+		set dept_code = #{deptCode,jdbcType=INTEGER},
+		company_id =
+		#{companyId,jdbcType=INTEGER},
+		shop_id = #{shopId,jdbcType=BIGINT},
+		op_no = #{opNo,jdbcType=VARCHAR},
+		op_password =
+		#{opPassword,jdbcType=VARCHAR},
+		staff_name =
+		#{staffName,jdbcType=VARCHAR},
+		id_type = #{idType,jdbcType=CHAR},
+		id_no
+		= #{idNo,jdbcType=CHAR},
+		mobile_no = #{mobileNo,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		work_date =
+		#{workDate,jdbcType=TIMESTAMP},
+		address = #{address,jdbcType=VARCHAR},
+		valid_flag = #{validFlag,jdbcType=CHAR},
+		staff_position =
+		#{staffPosition,jdbcType=VARCHAR},
+		staff_desc =
+		#{staffDesc,jdbcType=VARCHAR},
+		create_staff_id =
+		#{createStaffId,jdbcType=INTEGER},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		nick_name =
+		#{nickName,jdbcType=VARCHAR},
+		user_avatar =
+		#{userAvatar,jdbcType=BIGINT}
+		where staff_id =
+		#{staffId,jdbcType=INTEGER}
+	</update>
+
+	<select id="searchStaffList" parameterType="java.util.Map"
+		resultMap="StaffInfoMap">
+		SELECT
+		  a.staff_id,
+		  a.op_no,
+		  b.dept_name,
+		  a.staff_name,
+		  a.id_no,
+		  a.mobile_no,
+		  a.email,
+		  a.work_date,
+		  a.address,
+		  IF(a.valid_flag = 'Y', '鏈夋晥', '鏃犳晥') AS valid_flag,
+		  a.staff_position,
+		  a.staff_desc,
+		  a.nick_name,
+		  d.shop_name,
+		  c.company_name,
+		  c.company_id,
+		  getStaffRoleNama(a.staff_id) as role_name
+		FROM a_staff_info a
+		  LEFT JOIN a_dept_dict b
+		    ON a.dept_code = b.dept_code
+		  LEFT JOIN gd_company_dic c
+		    ON a.company_id = c.company_id
+		  LEFT JOIN gd_shop_info d
+		    ON a.shop_id = d.shop_id
+		    where 1=1
+		<trim suffixOverrides=",">
+			<if test="opNo != null">
+				and a.op_no like CONCAT('%',#{opNo,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="deptCode != null">
+				and a.dept_code like CONCAT('%',#{deptCode,jdbcType=INTEGER},'%')
+			</if>
+			<if test="staffName != null">
+				and a.staff_name like CONCAT('%',#{staffName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="mobileNo != null">
+				and a.mobile_no like CONCAT('%',#{mobileNo,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="email != null">
+				and a.email like CONCAT('%',#{email,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="validFlag != null">
+				and a.valid_flag like CONCAT('%',#{validFlag,jdbcType=CHAR},'%')
+			</if>
+			<if test="companyId != null">
+				and a.company_id = #{companyId,jdbcType=INTEGER}
+			</if>
+			<if test="shopId != null">
+				and a.shop_id = #{shopId,jdbcType=INTEGER}
+			</if>
+			<if test="start != null">
+				limit #{start},#{offset}
+			</if>
+		</trim>
+	</select>
+
+	<select id="searchStaffListCount" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		select
+		count(1)
+		FROM a_staff_info a
+		  LEFT JOIN a_dept_dict b
+		    ON a.dept_code = b.dept_code
+		  LEFT JOIN gd_company_dic c
+		    ON a.company_id = c.company_id
+		  LEFT JOIN gd_shop_info d
+		    ON a.shop_id = d.shop_id
+		    where 1=1
+		<trim suffixOverrides=",">
+			<if test="opNo != null">
+				and a.op_no like CONCAT('%',#{opNo,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="deptCode != null">
+				and a.dept_code like CONCAT('%',#{deptCode,jdbcType=INTEGER},'%')
+			</if>
+			<if test="staffName != null">
+				and a.staff_name like CONCAT('%',#{staffName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="mobileNo != null">
+				and a.mobile_no like CONCAT('%',#{mobileNo,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="email != null">
+				and a.email like CONCAT('%',#{email,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="validFlag != null">
+				and a.valid_flag like CONCAT('%',#{validFlag,jdbcType=CHAR},'%')
+			</if>
+			<if test="companyId != null">
+				and a.company_id = #{companyId,jdbcType=INTEGER}
+			</if>
+			<if test="shopId != null">
+				and a.shop_id  = #{shopId,jdbcType=INTEGER}
+			</if>
+			<if test="start != null">
+				limit #{start},#{offset}
+			</if>
+		</trim>
+	</select>
+
+	<insert id="insertAStaffInfo" parameterType="com.tmount.db.staff.dto.AStaffInfo">
+		insert into
+		a_staff_info
+		(staff_id, dept_code, company_id,
+		shop_id, op_no,
+		op_password,
+		staff_name, id_type, id_no,
+		mobile_no, email, work_date,
+		address,
+		valid_flag, staff_position,
+		staff_desc, create_staff_id,
+		create_time,
+		nick_name, user_avatar)
+		values
+		(#{staffId,jdbcType=INTEGER},
+		#{deptCode,jdbcType=INTEGER},
+		#{companyId,jdbcType=INTEGER},
+		#{shopId,jdbcType=BIGINT},
+		#{opNo,jdbcType=INTEGER},
+		#{opPassword,jdbcType=VARCHAR},
+		#{staffName,jdbcType=VARCHAR},
+		#{idType,jdbcType=CHAR},
+		#{idNo,jdbcType=CHAR},
+		#{mobileNo,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{workDate,jdbcType=TIMESTAMP},
+		#{address,jdbcType=VARCHAR},
+		#{validFlag,jdbcType=CHAR},
+		#{staffPosition,jdbcType=VARCHAR},
+		#{staffDesc,jdbcType=VARCHAR},
+		#{createStaffId,jdbcType=INTEGER},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{nickName,jdbcType=VARCHAR},
+		#{userAvatar,jdbcType=BIGINT})
+	</insert>
+
+	<delete id="deleteAStaffInfo" parameterType="java.lang.Integer">
+		delete from
+		a_staff_info
+		where staff_id = #{staffId,jdbcType=INTEGER}
+	</delete>
+
+	<select id="selectAStaffInfo" resultMap="StaffInfoMap"
+		parameterType="java.lang.Integer">
+		select a.staff_id,
+		a.op_no,
+		a.company_id,
+		(select b.dept_name from a_dept_dict b where a.dept_code = b.dept_code ) as 'dept_name',
+		a.staff_name,
+		a.id_no,
+		a.mobile_no,
+		a.email,
+		a.work_date,
+		a.address,
+		IF(a.valid_flag =
+		'Y', '鏈夋晥',
+		'鏃犳晥') as valid_flag,
+		a.staff_position,
+		a.staff_desc
+		,a.nick_name
+		,(select d.shop_name from gd_shop_info d where a.shop_id = d.shop_id) as 'shop_name'
+		,c.company_name
+		,IFNULL(a.shop_id,0) as 'shop_id'
+		from a_staff_info a
+		
+		,gd_company_dic c
+		
+		where a.company_id = c.company_id 
+		and staff_id = #{staffId,jdbcType=INTEGER}
+	</select>
+	<select id="selectOpnoByOpno" parameterType="String" resultType="java.lang.String">
+		select op_no
+		from a_staff_info
+		where op_no =
+		#{opNo,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectAStaffInfoByStaffId" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		select op_no
+		from a_staff_info
+		where staff_id =
+		#{staffId,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectAStaffInfoByOpnoStaffId" parameterType="com.tmount.db.staff.dto.AStaffInfo"
+		resultType="java.lang.String">
+		select op_no
+		from a_staff_info
+		where op_no =
+		#{opNo,jdbcType=VARCHAR} and
+		staff_id != #{staffId,jdbcType=INTEGER}
+	</select>
+
+	<update id="updateAStaffInfo" parameterType="com.tmount.db.staff.dto.AStaffInfo">
+		update a_staff_info
+		<set>
+			<if test="deptCode != null">
+				dept_code = #{deptCode,jdbcType=INTEGER},
+			</if>
+			<if test="companyId != null">
+				company_id = #{companyId,jdbcType=INTEGER},
+			</if>
+			<if test="shopId != null">
+				shop_id = #{shopId,jdbcType=BIGINT},
+			</if>
+			<if test="opNo != null">
+				op_no = #{opNo,jdbcType=VARCHAR},
+			</if>
+			<if test="opPassword != null">
+				op_password = #{opPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="staffName != null">
+				staff_name = #{staffName,jdbcType=VARCHAR},
+			</if>
+			<if test="idType != null">
+				id_type = #{idType,jdbcType=CHAR},
+			</if>
+			<if test="idNo != null">
+				id_no = #{idNo,jdbcType=CHAR},
+			</if>
+			<if test="mobileNo != null">
+				mobile_no = #{mobileNo,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="workDate != null">
+				work_date = #{workDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="validFlag != null">
+				valid_flag = #{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="staffPosition != null">
+				staff_position = #{staffPosition,jdbcType=VARCHAR},
+			</if>
+			<if test="staffDesc != null">
+				staff_desc = #{staffDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="createStaffId != null">
+				create_staff_id = #{createStaffId,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="nickName != null">
+				nick_name = #{nickName,jdbcType=VARCHAR},
+			</if>
+			<if test="userAvatar != null">
+				user_avatar = #{userAvatar,jdbcType=BIGINT},
+			</if>
+		</set>
+		where staff_id = #{staffId,jdbcType=INTEGER}
+	</update>
+	<select id="selectAStaffInfoByOpno" parameterType="String"
+		resultMap="StaffInfoMap">
+		select a.staff_id,
+		a.op_no,
+		a.op_password,
+		a.staff_name,
+		a.dept_code,
+		b.dept_name,
+		a.staff_name,
+		a.id_no,
+		a.mobile_no,
+		a.email,
+		a.work_date,
+		a.address,
+		a.valid_flag,
+		a.staff_position,
+		a.staff_desc
+		from
+		a_staff_info a ,a_dept_dict b
+		where a.dept_code = b.dept_code and
+		a.op_no = #{opNo,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectAStaffInfoByOpnoNoDept" parameterType="String"
+		resultMap="StaffInfoMap">
+		select a.staff_id,
+		a.op_no,
+		a.op_password,
+		a.staff_name,
+		IFNULL(a.dept_code,0) as 'dept_code',
+		a.company_id,
+		IFNULL(a.shop_id,0) as 'shop_id',
+		a.staff_name,
+		a.id_no,
+		a.mobile_no,
+		a.email,
+		a.work_date,
+		a.address,
+		a.valid_flag,
+		a.staff_position,
+		a.staff_desc,
+		 (select b.dept_name from a_dept_dict b where a.dept_code = b.dept_code ) as 'dept_name'
+		,(select d.shop_name from gd_shop_info d where a.shop_id = d.shop_id) as 'shop_name'
+		,c.company_name
+		,IFNULL(a.shop_id,0) 
+		from
+		a_staff_info a
+		,gd_company_dic c
+		where
+		a.company_id =	c.company_id
+		and a.op_no = #{opNo,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectAStaffInfoByDeptCode" parameterType="String"
+		resultMap="StaffInfoMap">
+		SELECT staff_id FROM a_staff_info WHERE dept_code =
+		#{deptCode,jdbcType=INTEGER},
+	</select>
+
+	<update id="updateAStaffInfoPassword" parameterType="com.tmount.db.staff.dto.AStaffInfo">
+		update
+		a_staff_info
+		set op_password = #{opPassword,jdbcType=VARCHAR}
+		where
+		op_no=#{opNo,jdbcType=VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.mileage.dao.ZdcFaultOriginalMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.mileage.dto.TZdcFaultOriginal" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
+    <result column="fault_code" property="faultCode" jdbcType="VARCHAR" />
+    <result column="falut_make_date" property="falutMakeDate" jdbcType="VARCHAR" />
+  </resultMap>
+    <resultMap id="BaseResultMap1" type="com.tmount.db.mileage.dto.TZdcFaultCodeLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="fault_type" property="faultType" jdbcType="VARCHAR" />
+    <result column="hex_code" property="hexCode" jdbcType="VARCHAR" />
+    <result column="dec_code" property="decCode" jdbcType="VARCHAR" />
+    <result column="deviceid" property="deviceid" jdbcType="VARCHAR" />
+    <result column="fault_clear" property="faultClear" jdbcType="INTEGER" />
+    <result column="make_date" property="makeDate" jdbcType="VARCHAR" />
+    <result column="DEAL_SUG" property="DEAL_SUG" jdbcType="VARCHAR" />
+    <result column="FAULT_DES" property="FAULT_DES" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,device_id,fault_code,falut_make_date
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.mileage.dto.TZdcFaultOriginal">
+    insert into t_zdc_fault_original (
+       device_id,fault_code,falut_make_date)
+    values (
+        #{deviceId,jdbcType=VARCHAR},#{faultCode,jdbcType=VARCHAR},
+        #{falutMakeDate,jdbcType=VARCHAR}
+    )
+  </insert>
+  <insert id="insert_fault_log" parameterType="com.tmount.db.mileage.dto.TZdcFaultCodeLog">
+    insert into t_zdc_fault_code_log (
+       fault_type,hex_code,dec_code,deviceid,fault_clear,make_date)
+    values (
+        #{faultType,jdbcType=VARCHAR},#{hexCode,jdbcType=VARCHAR},
+        #{decCode,jdbcType=VARCHAR},#{deviceid,jdbcType=VARCHAR},#{faultClear,jdbcType=INTEGER},
+        #{makeDate,jdbcType=VARCHAR}
+    )
+  </insert>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_zdc_fault_original
+     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+      from t_zdc_fault_original
+     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_zdc_fault_original
+    </select>
+    
+    
+      <select id="selectFaultCode" resultMap="BaseResultMap1" parameterType="com.tmount.db.mileage.dto.TZdcFaultCodeLog">
+ <!--  SELECT a.*,b.`FAULT_DES`,b.`DEAL_SUG` FROM `t_zdc_fault_code_log`  
+  a INNER JOIN `t_zdc_fault_code` b ON a.`HEX_CODE`=b.`HEX_CODE` 
+  WHERE deviceid= #{deviceid,jdbcType=VARCHAR}  AND fault_clear=0 -->
+  
+    SELECT a.*,
+  CONCAT(IFNULL( b.`FAULT_DES`,'未知故障'),CONCAT('-',a.`HEX_CODE`))
+   FAULT_DES
+   ,b.`DEAL_SUG` FROM `t_zdc_fault_code_log`  
+  a LEFT JOIN `t_zdc_fault_code` b ON a.`HEX_CODE`=b.`HEX_CODE` 
+  WHERE deviceid= #{deviceid,jdbcType=VARCHAR}   AND fault_clear=0
+  </select>
+
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.mileage.dto.TZdcFaultCodeLog">
+    update t_zdc_fault_code_log
+    set fault_clear=1
+    where deviceid= #{deviceid,jdbcType=VARCHAR} and fault_type = #{faultType,jdbcType=VARCHAR}
+  </update>
+  
+    <select id="selectByInto" resultMap="BaseResultMap1" parameterType="com.tmount.db.mileage.dto.TZdcFaultCodeLog">
+     SELECT *
+     FROM t_zdc_fault_code_log WHERE HEX_CODE= #{hexCode,jdbcType=VARCHAR} AND deviceid= #{deviceid,jdbcType=VARCHAR} AND FAULT_CLEAR=0  limit 1
+  </select>
+</mapper>

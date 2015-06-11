@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.host.dao.TZdcHostUserMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.host.dto.TZdcHostUser" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="accountid" property="accountid" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="CHAR" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="school" property="school" jdbcType="VARCHAR" />
+    <result column="specialty" property="specialty" jdbcType="VARCHAR" />
+    <result column="specdate" property="specdate" jdbcType="VARCHAR" />
+    <result column="native_place" property="nativePlace" jdbcType="VARCHAR" />
+    <result column="nation" property="nation" jdbcType="VARCHAR" />
+    <result column="telphone" property="telphone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="height" property="height" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="VARCHAR" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="createdate" property="createdate" jdbcType="VARCHAR" />
+    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+    <result column="grade" property="grade" jdbcType="CHAR" />
+    <result column="prell" property="prell" jdbcType="VARCHAR" />
+    <result column="voip_status" property="voip_status" jdbcType="INTEGER" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="voipAccount" property="voipAccount" jdbcType="VARCHAR" />
+    <result column="voipPwd" property="voipPwd" jdbcType="VARCHAR" />
+     <result column="roomId" property="roomId" jdbcType="INTEGER" />
+     <result column="hostType" property="hostType" jdbcType="VARCHAR" />
+     <result column="channelType" property="channelType" jdbcType="VARCHAR" />
+     <result column="account_name" property="account_name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,accountid,name,sex,birthday,school,specialty,specdate,native_place,nation,telphone,email,address,height,weight,pic,createdate,introduce,grade,prell,nickname
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.host.dto.TZdcHostUser">
+    insert into t_zdc_host_user (
+        name,sex,birthday,school,specialty,specdate,native_place,nation,telphone,email,address,height,weight,pic,createdate,introduce,grade,prell,nickname)
+    values (
+        #{name,jdbcType=VARCHAR},
+        #{sex,jdbcType=CHAR},#{birthday,jdbcType=VARCHAR},#{school,jdbcType=VARCHAR},
+        #{specialty,jdbcType=VARCHAR},#{specdate,jdbcType=VARCHAR},#{nativePlace,jdbcType=VARCHAR},
+        #{nation,jdbcType=VARCHAR},#{telphone,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},
+        #{address,jdbcType=VARCHAR},#{height,jdbcType=VARCHAR},#{weight,jdbcType=VARCHAR},
+        #{pic,jdbcType=VARCHAR},#{createdate,jdbcType=VARCHAR},#{introduce,jdbcType=VARCHAR},
+        #{grade,jdbcType=CHAR},#{prell,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.host.dto.TZdcHostUser">
+    update t_zdc_host_user
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="accountid != null">
+        accountid = #{accountid,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null">
+        school = #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="specialty != null">
+        specialty = #{specialty,jdbcType=VARCHAR},
+      </if>
+      <if test="specdate != null">
+        specdate = #{specdate,jdbcType=VARCHAR},
+      </if>
+      <if test="nativePlace != null">
+        native_place = #{nativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="nation != null">
+        nation = #{nation,jdbcType=VARCHAR},
+      </if>
+      <if test="telphone != null">
+        telphone = #{telphone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null">
+        height = #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null">
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="createdate != null">
+        createdate = #{createdate,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null">
+        grade = #{grade,jdbcType=CHAR},
+      </if>
+      <if test="prell != null">
+        prell = #{prell,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        nickname =  #{nickname,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_zdc_host_user
+     where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+   
+     
+   SELECT u.`accountid`,u.`name`,u.`nickname`,u.`birthday`,u.`introduce`,u.`pic` ,a.`voip_status`,a.`voipAccount`,a.`voipPwd`,a.roomId  FROM  t_zdc_host_user u INNER JOIN   `t_itov_ptt_subaccount` a ON  u.`accountid`=a.`account_id`
+   where u.id = #{id,jdbcType=INTEGER}
+  
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.tmount.db.host.dto.TZdcHostUser">
+  SELECT u.* ,a.`voip_status`,a.`roomId`,a.voipAccount,a.`voipPwd`   FROM  t_zdc_host_user u INNER JOIN   `t_itov_ptt_subaccount` a ON  u.`accountid`=a.`account_id`
+   <if test="hostType==1">
+   AND a.`hostType`= 1 
+   </if>
+   <if test="hostType==0">
+   AND a.`hostType`= 0
+   </if>
+   <if test="voip_status==0">
+    AND a.`voip_status`= 0 
+   </if>
+   LIMIT  #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="selectHostInfo" resultMap="BaseResultMap" parameterType="com.tmount.db.host.dto.TZdcHostUser">
+  SELECT u.*  FROM  t_zdc_host_user u
+  LIMIT  #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select 
+    <include refid="Base_Column_List" />
+      from t_zdc_host_user
+     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer">
+    select count(1) from
+      t_zdc_host_user
+  </select>
+ <select id="selectHostByStatus" resultMap="BaseResultMap" parameterType="com.tmount.db.host.dto.TZdcHostUser">
+  SELECT u.* ,a.`voip_status`,a.`hostType`   FROM  t_zdc_host_user u INNER JOIN   `t_itov_ptt_subaccount` a ON  u.`accountid`=a.`account_id`
+   <if test="voip_status!=null">
+   and a.`voip_status`= #{voip_status}
+   </if>
+   <if test="hostType!=null">
+   and a.`hostType`= #{hostType}
+   </if>
+  LIMIT  #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+ <select id="selectCountByStatus" resultType="java.lang.Integer" parameterType="com.tmount.db.host.dto.TZdcHostUser">
+  SELECT count(*)  FROM  t_zdc_host_user u INNER JOIN   `t_itov_ptt_subaccount` a ON  u.`accountid`=a.`account_id`
+  <if test="voip_status!=null">
+   and a.`voip_status`= #{voip_status}
+   </if>
+   <if test="hostType!=null">
+   and a.`hostType`= #{hostType}
+   </if>
+  </select>
+  <select id="selectAccountInfo" resultMap="BaseResultMap" parameterType="java.lang.Long">
+   SELECT account.`account_name`,sub.`hostType`,sub.`channelType`,sub.`roomId` FROM `t_itov_ptt_subaccount` sub 
+   INNER JOIN `t_itov_account` account ON sub.`account_id`=account.`account_id` WHERE account.`account_id`=#{account_id}
+  </select>
+</mapper>

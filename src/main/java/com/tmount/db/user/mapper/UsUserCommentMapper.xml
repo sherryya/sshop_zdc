@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.user.dao.UsUserCommentMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.user.dto.UsUserComment" >
+    <id column="comment_id" property="commentId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <result column="items_name" property="itemsName" jdbcType="VARCHAR" />
+    <result column="comment_level" property="commentLevel" jdbcType="INTEGER" />
+    <result column="items_desc" property="itemsDesc" jdbcType="INTEGER" />
+    <result column="delive_speed" property="deliveSpeed" jdbcType="INTEGER" />
+    <result column="server_attitude" property="serverAttitude" jdbcType="INTEGER" />
+    <result column="goods_speed" property="goodsSpeed" jdbcType="INTEGER" />
+    <result column="average_value" property="averageValue" jdbcType="INTEGER" />
+    <result column="comment_content" property="commentContent" jdbcType="VARCHAR" />
+    <result column="comment_time" property="commentTime" jdbcType="TIMESTAMP" />
+    <result column="order_no" property="orderNo" jdbcType="BIGINT" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="usUserCommentUserMap" type="com.tmount.db.user.vo.UsUserCommentUser" extends="BaseResultMap">
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="user_avatar" property="userAvatar" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="usUserCommentStatisMap" type="com.tmount.db.user.vo.UsUserStatis" extends="BaseResultMap">
+    <result column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="count(*)" property="commentCount" jdbcType="INTEGER" />
+    <result column="comment_level" property="commentCount" jdbcType="INTEGER" />
+    <result column="sum(comment_level)" property="commentLevelSum" jdbcType="INTEGER" />
+    <result column="comment_level" property="commentLevel" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    comment_id, user_id, shop_id, items_id, items_name, comment_level, items_desc, delive_speed, 
+    server_attitude, goods_speed, average_value, comment_content, comment_time, order_no, end_time
+  </sql>
+  <select id="selectBySelectiveCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select 
+    count(*)
+    from us_user_comment a, us_user_info b
+    where a.user_id = b.user_id
+      <if test="itemsId != null" >
+      and a.items_id = #{itemsId,jdbcType=BIGINT}
+      </if>
+      <if test="userId != null" >
+      and a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null" >
+      and a.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="commentLevel != null" >
+      and a.comment_level = #{commentLevel,jdbcType=BIGINT}
+      </if>
+  </select>
+  <select id="selectBySelective" resultMap="usUserCommentUserMap" parameterType="java.util.Map" >
+    select 
+    a.comment_id, a.user_id, a.shop_id, a.items_id, a.items_name, a.comment_level, a.items_desc, a.delive_speed, 
+    a.server_attitude, a.goods_speed, a.average_value, a.comment_content, a.comment_time, a.order_no, a.end_time, b.user_name, b.user_account, b.user_avatar
+    from us_user_comment a, us_user_info b
+    where a.user_id = b.user_id
+      <if test="itemsId != null" >
+      and a.items_id = #{itemsId,jdbcType=BIGINT}
+      </if>
+      <if test="userId != null" >
+      and a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null" >
+      and a.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="commentLevel != null" >
+      and a.comment_level = #{commentLevel,jdbcType=BIGINT}
+      </if>
+    order by comment_time desc
+    limit #{start}, #{end}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from us_user_comment
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from us_user_comment
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.user.dto.UsUserComment" >
+    insert into us_user_comment (comment_id, user_id, shop_id, 
+      items_id, items_name, comment_level, 
+      items_desc, delive_speed, server_attitude, 
+      goods_speed, average_value, comment_content, 
+      comment_time, order_no, end_time)
+    values (#{commentId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, 
+      #{itemsId,jdbcType=BIGINT}, #{itemsName,jdbcType=VARCHAR}, #{commentLevel,jdbcType=INTEGER}, 
+      #{itemsDesc,jdbcType=INTEGER}, #{deliveSpeed,jdbcType=INTEGER}, #{serverAttitude,jdbcType=INTEGER}, 
+      #{goodsSpeed,jdbcType=INTEGER}, #{averageValue,jdbcType=INTEGER}, #{commentContent,jdbcType=VARCHAR}, 
+      #{commentTime,jdbcType=TIMESTAMP}, #{orderNo,jdbcType=BIGINT}, #{endTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.user.dto.UsUserComment" >
+    insert into us_user_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commentId != null" >
+        comment_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="itemsId != null" >
+        items_id,
+      </if>
+      <if test="itemsName != null" >
+        items_name,
+      </if>
+      <if test="commentLevel != null" >
+        comment_level,
+      </if>
+      <if test="itemsDesc != null" >
+        items_desc,
+      </if>
+      <if test="deliveSpeed != null" >
+        delive_speed,
+      </if>
+      <if test="serverAttitude != null" >
+        server_attitude,
+      </if>
+      <if test="goodsSpeed != null" >
+        goods_speed,
+      </if>
+      <if test="averageValue != null" >
+        average_value,
+      </if>
+      <if test="commentContent != null" >
+        comment_content,
+      </if>
+      <if test="commentTime != null" >
+        comment_time,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commentId != null" >
+        #{commentId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="itemsId != null" >
+        #{itemsId,jdbcType=BIGINT},
+      </if>
+      <if test="itemsName != null" >
+        #{itemsName,jdbcType=VARCHAR},
+      </if>
+      <if test="commentLevel != null" >
+        #{commentLevel,jdbcType=INTEGER},
+      </if>
+      <if test="itemsDesc != null" >
+        #{itemsDesc,jdbcType=INTEGER},
+      </if>
+      <if test="deliveSpeed != null" >
+        #{deliveSpeed,jdbcType=INTEGER},
+      </if>
+      <if test="serverAttitude != null" >
+        #{serverAttitude,jdbcType=INTEGER},
+      </if>
+      <if test="goodsSpeed != null" >
+        #{goodsSpeed,jdbcType=INTEGER},
+      </if>
+      <if test="averageValue != null" >
+        #{averageValue,jdbcType=INTEGER},
+      </if>
+      <if test="commentContent != null" >
+        #{commentContent,jdbcType=VARCHAR},
+      </if>
+      <if test="commentTime != null" >
+        #{commentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.user.dto.UsUserComment" >
+    update us_user_comment
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="itemsId != null" >
+        items_id = #{itemsId,jdbcType=BIGINT},
+      </if>
+      <if test="itemsName != null" >
+        items_name = #{itemsName,jdbcType=VARCHAR},
+      </if>
+      <if test="commentLevel != null" >
+        comment_level = #{commentLevel,jdbcType=INTEGER},
+      </if>
+      <if test="itemsDesc != null" >
+        items_desc = #{itemsDesc,jdbcType=INTEGER},
+      </if>
+      <if test="deliveSpeed != null" >
+        delive_speed = #{deliveSpeed,jdbcType=INTEGER},
+      </if>
+      <if test="serverAttitude != null" >
+        server_attitude = #{serverAttitude,jdbcType=INTEGER},
+      </if>
+      <if test="goodsSpeed != null" >
+        goods_speed = #{goodsSpeed,jdbcType=INTEGER},
+      </if>
+      <if test="averageValue != null" >
+        average_value = #{averageValue,jdbcType=INTEGER},
+      </if>
+      <if test="commentContent != null" >
+        comment_content = #{commentContent,jdbcType=VARCHAR},
+      </if>
+      <if test="commentTime != null" >
+        comment_time = #{commentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.user.dto.UsUserComment" >
+    update us_user_comment
+    set user_id = #{userId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      items_id = #{itemsId,jdbcType=BIGINT},
+      items_name = #{itemsName,jdbcType=VARCHAR},
+      comment_level = #{commentLevel,jdbcType=INTEGER},
+      items_desc = #{itemsDesc,jdbcType=INTEGER},
+      delive_speed = #{deliveSpeed,jdbcType=INTEGER},
+      server_attitude = #{serverAttitude,jdbcType=INTEGER},
+      goods_speed = #{goodsSpeed,jdbcType=INTEGER},
+      average_value = #{averageValue,jdbcType=INTEGER},
+      comment_content = #{commentContent,jdbcType=VARCHAR},
+      comment_time = #{commentTime,jdbcType=TIMESTAMP}
+      order_no = #{orderNo,jdbcType=BIGINT}
+      end_time = #{endTime,jdbcType=TIMESTAMP}
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </update>
+  <select id="selectListById" resultMap="BaseResultMap" parameterType="com.tmount.db.user.dto.UsUserComment" >
+    select 
+    <include refid="Base_Column_List" />
+    from us_user_comment
+    where 1=1 
+    <if test="userId != null" >
+        and user_id=#{userId,jdbcType=BIGINT}
+    </if>
+    <if test="shopId != null" >
+        and shop_id=#{shopId,jdbcType=BIGINT}
+    </if>
+    <if test="itemsId != null" >
+        and items_id=#{itemsId,jdbcType=BIGINT}
+    </if>
+    <if test="commentLevel != null" >
+        and comment_level=#{commentLevel,jdbcType=INTEGER}
+    </if>
+    <if test="commentTime != null" >
+        and comment_time &lt; #{commentTime,jdbcType=TIMESTAMP}
+    </if>
+   	order by comment_time desc
+   	limit 0,20
+  </select>
+  
+  <select id="selectCommentByTime" resultMap="usUserCommentStatisMap" parameterType="com.tmount.db.sys.vo.StatisTime" >
+    select items_id,count(*),sum(comment_level)
+    from us_user_comment
+    where  comment_time &lt; #{endTime,jdbcType=TIMESTAMP} and comment_time >= #{beginTime,jdbcType=TIMESTAMP}
+   	group by items_id
+  </select>
+  
+  <select id="selectShopCommentByTime" resultMap="usUserCommentStatisMap" parameterType="com.tmount.db.sys.vo.StatisTime" >
+    select shop_id,comment_level,count(*)
+    from us_user_comment
+    where  comment_time &lt; #{endTime,jdbcType=TIMESTAMP} and comment_time >= #{beginTime,jdbcType=TIMESTAMP}
+   	group by shop_id,comment_level
+  </select>
+  
+</mapper>

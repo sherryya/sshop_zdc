@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.user.dao.UsUserAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.user.dto.UsUserAccount" >
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="balance_money" property="balanceMoney" jdbcType="DOUBLE" />
+    <result column="point_value" property="pointValue" jdbcType="DOUBLE" />
+    <result column="point" property="point" jdbcType="DOUBLE" />
+    <result column="eval_point" property="evalPoint" jdbcType="DOUBLE" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, balance_money, point_value, point, eval_point, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from us_user_account
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from us_user_account
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <!-- 用户注册 -->
+  <insert id="insert" parameterType="com.tmount.db.user.dto.UsAccount" >
+      INSERT INTO t_itov_account (account_id,account_name,account_password,account_type,account_role_id,company_id,access_id,access_token,nickname)
+       VALUES (#{account_id,jdbcType=BIGINT},#{account_name,jdbcType=VARCHAR},#{account_password,jdbcType=VARCHAR},
+       #{account_type,jdbcType=BIGINT},#{account_role_id,jdbcType=BIGINT},#{company_id,jdbcType=BIGINT},#{access_id,jdbcType=VARCHAR},#{access_token,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.user.dto.UsUserAccount" >
+    insert into us_user_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="balanceMoney != null" >
+        balance_money,
+      </if>
+      <if test="pointValue != null" >
+        point_value,
+      </if>
+      <if test="point != null" >
+        point,
+      </if>
+      <if test="evalPoint != null" >
+        eval_point,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="balanceMoney != null" >
+        #{balanceMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="pointValue != null" >
+        #{pointValue,jdbcType=DOUBLE},
+      </if>
+      <if test="point != null" >
+        #{point,jdbcType=DOUBLE},
+      </if>
+      <if test="evalPoint != null" >
+        #{evalPoint,jdbcType=DOUBLE},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.user.dto.UsUserAccount" >
+    update us_user_account
+    <set >
+      <if test="balanceMoney != null" >
+        balance_money = #{balanceMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="pointValue != null" >
+        point_value = #{pointValue,jdbcType=DOUBLE},
+      </if>
+      <if test="point != null" >
+        point = #{point,jdbcType=DOUBLE},
+      </if>
+      <if test="evalPoint != null" >
+        eval_point = #{evalPoint,jdbcType=DOUBLE},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.user.dto.UsUserAccount" >
+    update us_user_account
+    set balance_money = #{balanceMoney,jdbcType=DOUBLE},
+      point_value = #{pointValue,jdbcType=DOUBLE},
+      point = #{point,jdbcType=DOUBLE},
+      eval_point = #{evalPoint,jdbcType=DOUBLE},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <select id="getAccountIdByName" parameterType="java.lang.String" resultType="java.lang.Long">
+     SELECT t.`account_id` FROM `t_itov_account` t WHERE t.`account_name` =#{account_name};
+  </select>
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.pub.dao.DbSequenceMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.pub.dto.DbSequence" >
+    <result column="seq_name" property="seqName" jdbcType="CHAR" />
+    <result column="seq_value" property="seqValue" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+     seq_name, seq_value
+  </sql>
+  <select id="selectSeqByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select #{seqName,jdbcType=CHAR} seq_name, nextval(#{seqName,jdbcType=CHAR}) seq_value
+  </select>
+</mapper>

@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdShopItemsRelMapper" >
+  <resultMap id="itemsInfoMap" type="com.tmount.db.product.dto.GdItemsInfo" >
+    <id column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="show_type" property="showType" jdbcType="INTEGER" />
+    <result column="has_child" property="hasChild" jdbcType="CHAR" />
+    <result column="items_name" property="itemsName" jdbcType="VARCHAR" />
+    <result column="name_spr" property="nameSpr" jdbcType="VARCHAR" />
+    <result column="items_intro" property="itemsIntro" jdbcType="VARCHAR" />
+    <result column="small_pic" property="smallPic" jdbcType="BIGINT" />
+    <result column="big_pic" property="bigPic" jdbcType="BIGINT" />
+    <result column="http_url" property="httpUrl" jdbcType="VARCHAR" />
+    <result column="web_url" property="webUrl" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="aunit" property="aunit" jdbcType="CHAR" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="member_price" property="memberPrice" jdbcType="DOUBLE" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="update_no" property="updateNo" jdbcType="INTEGER" />
+    <result column="discuss_count" property="discussCount" jdbcType="INTEGER" />
+    <result column="comment_value" property="commentValue" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="shopItemsRelInfoMap" type="com.tmount.db.product.vo.GdShopItemsRelInfo" extends="itemsInfoMap">
+    <id column="sitems_type" property="sitemsType" jdbcType="INTEGER" />
+    <result column="data_type" property="dataType" jdbcType="INTEGER" />
+    <result column="up_flag" property="upFlag" jdbcType="CHAR" />
+    <result column="orders_time" property="ordersTime" jdbcType="TIMESTAMP" />
+    <result column="orders" property="orders" jdbcType="INTEGER" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdShopItemsRel" >
+    <id column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <id column="sitems_type" property="sitemsType" jdbcType="INTEGER" />
+    <result column="data_type" property="dataType" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="orders_time" property="ordersTime" jdbcType="TIMESTAMP" />
+    <result column="orders" property="orders" jdbcType="INTEGER" />
+    <result column="up_flag" property="upFlag" jdbcType="CHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="update_no" property="updateNo" jdbcType="CHAR" />
+  </resultMap>
+
+  <sql id="Extend_Column_List" >
+    a.items_id, a.shop_id, a.show_type, a.has_child, a.items_name, a.name_spr, a.items_intro, 
+    a.small_pic, a.big_pic, a.http_url, a.web_url,a.price, a.aunit, a.discount, a.member_price, a.discuss_count, a.comment_value, b.update_time, 
+    b.state, b.update_no, b.sitems_type,b.data_type, b.up_flag, b.orders_time, b.orders, c.type_name
+  </sql>
+
+  <sql id="Base_Column_List" >
+    items_id, shop_id, sitems_type, orders_time, orders, up_flag, update_time, state, 
+    update_no
+  </sql>
+
+  <delete id="deleteByMap" parameterType="java.util.Map" >
+    delete from gd_shop_items_rel
+    <where>
+    	<if test="itemsId != null">
+    		items_id = #{itemsId,jdbcType=BIGINT}
+    	</if>
+    	<if test="dataType != null">
+    		and data_type = #{dataType,jdbcType=INTEGER}
+    	</if>
+    </where>
+  </delete>
+  <delete id="deleteByItemsId" parameterType="java.lang.Long" >
+    delete from gd_shop_items_rel
+    where items_id = #{itemsId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByShopId" parameterType="java.lang.Long" >
+    delete from gd_shop_items_rel
+    where shop_id = #{shopId,jdbcType=BIGINT}
+  </delete>
+
+  <select id="selectByPKExpl" resultMap="shopItemsRelInfoMap" parameterType="com.tmount.db.product.dto.GdShopItemsRelKey" >
+    select 
+    <include refid="Extend_Column_List" />
+    from gd_items_info a, gd_shop_items_rel b, gd_shop_itemstype_dic c
+    where a.items_id = b.items_id
+      and b.sitems_type = c.sitems_type
+      and b.sitems_type = #{sitemsType,jdbcType=INTEGER}
+      and b.items_id = #{itemsId}
+    order by orders_time desc
+  </select>
+
+  <select id="selectShopItemsRelList" resultMap="shopItemsRelInfoMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Extend_Column_List" />
+    from gd_items_info a, gd_shop_items_rel b, gd_shop_itemstype_dic c
+    where a.items_id = b.items_id
+      and b.sitems_type = c.sitems_type
+      and b.shop_id = #{shopId,jdbcType=BIGINT}
+      <if test="sitemsType != null">
+      and b.sitems_type = #{sitemsType,jdbcType=INTEGER}
+      </if>
+      <if test="dataType != null">
+      and c.data_type = #{dataType,jdbcType=INTEGER}
+      </if>
+      <if test="state != null">
+      and b.state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="itemsState != null">
+      and a.state = #{itemsState,jdbcType=CHAR}
+      </if>
+      <if test="itemsName != null">
+      AND a.items_name like CONCAT('%',#{itemsName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="beginPrice != null">
+      AND a.price &gt;= #{beginPrice,jdbcType=DOUBLE}
+      </if>
+      <if test="endPrice != null">
+      AND a.price &lt;= #{endPrice,jdbcType=DOUBLE}
+      </if>
+      <if test="ordersTime != null">
+      and b.orders_time &lt; #{ordersTime,jdbcType=TIMESTAMP}
+      </if>
+    order by sitems_type, orders_time desc
+    <if test="start != null">
+    limit #{start},#{end}
+    </if>
+    <if test="fetchRows != null">
+    limit #{fetchRows,jdbcType=INTEGER}
+    </if>
+  </select>
+  
+  <select id="selectShopItemsRelListCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select 
+    count(1)
+    from gd_items_info a, gd_shop_items_rel b, gd_shop_itemstype_dic c
+    where a.items_id = b.items_id
+      and b.sitems_type = c.sitems_type
+      and b.shop_id = #{shopId,jdbcType=BIGINT}
+      <if test="sitemsType != null">
+      and b.sitems_type = #{sitemsType,jdbcType=INTEGER}
+      </if>
+      <if test="dataType != null">
+      and c.data_type = #{dataType,jdbcType=INTEGER}
+      </if>
+      <if test="state != null">
+      and b.state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="itemsState != null">
+      and a.state = #{itemsState,jdbcType=CHAR}
+      </if>
+      <if test="itemsName != null">
+      AND a.items_name like CONCAT('%',#{itemsName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="beginPrice != null">
+      AND a.price &gt;= #{beginPrice,jdbcType=DOUBLE}
+      </if>
+      <if test="endPrice != null">
+      AND a.price &lt;= #{endPrice,jdbcType=DOUBLE}
+      </if>
+      <if test="ordersTime != null">
+      and b.orders_time &lt; #{ordersTime,jdbcType=TIMESTAMP}
+      </if>
+  </select>
+
+  <select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.GdShopItemsRel" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_shop_items_rel
+    <where>
+      <if test="itemsId != null" >
+        items_id = #{itemsId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null" >
+        and shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="sitemsType != null" >
+        and sitems_type = #{sitemsType,jdbcType=INTEGER}
+      </if>
+      <if test="dataType != null" >
+        and data_type = #{dataType,jdbcType=INTEGER}
+      </if>
+      <if test="upFlag != null" >
+        and up_flag = #{upFlag,jdbcType=CHAR}
+      </if>
+      <if test="state != null" >
+        and state = #{state,jdbcType=CHAR}
+      </if>
+      </where>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.GdShopItemsRelKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_shop_items_rel
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and sitems_type = #{sitemsType,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.product.dto.GdShopItemsRelKey" >
+    delete from gd_shop_items_rel
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and sitems_type = #{sitemsType,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.GdShopItemsRel" >
+    insert into gd_shop_items_rel (items_id, shop_id, sitems_type, data_type,
+      orders_time, orders, up_flag, 
+      update_time, state, update_no
+      )
+    values (#{itemsId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, #{sitemsType,jdbcType=INTEGER}, #{dataType,jdbcType=INTEGER}, 
+      #{ordersTime,jdbcType=TIMESTAMP}, #{orders,jdbcType=INTEGER}, #{upFlag,jdbcType=CHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{state,jdbcType=CHAR}, #{updateNo,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.GdShopItemsRel" >
+    insert into gd_shop_items_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemsId != null" >
+        items_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="sitemsType != null" >
+        sitems_type,
+      </if>
+      <if test="dataType != null" >
+        data_type,
+      </if>
+      <if test="ordersTime != null" >
+        orders_time,
+      </if>
+      <if test="orders != null" >
+        orders,
+      </if>
+      <if test="upFlag != null" >
+        up_flag,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="updateNo != null" >
+        update_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemsId != null" >
+        #{itemsId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="sitemsType != null" >
+        #{sitemsType,jdbcType=INTEGER},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="ordersTime != null" >
+        #{ordersTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orders != null" >
+        #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="upFlag != null" >
+        #{upFlag,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="updateNo != null" >
+        #{updateNo,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByMapSelective" parameterType="java.util.Map" >
+    update gd_shop_items_rel
+    <set >
+      <if test="ordersTime != null" >
+        orders_time = #{ordersTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+       <if test="dataType != null" >
+        data_type = #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="orders != null" >
+        orders = #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="upFlag != null" >
+        up_flag = #{upFlag,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="updateNo != null" >
+        update_no = #{updateNo,jdbcType=INTEGER},
+      </if>
+    </set>
+    <where>
+      <if test="itemsId != null" >
+        items_id = #{itemsId,jdbcType=BIGINT}
+      </if>
+      <if test="sitemsType != null" >
+      and sitems_type = #{sitemsType,jdbcType=INTEGER}
+      </if>
+    </where>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.GdShopItemsRel" >
+    update gd_shop_items_rel
+    <set >
+      <if test="ordersTime != null" >
+        orders_time = #{ordersTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+       <if test="dataType != null" >
+        data_type = #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="orders != null" >
+        orders = #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="upFlag != null" >
+        up_flag = #{upFlag,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="updateNo != null" >
+        update_no = #{updateNo,jdbcType=INTEGER},
+      </if>
+    </set>
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and sitems_type = #{sitemsType,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.GdShopItemsRel" >
+    update gd_shop_items_rel
+    set orders_time = #{ordersTime,jdbcType=TIMESTAMP},
+      shop_id = #{shopId,jdbcType=BIGINT}
+      data_type = #{dataType,jdbcType=INTEGER},
+      orders = #{orders,jdbcType=INTEGER},
+      up_flag = #{upFlag,jdbcType=CHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=CHAR},
+      update_no = #{updateNo,jdbcType=INTEGER}
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and sitems_type = #{sitemsType,jdbcType=INTEGER}
+  </update>
+</mapper>

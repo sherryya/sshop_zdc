@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.mileage.dao.TZdcFaultCodeLogMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.mileage.dto.TZdcFaultCodeLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="fault_type" property="faultType" jdbcType="VARCHAR" />
+    <result column="hex_code" property="hexCode" jdbcType="VARCHAR" />
+    <result column="dec_code" property="decCode" jdbcType="VARCHAR" />
+    <result column="deviceid" property="deviceid" jdbcType="VARCHAR" />
+    <result column="fault_clear" property="faultClear" jdbcType="INTEGER" />
+    <result column="make_date" property="makeDate" jdbcType="VARCHAR" />
+    <result column="DEAL_SUG" property="DEAL_SUG" jdbcType="VARCHAR" />
+    <result column="FAULT_DES" property="FAULT_DES" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,fault_type,hex_code,dec_code,deviceid,fault_clear,make_date
+  </sql>
+  <insert id="insert_fault_log" parameterType="com.tmount.db.mileage.dto.TZdcFaultCodeLog">
+    insert into t_zdc_fault_code_log (
+       fault_type,hex_code,dec_code,deviceid,fault_clear,make_date)
+    values (
+        #{faultType,jdbcType=VARCHAR},#{hexCode,jdbcType=VARCHAR},
+        #{decCode,jdbcType=VARCHAR},#{deviceid,jdbcType=VARCHAR},#{faultClear,jdbcType=INTEGER},
+        #{makeDate,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.mileage.dto.TZdcFaultCodeLog">
+    update t_zdc_fault_code_log
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="faultType != null">
+        fault_type = #{faultType,jdbcType=VARCHAR},
+      </if>
+      <if test="hexCode != null">
+        hex_code = #{hexCode,jdbcType=VARCHAR},
+      </if>
+      <if test="decCode != null">
+        dec_code = #{decCode,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceid != null">
+        deviceid = #{deviceid,jdbcType=VARCHAR},
+      </if>
+      <if test="faultClear != null">
+        fault_clear = #{faultClear,jdbcType=INT},
+      </if>
+      <if test="makeDate != null">
+        make_date = #{makeDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT},
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_zdc_fault_code_log
+     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+      from t_zdc_fault_code_log
+     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_zdc_fault_code_log
+    </select>
+    
+    
+    
+
+</mapper>

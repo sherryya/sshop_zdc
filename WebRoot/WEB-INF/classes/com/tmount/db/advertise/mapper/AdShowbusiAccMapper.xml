@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmount.db.advertise.dao.AdShowbusiAccMapper">
+	<resultMap id="BaseResultMap" type="com.tmount.db.advertise.dto.AdShowbusiAcc">
+		<id column="showbusi_id" jdbcType="BIGINT" property="showbusiId" />
+		<result column="shop_id" jdbcType="BIGINT" property="shopId" />
+		<result column="showarea_id" jdbcType="INTEGER" property="showareaId" />
+		<result column="show_page_no" jdbcType="INTEGER" property="showPageNo" />
+		<result column="showsite_id" jdbcType="INTEGER" property="showsiteId" />
+		<result column="show_line_axis" jdbcType="DOUBLE" property="showLineAxis" />
+		<result column="show_row_axis" jdbcType="DOUBLE" property="showRowAxis" />
+		<result column="showsite_width" jdbcType="DOUBLE" property="showsiteWidth" />
+		<result column="showsite_high" jdbcType="DOUBLE" property="showsiteHigh" />
+		<result column="showsite_unit_id" jdbcType="BIGINT" property="showsiteUnitId" />
+		<result column="showsite_unit_type" jdbcType="CHAR" property="showsiteUnitType" />
+		<result column="showsite_unit_url" jdbcType="VARCHAR" property="showsiteUnitUrl" />
+		<result column="showsite_pic_id" jdbcType="BIGINT" property="showsitePicId" />
+		<result column="showsite_pic_width" jdbcType="DOUBLE" property="showsitePicWidth" />
+		<result column="showsite_pic_high" jdbcType="DOUBLE" property="showsitePicHigh" />
+		<result column="showsite_ad_text" jdbcType="VARCHAR" property="showsiteAdText" />
+		<result column="showsite_eff_date" jdbcType="TIMESTAMP"
+			property="showsiteEffDate" />
+		<result column="showsite_exp_date" jdbcType="TIMESTAMP"
+			property="showsiteExpDate" />
+		<result column="showsite_valid" jdbcType="CHAR" property="showsiteValid" />
+		<result column="showsite_combine" jdbcType="VARCHAR" property="showsiteCombine" />
+		<result column="click_do" jdbcType="INTEGER" property="clickDo" />
+		<result column="showsite_show_type" jdbcType="INTEGER"
+			property="showsiteShowType" />
+		<result column="is_default" property="isDefault" jdbcType="CHAR" />
+		<result column="show_id" property="showId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BaseResultMapVo" type="com.tmount.db.advertise.vo.AdShowbusiAccVo">
+		<id column="showbusi_id" jdbcType="BIGINT" property="showbusiId" />
+		<result column="shop_id" jdbcType="BIGINT" property="shopId" />
+		<result column="showarea_id" jdbcType="INTEGER" property="showareaId" />
+		<result column="show_page_no" jdbcType="INTEGER" property="showPageNo" />
+		<result column="showsite_id" jdbcType="INTEGER" property="showsiteId" />
+		<result column="show_line_axis" jdbcType="DOUBLE" property="showLineAxis" />
+		<result column="show_row_axis" jdbcType="DOUBLE" property="showRowAxis" />
+		<result column="showsite_width" jdbcType="DOUBLE" property="showsiteWidth" />
+		<result column="showsite_high" jdbcType="DOUBLE" property="showsiteHigh" />
+		<result column="showsite_unit_id" jdbcType="BIGINT" property="showsiteUnitId" />
+		<result column="showsite_unit_type" jdbcType="CHAR" property="showsiteUnitType" />
+		<result column="showsite_unit_url" jdbcType="VARCHAR" property="showsiteUnitUrl" />
+		<result column="showsite_pic_id" jdbcType="BIGINT" property="showsitePicId" />
+		<result column="showsite_pic_width" jdbcType="DOUBLE" property="showsitePicWidth" />
+		<result column="showsite_pic_high" jdbcType="DOUBLE" property="showsitePicHigh" />
+		<result column="showsite_ad_text" jdbcType="VARCHAR" property="showsiteAdText" />
+		<result column="showsite_eff_date" jdbcType="TIMESTAMP"
+			property="showsiteEffDate" />
+		<result column="showsite_exp_date" jdbcType="TIMESTAMP"
+			property="showsiteExpDate" />
+		<result column="showsite_valid" jdbcType="CHAR" property="showsiteValid" />
+		<result column="showsite_combine" jdbcType="VARCHAR" property="showsiteCombine" />
+		<result column="click_do" jdbcType="INTEGER" property="clickDo" />
+		<result column="showsite_show_type" jdbcType="INTEGER"
+			property="showsiteShowType" />
+		<result column="is_default" property="isDefault" jdbcType="CHAR" />
+		<result column="showsite_unit_type_name" jdbcType="VARCHAR"
+			property="showsiteUnitTypeName" />
+		<result column="showsite_unit_id_name" jdbcType="VARCHAR"
+			property="showsiteUnitIdName" />
+		<result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+		<result column="show_id" property="showId" jdbcType="BIGINT" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		showbusi_id, shop_id, showarea_id, show_page_no,
+		showsite_id, show_line_axis,
+		show_row_axis,
+		showsite_width,
+		showsite_high, showsite_unit_id, showsite_unit_type,
+		showsite_unit_url,
+		showsite_pic_id, showsite_pic_width,
+		showsite_pic_high, showsite_ad_text,
+		showsite_eff_date,
+		showsite_exp_date, showsite_valid, showsite_combine, click_do,
+		showsite_show_type,
+		is_default,
+		show_id
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ad_showbusi_acc
+		where showbusi_id = #{showbusiId,jdbcType=BIGINT}
+	</select>
+	<select id="selectAccList" parameterType="java.util.Map"
+		resultMap="BaseResultMapVo">
+		SELECT
+		CASE a.showsite_unit_type
+		WHEN 1 THEN '商品'
+		WHEN 2 THEN
+		'活动'
+		WHEN 3 THEN '商店'
+		WHEN 4 THEN '分类'
+		END AS showsite_unit_type_name,
+		b.shop_name,
+		a.showbusi_id,
+		a.showarea_id,
+		a.show_page_no,
+		a.showsite_id,
+		a.show_line_axis,
+		a.show_row_axis,
+		a.showsite_width,
+		a.showsite_high,
+		a.showsite_unit_id,
+		a.showsite_unit_url,
+		a.showsite_pic_id,
+		a.showsite_pic_width,
+		a.showsite_pic_high,
+		a.showsite_ad_text,
+		a.showsite_eff_date,
+		a.showsite_exp_date,
+		a.showsite_valid,
+		a.showsite_combine,
+		a.click_do,
+		a.showsite_show_type,
+		a.showsite_unit_type
+		FROM ad_showbusi_acc a,gd_shop_info b WHERE
+		a.shop_id = b.shop_id AND
+		a.is_default='N'
+		and a.showsite_id =
+		#{showsiteId,jdbcType=BIGINT} and a.showarea_id =
+		#{showareaId,jdbcType=INTEGER}
+	</select>
+	<select id="selectByShowSiteId" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from ad_showbusi_acc
+		where showsite_id = #{showsiteId,jdbcType=INTEGER}
+		and is_default = 'Y'
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		ad_showbusi_acc
+		where showbusi_id = #{showbusiId,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteBySieArea" parameterType="java.util.Map">
+		delete from
+		ad_showbusi_acc
+		where showsite_id = #{showsiteId,jdbcType=BIGINT} and
+		showarea_id =
+		#{showareaId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.tmount.db.advertise.dto.AdShowbusiAcc">
+		insert into ad_showbusi_acc
+		(showbusi_id, shop_id, showarea_id,
+		show_page_no, showsite_id,
+		show_line_axis,
+		show_row_axis, showsite_width, showsite_high,
+		showsite_unit_id, showsite_unit_type, showsite_unit_url,
+		showsite_pic_id, showsite_pic_width, showsite_pic_high,
+		showsite_ad_text, showsite_eff_date, showsite_exp_date,
+		showsite_valid, showsite_combine, click_do,
+		showsite_show_type,
+		is_default,show_id)
+		values (#{showbusiId,jdbcType=BIGINT},
+		#{shopId,jdbcType=BIGINT},
+		#{showareaId,jdbcType=INTEGER},
+		#{showPageNo,jdbcType=INTEGER}, #{showsiteId,jdbcType=INTEGER},
+		#{showLineAxis,jdbcType=DOUBLE},
+		#{showRowAxis,jdbcType=DOUBLE},
+		#{showsiteWidth,jdbcType=DOUBLE},
+		#{showsiteHigh,jdbcType=DOUBLE},
+		#{showsiteUnitId,jdbcType=BIGINT}, #{showsiteUnitType,jdbcType=CHAR},
+		#{showsiteUnitUrl,jdbcType=VARCHAR},
+		#{showsitePicId,jdbcType=BIGINT},
+		#{showsitePicWidth,jdbcType=DOUBLE},
+		#{showsitePicHigh,jdbcType=DOUBLE},
+		#{showsiteAdText,jdbcType=VARCHAR},
+		#{showsiteEffDate,jdbcType=TIMESTAMP},
+		#{showsiteExpDate,jdbcType=TIMESTAMP},
+		#{showsiteValid,jdbcType=CHAR},
+		#{showsiteCombine,jdbcType=VARCHAR}, #{clickDo,jdbcType=INTEGER},
+		#{showsiteShowType,jdbcType=INTEGER}, #{isDefault,jdbcType=CHAR},
+		#{showId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.tmount.db.advertise.dto.AdShowbusiAcc">
+		insert into ad_showbusi_acc
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="showbusiId != null">
+				showbusi_id,
+			</if>
+			<if test="shopId != null">
+				shop_id,
+			</if>
+			<if test="showareaId != null">
+				showarea_id,
+			</if>
+			<if test="showPageNo != null">
+				show_page_no,
+			</if>
+			<if test="showsiteId != null">
+				showsite_id,
+			</if>
+			<if test="showLineAxis != null">
+				show_line_axis,
+			</if>
+			<if test="showRowAxis != null">
+				show_row_axis,
+			</if>
+			<if test="showsiteWidth != null">
+				showsite_width,
+			</if>
+			<if test="showsiteHigh != null">
+				showsite_high,
+			</if>
+			<if test="showsiteUnitId != null">
+				showsite_unit_id,
+			</if>
+			<if test="showsiteUnitType != null">
+				showsite_unit_type,
+			</if>
+			<if test="showsiteUnitUrl != null">
+				showsite_unit_url,
+			</if>
+			<if test="showsitePicId != null">
+				showsite_pic_id,
+			</if>
+			<if test="showsitePicWidth != null">
+				showsite_pic_width,
+			</if>
+			<if test="showsitePicHigh != null">
+				showsite_pic_high,
+			</if>
+			<if test="showsiteAdText != null">
+				showsite_ad_text,
+			</if>
+			<if test="showsiteEffDate != null">
+				showsite_eff_date,
+			</if>
+			<if test="showsiteExpDate != null">
+				showsite_exp_date,
+			</if>
+			<if test="showsiteValid != null">
+				showsite_valid,
+			</if>
+			<if test="showsiteCombine != null">
+				showsite_combine,
+			</if>
+			<if test="clickDo != null">
+				click_do,
+			</if>
+			<if test="showsiteShowType != null">
+				showsite_show_type,
+			</if>
+			<if test="isDefault != null">
+				is_default,
+			</if>
+			<if test="showId != null">
+				show_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="showbusiId != null">
+				#{showbusiId,jdbcType=BIGINT},
+			</if>
+			<if test="shopId != null">
+				#{shopId,jdbcType=BIGINT},
+			</if>
+			<if test="showareaId != null">
+				#{showareaId,jdbcType=INTEGER},
+			</if>
+			<if test="showPageNo != null">
+				#{showPageNo,jdbcType=INTEGER},
+			</if>
+			<if test="showsiteId != null">
+				#{showsiteId,jdbcType=INTEGER},
+			</if>
+			<if test="showLineAxis != null">
+				#{showLineAxis,jdbcType=DOUBLE},
+			</if>
+			<if test="showRowAxis != null">
+				#{showRowAxis,jdbcType=DOUBLE},
+			</if>
+			<if test="showsiteWidth != null">
+				#{showsiteWidth,jdbcType=DOUBLE},
+			</if>
+			<if test="showsiteHigh != null">
+				#{showsiteHigh,jdbcType=DOUBLE},
+			</if>
+			<if test="showsiteUnitId != null">
+				#{showsiteUnitId,jdbcType=BIGINT},
+			</if>
+			<if test="showsiteUnitType != null">
+				#{showsiteUnitType,jdbcType=CHAR},
+			</if>
+			<if test="showsiteUnitUrl != null">
+				#{showsiteUnitUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="showsitePicId != null">
+				#{showsitePicId,jdbcType=BIGINT},
+			</if>
+			<if test="showsitePicWidth != null">
+				#{showsitePicWidth,jdbcType=DOUBLE},
+			</if>
+			<if test="showsitePicHigh != null">
+				#{showsitePicHigh,jdbcType=DOUBLE},
+			</if>
+			<if test="showsiteAdText != null">
+				#{showsiteAdText,jdbcType=VARCHAR},
+			</if>
+			<if test="showsiteEffDate != null">
+				#{showsiteEffDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="showsiteExpDate != null">
+				#{showsiteExpDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="showsiteValid != null">
+				#{showsiteValid,jdbcType=CHAR},
+			</if>
+			<if test="showsiteCombine != null">
+				#{showsiteCombine,jdbcType=VARCHAR},
+			</if>
+			<if test="clickDo != null">
+				#{clickDo,jdbcType=INTEGER},
+			</if>
+			<if test="showsiteShowType != null">
+				#{showsiteShowType,jdbcType=INTEGER},
+			</if>
+			<if test="isDefault != null">
+				#{isDefault,jdbcType=CHAR},
+			</if>
+			<if test="showId != null">
+				#{showId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.advertise.dto.AdShowbusiAcc">
+		update ad_showbusi_acc
+		<set>
+			<if test="shopId != null">
+				shop_id = #{shopId,jdbcType=BIGINT},
+			</if>
+			<if test="showareaId != null">
+				showarea_id = #{showareaId,jdbcType=INTEGER},
+			</if>
+			<if test="showPageNo != null">
+				show_page_no = #{showPageNo,jdbcType=INTEGER},
+			</if>
+			<if test="showsiteId != null">
+				showsite_id = #{showsiteId,jdbcType=INTEGER},
+			</if>
+			<if test="showLineAxis != null">
+				show_line_axis = #{showLineAxis,jdbcType=DOUBLE},
+			</if>
+			<if test="showRowAxis != null">
+				show_row_axis = #{showRowAxis,jdbcType=DOUBLE},
+			</if>
+			<if test="showsiteWidth != null">
+				showsite_width = #{showsiteWidth,jdbcType=DOUBLE},
+			</if>
+			<if test="showsiteHigh != null">
+				showsite_high = #{showsiteHigh,jdbcType=DOUBLE},
+			</if>
+			<if test="showsiteUnitId != null">
+				showsite_unit_id = #{showsiteUnitId,jdbcType=BIGINT},
+			</if>
+			<if test="showsiteUnitType != null">
+				showsite_unit_type = #{showsiteUnitType,jdbcType=CHAR},
+			</if>
+			<if test="showsiteUnitUrl != null">
+				showsite_unit_url = #{showsiteUnitUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="showsitePicId != null">
+				showsite_pic_id = #{showsitePicId,jdbcType=BIGINT},
+			</if>
+			<if test="showsitePicWidth != null">
+				showsite_pic_width = #{showsitePicWidth,jdbcType=DOUBLE},
+			</if>
+			<if test="showsitePicHigh != null">
+				showsite_pic_high = #{showsitePicHigh,jdbcType=DOUBLE},
+			</if>
+			<if test="showsiteAdText != null">
+				showsite_ad_text = #{showsiteAdText,jdbcType=VARCHAR},
+			</if>
+			<if test="showsiteEffDate != null">
+				showsite_eff_date =
+				#{showsiteEffDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="showsiteExpDate != null">
+				showsite_exp_date =
+				#{showsiteExpDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="showsiteValid != null">
+				showsite_valid = #{showsiteValid,jdbcType=CHAR},
+			</if>
+			<if test="showsiteCombine != null">
+				showsite_combine = #{showsiteCombine,jdbcType=VARCHAR},
+			</if>
+			<if test="clickDo != null">
+				click_do = #{clickDo,jdbcType=INTEGER},
+			</if>
+			<if test="showsiteShowType != null">
+				showsite_show_type =
+				#{showsiteShowType,jdbcType=INTEGER},
+			</if>
+			<if test="isDefault != null">
+				is_default = #{isDefault,jdbcType=CHAR},
+			</if>
+			<if test="showId != null">
+				show_id = #{showId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where showbusi_id = #{showbusiId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.tmount.db.advertise.dto.AdShowbusiAcc">
+		update
+		ad_showbusi_acc
+		set shop_id = #{shopId,jdbcType=BIGINT},
+		showarea_id =
+		#{showareaId,jdbcType=INTEGER},
+		show_page_no =
+		#{showPageNo,jdbcType=INTEGER},
+		showsite_id =
+		#{showsiteId,jdbcType=INTEGER},
+		show_line_axis =
+		#{showLineAxis,jdbcType=DOUBLE},
+		show_row_axis =
+		#{showRowAxis,jdbcType=DOUBLE},
+		showsite_width =
+		#{showsiteWidth,jdbcType=DOUBLE},
+		showsite_high =
+		#{showsiteHigh,jdbcType=DOUBLE},
+		showsite_unit_id =
+		#{showsiteUnitId,jdbcType=BIGINT},
+		showsite_unit_type =
+		#{showsiteUnitType,jdbcType=CHAR},
+		showsite_unit_url =
+		#{showsiteUnitUrl,jdbcType=VARCHAR},
+		showsite_pic_id =
+		#{showsitePicId,jdbcType=BIGINT},
+		showsite_pic_width =
+		#{showsitePicWidth,jdbcType=DOUBLE},
+		showsite_pic_high =
+		#{showsitePicHigh,jdbcType=DOUBLE},
+		showsite_ad_text =
+		#{showsiteAdText,jdbcType=VARCHAR},
+		showsite_eff_date =
+		#{showsiteEffDate,jdbcType=TIMESTAMP},
+		showsite_exp_date =
+		#{showsiteExpDate,jdbcType=TIMESTAMP},
+		showsite_valid =
+		#{showsiteValid,jdbcType=CHAR},
+		showsite_combine =
+		#{showsiteCombine,jdbcType=VARCHAR},
+		click_do =
+		#{clickDo,jdbcType=INTEGER},
+		showsite_show_type =
+		#{showsiteShowType,jdbcType=INTEGER},
+		is_default =
+		#{isDefault,jdbcType=CHAR},
+		show_id =
+		#{showId,jdbcType=BIGINT}
+		where
+		showbusi_id =
+		#{showbusiId,jdbcType=BIGINT}
+	</update>
+	<select id="selectCheckAccDate" resultType="java.lang.Integer"
+		parameterType="com.tmount.db.advertise.dto.AdShowbusiAcc">
+		SELECT COUNT(*) FROM ad_showbusi_acc
+		WHERE
+		showarea_id =
+		#{showareaId,jdbcType=INTEGER}
+		AND
+		showsite_id =
+		#{showsiteId,jdbcType=INTEGER}
+		AND
+		show_page_no =
+		#{showPageNo,jdbcType=INTEGER}
+		AND
+		is_default = 'N'
+		AND
+		((DATE_FORMAT(#{showsiteEffDate,jdbcType=TIMESTAMP},'%Y-%m-%d
+		%H:%i:%S')&gt;showsite_eff_date AND
+		DATE_FORMAT(#{showsiteExpDate,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S')
+		&lt;showsite_exp_date)
+		OR
+		(DATE_FORMAT(#{showsiteExpDate,jdbcType=TIMESTAMP},'%Y-%m-%d
+		%H:%i:%S') BETWEEN showsite_eff_date AND
+		showsite_exp_date)
+		OR
+		(DATE_FORMAT(#{showsiteEffDate,jdbcType=TIMESTAMP},'%Y-%m-%d
+		%H:%i:%S') BETWEEN showsite_eff_date AND
+		showsite_exp_date)
+		OR
+		((showsite_eff_date BETWEEN
+		DATE_FORMAT(#{showsiteEffDate,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S')
+		AND
+		DATE_FORMAT(#{showsiteExpDate,jdbcType=TIMESTAMP},'%Y-%m-%d
+		%H:%i:%S') )
+		AND
+		(showsite_exp_date BETWEEN
+		DATE_FORMAT(#{showsiteEffDate,jdbcType=TIMESTAMP},'%Y-%m-%d %H:%i:%S')
+		AND
+		DATE_FORMAT(#{showsiteExpDate,jdbcType=TIMESTAMP},'%Y-%m-%d
+		%H:%i:%S') )))
+	</select>
+	<select id="selectAccByPageNo" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.advertise.dto.AdShowbusiAcc">
+		SELECT show_page_no FROM ad_showbusi_acc WHERE
+		showarea_id = #{showareaId,jdbcType=INTEGER} AND shop_id =
+		#{shopId,jdbcType=BIGINT}
+		AND show_id = #{showId,jdbcType=BIGINT} AND
+		NOW() BETWEEN showsite_eff_date
+		AND showsite_exp_date
+		GROUP BY
+		show_id,shop_id,show_page_no,showarea_id
+	</select>
+	<select id="selectAccByShopShowId" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.advertise.dto.AdShowbusiAcc">
+		SELECT 
+		<include refid="Base_Column_List" />
+		FROM
+		ad_showbusi_acc
+		WHERE showarea_id = #{showareaId,jdbcType=INTEGER}
+		AND show_id = #{showId,jdbcType=BIGINT}
+		AND show_page_no = #{showPageNo,jdbcType=INTEGER}
+		AND shop_id = #{shopId,jdbcType=BIGINT}
+		AND NOW()BETWEEN showsite_eff_date
+		AND showsite_exp_date
+		AND is_default = #{isDefault,jdbcType=CHAR}
+		AND showsite_valid = 'Y'
+		ORDER BY show_page_no
+	</select>
+</mapper>

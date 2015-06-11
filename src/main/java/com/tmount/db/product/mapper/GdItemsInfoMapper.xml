@@ -1,0 +1,1105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdItemsInfoMapper">
+	<resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdItemsInfo">
+		<id column="items_id" property="itemsId" jdbcType="BIGINT" />
+		<result column="shop_id" property="shopId" jdbcType="BIGINT" />
+		<result column="show_type" property="showType" jdbcType="INTEGER" />
+		<result column="data_type" property="dataType" jdbcType="INTEGER" />
+		<result column="newtype_type" property="newtypeType" jdbcType="INTEGER" />
+		<result column="item_type" property="itemType" jdbcType="INTEGER" />
+		<result column="has_child" property="hasChild" jdbcType="CHAR" />
+		<result column="items_name" property="itemsName" jdbcType="VARCHAR" />
+		<result column="name_spr" property="nameSpr" jdbcType="VARCHAR" />
+		<result column="items_intro" property="itemsIntro" jdbcType="VARCHAR" />
+		<result column="small_pic" property="smallPic" jdbcType="BIGINT" />
+		<result column="big_pic" property="bigPic" jdbcType="BIGINT" />
+		<result column="http_url" property="httpUrl" jdbcType="VARCHAR" />
+		<result column="web_url" property="webUrl" jdbcType="VARCHAR" />
+		<result column="items_count" property="itemsCount" jdbcType="INTEGER" />
+		<result column="price" property="price" jdbcType="DOUBLE" />
+		<result column="aunit" property="aunit" jdbcType="CHAR" />
+		<result column="discount" property="discount" jdbcType="DOUBLE" />
+		<result column="member_price" property="memberPrice" jdbcType="DOUBLE" />
+		<result column="state" property="state" jdbcType="CHAR" />
+		<result column="sale_count" property="saleCount" jdbcType="INTEGER" />
+		<result column="discuss30_count" property="discuss30Count"
+			jdbcType="INTEGER" />
+		<result column="discuss_count" property="discussCount"
+			jdbcType="INTEGER" />
+		<result column="collect_cout" property="collectCout" jdbcType="INTEGER" />
+		<result column="bar_code" property="barCode" jdbcType="VARCHAR" />
+		<result column="serch_up" property="serchUp" jdbcType="CHAR" />
+		<result column="credit_percent" property="creditPercent"
+			jdbcType="INTEGER" />
+		<result column="credit" property="credit" jdbcType="INTEGER" />
+		<result column="deliver_flag" property="deliverFlag" jdbcType="CHAR" />
+		<result column="out_code" property="outCode" jdbcType="VARCHAR" />
+		<result column="product_id" property="productId" jdbcType="BIGINT" />
+		<result column="order_value" property="orderValue" jdbcType="INTEGER" />
+		<result column="invoice_flag" property="invoiceFlag" jdbcType="CHAR" />
+		<result column="back_order_flag" property="backOrderFlag"
+			jdbcType="CHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_no" property="updateNo" jdbcType="INTEGER" />
+		<result column="city_code" property="cityCode" jdbcType="INTEGER" />
+		<result column="province_code" property="provinceCode"
+			jdbcType="INTEGER" />
+		<result column="comment_value" property="commentValue"
+			jdbcType="INTEGER" />
+		<result column="can_pay_later" property="canPayLater" jdbcType="CHAR" />
+		<result column="browser_count" property="browserCount"
+			jdbcType="INTEGER" />
+		<result column="items_weight" property="itemsWeight" jdbcType="DOUBLE" />
+		<result column="flash_time" property="flashTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="ItemSearchInfo" type="com.tmount.db.product.vo.GdItemListInfo">
+		<id column="items_id" property="itemsId" jdbcType="BIGINT" />
+		<result column="shop_id" property="shopId" jdbcType="BIGINT" />
+		<result column="item_type" property="itemType" jdbcType="INTEGER" />
+		<result column="items_name" property="itemsName" jdbcType="VARCHAR" />
+		<result column="small_pic" property="smallPic" jdbcType="BIGINT" />
+		<result column="items_count" property="itemsCount" jdbcType="INTEGER" />
+		<result column="price" property="price" jdbcType="DOUBLE" />
+		<result column="discount" property="discount" jdbcType="DOUBLE" />
+		<result column="member_price" property="memberPrice" jdbcType="DOUBLE" />
+		<result column="discuss30_count" property="discuss30Count"
+			jdbcType="INTEGER" />
+		<result column="collect_cout" property="collectCout" jdbcType="INTEGER" />
+		<result column="deliver_flag" property="deliverFlag" jdbcType="CHAR" />
+		<result column="city_code" property="cityCode" jdbcType="INTEGER" />
+		<result column="province_code" property="provinceCode"
+			jdbcType="INTEGER" />
+		<result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+		<result column="shop_level" property="shopLevel" jdbcType="INTEGER" />
+		<result column="city_name" property="cityName" jdbcType="VARCHAR" />
+		<result column="province_name" property="provinceName"
+			jdbcType="VARCHAR" />
+		<result column="show_type" property="showType" jdbcType="INTEGER" />
+		<result column="data_type" property="dataType" jdbcType="INTEGER" />
+		<result column="http_url" property="httpUrl" jdbcType="VARCHAR" />
+		<result column="name_spr" property="nameSpr" jdbcType="VARCHAR" />
+		<result column="items_intro" property="itemsIntro" jdbcType="VARCHAR" />
+		<result column="has_child" property="hasChild" jdbcType="CHAR" />
+		<result column="comment_value" property="commentValue"
+			jdbcType="INTEGER" />
+		<result column="discuss_count" property="discussCount"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="ItemDetailInfo" type="com.tmount.db.product.vo.GdItemDetailInfo"
+		extends="ItemSearchInfo">
+		<result column="sale_count" property="saleCount" jdbcType="INTEGER" />
+		<result column="credit" property="credit" jdbcType="INTEGER" />
+		<result column="invoice_flag" property="invoiceFlag" jdbcType="CHAR" />
+		<result column="back_order_flag" property="backOrderFlag"
+			jdbcType="CHAR" />
+		<result column="big_pic" property="bigPic" jdbcType="BIGINT" />
+		<result column="is_use_mode" property="isUseMode" jdbcType="CHAR" />
+		<result column="deliver_id" property="deliverId" jdbcType="BIGINT" />
+		<result column="post_fee" property="postFee" jdbcType="DOUBLE" />
+		<result column="fast_post_fee" property="fastPostFee" jdbcType="DOUBLE" />
+		<result column="ems_fee" property="emsFee" jdbcType="DOUBLE" />
+		<result column="web_url" property="webUrl" jdbcType="VARCHAR" />
+		<result column="items_weight" property="itemsWeight" jdbcType="DOUBLE" />
+		<result column="brand" property="brand" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ItemStatisMaxInfo" type="com.tmount.db.product.dto.GdItemsInfo">
+		<result column="max(sale_count)" property="saleCount" jdbcType="INTEGER" />
+		<result column="max(collect_cout)" property="collectCout"
+			jdbcType="INTEGER" />
+		<result column="max(browser_count)" property="browserCount"
+			jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		items_id, shop_id, show_type, data_type, newtype_type, item_type, has_child,
+		items_name,
+		name_spr, items_intro, small_pic, big_pic, http_url, web_url, items_count,
+		price,
+		aunit, discount, member_price, state, sale_count, discuss30_count,
+		discuss_count,
+		collect_cout, bar_code, serch_up, credit_percent, credit, deliver_flag, out_code,
+		product_id, order_value, invoice_flag, back_order_flag, update_time,
+		update_no, city_code,
+		province_code,comment_value,can_pay_later, browser_count,items_weight,flash_time
+	</sql>
+	<sql id="Search_Column_List">
+		distinct(a.items_id), a.shop_id, a.item_type, a.items_name, a.small_pic, a.items_count,
+		a.price,a.discount,a.member_price,
+		a.discuss30_count,a.collect_cout,a.deliver_flag,
+		a.city_code,a.province_code,b.shop_name,b.shop_level,d.city_name,e.city_name
+		as province_name,
+		a.show_type, a.data_type,a.has_child,a.name_spr,
+		a.items_intro,a.http_url,a.discuss_count,a.comment_value
+	</sql>
+	<sql id="Items_Detail_List">
+		a.items_id, a.shop_id, a.item_type, a.items_name, a.small_pic, a.items_count,
+		a.price,a.discount,a.member_price,
+		a.discuss30_count,a.collect_cout,a.deliver_flag,
+		a.city_code,a.province_code,b.shop_name,b.shop_level,a.big_pic,a.sale_count,a.web_url,
+		a.credit,a.invoice_flag,a.back_order_flag,d.city_name,e.city_name as
+		province_name,
+		f.is_use_mode,f.deliver_id,f.post_fee,f.fast_post_fee,f.ems_fee,a.items_weight,
+		a.show_type, a.data_type,a.has_child,a.name_spr,
+		a.items_intro,a.http_url,a.discuss_count,a.comment_value,
+		g.brand
+	</sql>
+	<select id="selectSequence" resultType="long">
+		select nextval('items_id')
+	</select>
+	<select id="selectByShopId" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from gd_items_info
+		where shop_id = #{shopId,jdbcType=BIGINT}
+	</select>
+	<select id="selectByCompanyId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from gd_items_info
+		where shop_id in (select shop_id from gd_shop_info where company_id =
+		#{companyId,jdbcType=BIGINT})
+	</select>
+	<select id="selectItemList" resultMap="BaseResultMap"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from gd_items_info
+		<where>
+			<if test="shopId != null and shopId != 0">
+				AND shop_id = #{shopId,jdbcType=BIGINT}
+			</if>
+			<if test="itemsName != null">
+				AND items_name like CONCAT('%',#{itemsName},'%')
+			</if>
+			<if test="state != null">
+				and state = #{state,jdbcType=CHAR}
+			</if>
+			<if test="barCode != null">
+				and bar_code = #{barCode,jdbcType=VARCHAR}
+			</if>
+			<if test="nameSpr != null">
+				AND name_spr like CONCAT('%',#{nameSpr},'%')
+			</if>
+			<if test="priceMin != null">
+				AND price &gt;= #{priceMin}
+			</if>
+			<if test="priceMax != null">
+				AND price &lt;= #{priceMax}
+			</if>
+			<if test="not_itemsType != null">
+				AND items_id not in (select items_id from gd_itemstype_rel where
+				items_type=#{not_itemsType})
+			</if>
+			<if test="not_sitemsType != null">
+				AND items_id not in (select items_id from gd_shop_items_rel where
+				sitems_type=#{not_sitemsType})
+			</if>
+			<if test="itemsType != null">
+				AND items_id in (select items_id from gd_itemstype_rel where
+				items_type=#{itemsType})
+			</if>
+			<if test="sitemsType != null">
+				AND items_id in (select items_id from gd_shop_items_rel where
+				sitems_type=#{sitemsType})
+			</if>
+		</where>
+	</select>
+
+	<select id="selectItemListCount" resultType="int" parameterType="java.util.Map">
+		select
+		count(1)
+		from gd_items_info
+		<where>
+			<if test="shopId != null and shopId != 0">
+				AND shop_id = #{shopId,jdbcType=BIGINT}
+			</if>
+			<if test="itemsName != null">
+				AND items_name like CONCAT('%',#{itemsName},'%')
+			</if>
+			<if test="state != null">
+				and state = #{state,jdbcType=CHAR}
+			</if>
+			<if test="barCode != null">
+				and bar_code = #{barCode,jdbcType=VARCHAR}
+			</if>
+			<if test="nameSpr != null">
+				AND name_spr like CONCAT('%',#{nameSpr},'%')
+			</if>
+			<if test="priceMin != null">
+				AND price &gt;= #{priceMin}
+			</if>
+			<if test="priceMax != null">
+				AND price &lt;= #{priceMax}
+			</if>
+			<if test="not_itemsType != null">
+				AND items_id not in (select items_id from gd_itemstype_rel where
+				items_type=#{not_itemsType})
+			</if>
+			<if test="not_sitemsType != null">
+				AND items_id not in (select items_id from gd_shop_items_rel where
+				sitems_type=#{not_sitemsType})
+			</if>
+			<if test="itemsType != null">
+				AND items_id in (select items_id from gd_itemstype_rel where
+				items_type=#{itemsType})
+			</if>
+			<if test="sitemsType != null">
+				AND items_id in (select items_id from gd_shop_items_rel where
+				sitems_type=#{sitemsType})
+			</if>
+		</where>
+	</select>
+
+	<update id="updateSmallPicIdByPrimaryKey" parameterType="com.tmount.db.product.dto.GdItemsInfo">
+		update gd_items_info
+		set small_pic = #{smallPic,jdbcType=BIGINT}
+		where items_id = #{itemsId,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateHtmlUrl" parameterType="com.tmount.db.product.dto.GdItemsInfo">
+		update gd_items_info
+		set http_url = #{httpUrl,jdbcType=VARCHAR},
+		web_url = #{webUrl,jdbcType=VARCHAR}
+		where items_id = #{itemsId,jdbcType=BIGINT}
+	</update>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from gd_items_info
+		where items_id = #{itemsId,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from gd_items_info
+		where items_id = #{itemsId,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.tmount.db.product.dto.GdItemsInfo">
+		insert into gd_items_info (items_id, shop_id, show_type,
+		data_type, newtype_type, item_type,
+		has_child, items_name, name_spr,
+		items_intro, small_pic, big_pic,
+		http_url, web_url, items_count,
+		price, aunit, discount,
+		member_price, state, sale_count,
+		discuss30_count, discuss_count, collect_cout,
+		bar_code, serch_up, credit_percent,
+		credit, deliver_flag, out_code,
+		product_id, order_value, invoice_flag,
+		back_order_flag, update_time, update_no,
+		city_code, province_code, comment_value, can_pay_later, browser_count,
+		items_weight)
+		values (#{itemsId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT},
+		#{showType,jdbcType=INTEGER},
+		#{dataType,jdbcType=INTEGER}, #{newtypeType,jdbcType=INTEGER}, #{itemType,jdbcType=INTEGER},
+		#{hasChild,jdbcType=CHAR}, #{itemsName,jdbcType=VARCHAR},
+		#{nameSpr,jdbcType=VARCHAR},
+		#{itemsIntro,jdbcType=VARCHAR}, #{smallPic,jdbcType=BIGINT}, #{bigPic,jdbcType=BIGINT},
+		#{httpUrl,jdbcType=VARCHAR}, #{webUrl,jdbcType=VARCHAR},
+		#{itemsCount,jdbcType=INTEGER},
+		#{price,jdbcType=DOUBLE}, #{aunit,jdbcType=CHAR}, #{discount,jdbcType=DOUBLE},
+		#{memberPrice,jdbcType=DOUBLE}, #{state,jdbcType=CHAR},
+		#{saleCount,jdbcType=INTEGER},
+		#{discuss30Count,jdbcType=INTEGER}, #{discussCount,jdbcType=INTEGER}, #{collectCout,jdbcType=INTEGER},
+		#{barCode,jdbcType=VARCHAR}, #{serchUp,jdbcType=CHAR},
+		#{creditPercent,jdbcType=INTEGER},
+		#{credit,jdbcType=INTEGER}, #{deliverFlag,jdbcType=CHAR}, #{outCode,jdbcType=VARCHAR},
+		#{productId,jdbcType=BIGINT}, #{orderValue,jdbcType=INTEGER},
+		#{invoiceFlag,jdbcType=CHAR},
+		#{backOrderFlag,jdbcType=CHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateNo,jdbcType=INTEGER},
+		#{cityCode,jdbcType=INTEGER}, #{provinceCode,jdbcType=INTEGER},
+		#{commentValue,jdbcType=INTEGER},
+		#{canPayLater,jdbcType=CHAR}, #{browserCount,jdbcType=INTEGER},#{itemsWeight,jdbcType=DOUBLE})
+	</insert>
+	<insert id="insertSelective" parameterType="com.tmount.db.product.dto.GdItemsInfo">
+		insert into gd_items_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="itemsId != null">
+				items_id,
+			</if>
+			<if test="shopId != null">
+				shop_id,
+			</if>
+			<if test="showType != null">
+				show_type,
+			</if>
+			<if test="dataType != null">
+				data_type,
+			</if>
+			<if test="newtypeType != null">
+				newtype_type,
+			</if>
+			<if test="itemType != null">
+				item_type,
+			</if>
+			<if test="hasChild != null">
+				has_child,
+			</if>
+			<if test="itemsName != null">
+				items_name,
+			</if>
+			<if test="nameSpr != null">
+				name_spr,
+			</if>
+			<if test="itemsIntro != null">
+				items_intro,
+			</if>
+			<if test="smallPic != null">
+				small_pic,
+			</if>
+			<if test="bigPic != null">
+				big_pic,
+			</if>
+			<if test="httpUrl != null">
+				http_url,
+			</if>
+			<if test="webUrl != null">
+				web_url,
+			</if>
+			<if test="itemsCount != null">
+				items_count,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="aunit != null">
+				aunit,
+			</if>
+			<if test="discount != null">
+				discount,
+			</if>
+			<if test="memberPrice != null">
+				member_price,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+			<if test="saleCount != null">
+				sale_count,
+			</if>
+			<if test="discuss30Count != null">
+				discuss30_count,
+			</if>
+			<if test="discussCount != null">
+				discuss_count,
+			</if>
+			<if test="collectCout != null">
+				collect_cout,
+			</if>
+			<if test="barCode != null">
+				bar_code,
+			</if>
+			<if test="serchUp != null">
+				serch_up,
+			</if>
+			<if test="creditPercent != null">
+				credit_percent,
+			</if>
+			<if test="credit != null">
+				credit,
+			</if>
+			<if test="deliverFlag != null">
+				deliver_flag,
+			</if>
+			<if test="outCode != null">
+				out_code,
+			</if>
+			<if test="productId != null">
+				product_id,
+			</if>
+			<if test="orderValue != null">
+				order_value,
+			</if>
+			<if test="invoiceFlag != null">
+				invoice_flag,
+			</if>
+			<if test="backOrderFlag != null">
+				back_order_flag,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="updateNo != null">
+				update_no,
+			</if>
+			<if test="cityCode != null">
+				city_code,
+			</if>
+			<if test="provinceCode != null">
+				province_code,
+			</if>
+			<if test="commentValue != null">
+				comment_value,
+			</if>
+			<if test="canPayLater != null">
+				can_pay_later,
+			</if>
+			<if test="browserCount != null">
+				browser_count,
+			</if>
+			<if test="itemsWeight != null">
+				items_weight,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="itemsId != null">
+				#{itemsId,jdbcType=BIGINT},
+			</if>
+			<if test="shopId != null">
+				#{shopId,jdbcType=BIGINT},
+			</if>
+			<if test="showType != null">
+				#{showType,jdbcType=INTEGER},
+			</if>
+			<if test="dataType != null">
+				#{dataType,jdbcType=INTEGER},
+			</if>
+			<if test="newtypeType != null">
+				#{newtypeType,jdbcType=INTEGER},
+			</if>
+			<if test="itemType != null">
+				#{itemType,jdbcType=INTEGER},
+			</if>
+			<if test="hasChild != null">
+				#{hasChild,jdbcType=CHAR},
+			</if>
+			<if test="itemsName != null">
+				#{itemsName,jdbcType=VARCHAR},
+			</if>
+			<if test="nameSpr != null">
+				#{nameSpr,jdbcType=VARCHAR},
+			</if>
+			<if test="itemsIntro != null">
+				#{itemsIntro,jdbcType=VARCHAR},
+			</if>
+			<if test="smallPic != null">
+				#{smallPic,jdbcType=BIGINT},
+			</if>
+			<if test="bigPic != null">
+				#{bigPic,jdbcType=BIGINT},
+			</if>
+			<if test="httpUrl != null">
+				#{httpUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="webUrl != null">
+				#{webUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="itemsCount != null">
+				#{itemsCount,jdbcType=INTEGER},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=DOUBLE},
+			</if>
+			<if test="aunit != null">
+				#{aunit,jdbcType=CHAR},
+			</if>
+			<if test="discount != null">
+				#{discount,jdbcType=DOUBLE},
+			</if>
+			<if test="memberPrice != null">
+				#{memberPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=CHAR},
+			</if>
+			<if test="saleCount != null">
+				#{saleCount,jdbcType=INTEGER},
+			</if>
+			<if test="discuss30Count != null">
+				#{discuss30Count,jdbcType=INTEGER},
+			</if>
+			<if test="discussCount != null">
+				#{discussCount,jdbcType=INTEGER},
+			</if>
+			<if test="collectCout != null">
+				#{collectCout,jdbcType=INTEGER},
+			</if>
+			<if test="barCode != null">
+				#{barCode,jdbcType=VARCHAR},
+			</if>
+			<if test="serchUp != null">
+				#{serchUp,jdbcType=CHAR},
+			</if>
+			<if test="creditPercent != null">
+				#{creditPercent,jdbcType=INTEGER},
+			</if>
+			<if test="credit != null">
+				#{credit,jdbcType=INTEGER},
+			</if>
+			<if test="deliverFlag != null">
+				#{deliverFlag,jdbcType=CHAR},
+			</if>
+			<if test="outCode != null">
+				#{outCode,jdbcType=VARCHAR},
+			</if>
+			<if test="productId != null">
+				#{productId,jdbcType=BIGINT},
+			</if>
+			<if test="orderValue != null">
+				#{orderValue,jdbcType=INTEGER},
+			</if>
+			<if test="invoiceFlag != null">
+				#{invoiceFlag,jdbcType=CHAR},
+			</if>
+			<if test="backOrderFlag != null">
+				#{backOrderFlag,jdbcType=CHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateNo != null">
+				#{updateNo,jdbcType=INTEGER},
+			</if>
+			<if test="cityCode != null">
+				#{cityCode,jdbcType=INTEGER},
+			</if>
+			<if test="provinceCode != null">
+				#{provinceCode,jdbcType=INTEGER},
+			</if>
+			<if test="commentValue != null">
+				#{commentValue,jdbcType=INTEGER},
+			</if>
+			<if test="canPayLater != null">
+				#{canPayLater,jdbcType=CHAR},
+			</if>
+			<if test="browserCount != null">
+				#{browserCount,jdbcType=INTEGER},
+			</if>
+			<if test="itemsWeight != null">
+				#{itemsWeight,jdbcType=DOUBLE},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.GdItemsInfo">
+		update gd_items_info
+		<set>
+			<if test="shopId != null">
+				shop_id = #{shopId,jdbcType=BIGINT},
+			</if>
+			<if test="showType != null">
+				show_type = #{showType,jdbcType=INTEGER},
+			</if>
+			<if test="dataType != null">
+				data_type = #{dataType,jdbcType=INTEGER},
+			</if>
+			<if test="newtypeType != null">
+				newtype_type = #{newtypeType,jdbcType=INTEGER},
+			</if>
+			<if test="itemType != null">
+				item_type = #{itemType,jdbcType=INTEGER},
+			</if>
+			<if test="hasChild != null">
+				has_child = #{hasChild,jdbcType=CHAR},
+			</if>
+			<if test="itemsName != null">
+				items_name = #{itemsName,jdbcType=VARCHAR},
+			</if>
+			<if test="nameSpr != null">
+				name_spr = #{nameSpr,jdbcType=VARCHAR},
+			</if>
+			<if test="itemsIntro != null">
+				items_intro = #{itemsIntro,jdbcType=VARCHAR},
+			</if>
+			<if test="smallPic != null">
+				small_pic = #{smallPic,jdbcType=BIGINT},
+			</if>
+			<if test="bigPic != null">
+				big_pic = #{bigPic,jdbcType=BIGINT},
+			</if>
+			<if test="httpUrl != null">
+				http_url = #{httpUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="webUrl != null">
+				web_url = #{webUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="itemsCount != null">
+				items_count = #{itemsCount,jdbcType=INTEGER},
+			</if>
+			<if test="price != null">
+				price = #{price,jdbcType=DOUBLE},
+			</if>
+			<if test="aunit != null">
+				aunit = #{aunit,jdbcType=CHAR},
+			</if>
+			<if test="discount != null">
+				discount = #{discount,jdbcType=DOUBLE},
+			</if>
+			<if test="memberPrice != null">
+				member_price = #{memberPrice,jdbcType=DOUBLE},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=CHAR},
+			</if>
+			<if test="saleCount != null">
+				sale_count = #{saleCount,jdbcType=INTEGER},
+			</if>
+			<if test="discuss30Count != null">
+				discuss30_count = #{discuss30Count,jdbcType=INTEGER},
+			</if>
+			<if test="discussCount != null">
+				discuss_count = #{discussCount,jdbcType=INTEGER},
+			</if>
+			<if test="collectCout != null">
+				collect_cout = #{collectCout,jdbcType=INTEGER},
+			</if>
+			<if test="barCode != null">
+				bar_code = #{barCode,jdbcType=VARCHAR},
+			</if>
+			<if test="serchUp != null">
+				serch_up = #{serchUp,jdbcType=CHAR},
+			</if>
+			<if test="creditPercent != null">
+				credit_percent = #{creditPercent,jdbcType=INTEGER},
+			</if>
+			<if test="credit != null">
+				credit = #{credit,jdbcType=INTEGER},
+			</if>
+			<if test="deliverFlag != null">
+				deliver_flag = #{deliverFlag,jdbcType=CHAR},
+			</if>
+			<if test="outCode != null">
+				out_code = #{outCode,jdbcType=VARCHAR},
+			</if>
+			<if test="productId != null">
+				product_id = #{productId,jdbcType=BIGINT},
+			</if>
+			<if test="orderValue != null">
+				order_value = #{orderValue,jdbcType=INTEGER},
+			</if>
+			<if test="invoiceFlag != null">
+				invoice_flag = #{invoiceFlag,jdbcType=CHAR},
+			</if>
+			<if test="backOrderFlag != null">
+				back_order_flag = #{backOrderFlag,jdbcType=CHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateNo != null">
+				update_no = #{updateNo,jdbcType=INTEGER},
+			</if>
+			<if test="cityCode != null">
+				city_code = #{cityCode,jdbcType=INTEGER},
+			</if>
+			<if test="provinceCode != null">
+				province_code = #{provinceCode,jdbcType=INTEGER},
+			</if>
+			<if test="commentValue != null">
+				comment_value = #{commentValue,jdbcType=INTEGER},
+			</if>
+			<if test="canPayLater != null">
+				can_pay_later = #{canPayLater,jdbcType=CHAR},
+			</if>
+			<if test="browserCount != null">
+				browser_count = #{browserCount,jdbcType=INTEGER},
+			</if>
+			<if test="itemsWeight != null">
+				items_weight = #{itemsWeight,jdbcType=DOUBLE},
+			</if>
+		</set>
+		where items_id = #{itemsId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.GdItemsInfo">
+		update gd_items_info
+		set shop_id = #{shopId,jdbcType=BIGINT},
+		show_type = #{showType,jdbcType=INTEGER},
+		data_type = #{dataType,jdbcType=INTEGER},
+		newtype_type = #{newtypeType,jdbcType=INTEGER},
+		item_type = #{itemType,jdbcType=INTEGER},
+		has_child = #{hasChild,jdbcType=CHAR},
+		items_name = #{itemsName,jdbcType=VARCHAR},
+		name_spr = #{nameSpr,jdbcType=VARCHAR},
+		items_intro = #{itemsIntro,jdbcType=VARCHAR},
+		small_pic = #{smallPic,jdbcType=BIGINT},
+		big_pic = #{bigPic,jdbcType=BIGINT},
+		http_url = #{httpUrl,jdbcType=VARCHAR},
+		web_url = #{webUrl,jdbcType=VARCHAR},
+		items_count = #{itemsCount,jdbcType=INTEGER},
+		price = #{price,jdbcType=DOUBLE},
+		aunit = #{aunit,jdbcType=CHAR},
+		discount = #{discount,jdbcType=DOUBLE},
+		member_price = #{memberPrice,jdbcType=DOUBLE},
+		state = #{state,jdbcType=CHAR},
+		sale_count = #{saleCount,jdbcType=INTEGER},
+		discuss30_count = #{discuss30Count,jdbcType=INTEGER},
+		discuss_count = #{discussCount,jdbcType=INTEGER},
+		collect_cout = #{collectCout,jdbcType=INTEGER},
+		bar_code = #{barCode,jdbcType=VARCHAR},
+		serch_up = #{serchUp,jdbcType=CHAR},
+		credit_percent = #{creditPercent,jdbcType=INTEGER},
+		credit = #{credit,jdbcType=INTEGER},
+		deliver_flag = #{deliverFlag,jdbcType=CHAR},
+		out_code = #{outCode,jdbcType=VARCHAR},
+		product_id = #{productId,jdbcType=BIGINT},
+		order_value = #{orderValue,jdbcType=INTEGER},
+		invoice_flag = #{invoiceFlag,jdbcType=CHAR},
+		back_order_flag = #{backOrderFlag,jdbcType=CHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		update_no = #{updateNo,jdbcType=INTEGER},
+		city_code = #{cityCode,jdbcType=INTEGER},
+		province_code = #{provinceCode,jdbcType=INTEGER},
+		comment_value = #{commentValue,jdbcType=INTEGER},
+		can_pay_later = #{canPayLater,jdbcType=CHAR},
+		browser_count = #{browserCount,jdbcType=INTEGER},
+		items_weight = #{itemsWeight,jdbcType=DOUBLE}
+		where items_id = #{itemsId,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectItemSerchList" resultMap="ItemSearchInfo"
+		parameterType="com.tmount.db.product.vo.GdItemInputInfo">
+		select
+		<include refid="Search_Column_List" />
+		from gd_items_info a left join gd_items_exp_rice c on a.items_id =
+		c.items_id,gd_shop_info b,
+		sy_city_dict d,sy_city_dict e,gd_itemstype_rel f
+		where a.shop_id = b.shop_id and a.city_code = d.city_code and
+		a.province_code = e.city_code and a.items_id=f.items_id and
+		f.data_type=10 and a.state='Y'
+		<if test="itemsId != null">
+			and a.items_id = #{itemsId,jdbcType=BIGINT}
+		</if>
+		<if test="shopId != null">
+			and a.shop_id = #{shopId,jdbcType=BIGINT}
+		</if>
+		<if test="itemsType != null">
+			and f.items_type = #{itemsType,jdbcType=INTEGER}
+		</if>
+		<if test="itemsName != null">
+			and a.items_name like CONCAT ('%',#{itemsName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="priceBegin != null">
+        <![CDATA[and a.discount >= #{priceBegin,jdbcType=DOUBLE}]]>
+		</if>
+		<if test="priceEnd != null">
+        <![CDATA[and a.discount < #{priceEnd,jdbcType=DOUBLE}]]>
+		</if>
+		<if test="deliverFlag != null">
+			and a.deliver_flag = #{deliverFlag,jdbcType=VARCHAR}
+		</if>
+		<if test="cityCode != null">
+			and a.city_code = #{cityCode,jdbcType=INTEGER}
+		</if>
+		<if test="provinceCode != null">
+			and a.province_code = #{provinceCode,jdbcType=INTEGER}
+		</if>
+		<if test="qualityId != null">
+			and c.quality_id = #{qualityId,jdbcType=INTEGER}
+		</if>
+		<if test="standId != null">
+			and c.stand_id = #{standId,jdbcType=INTEGER}
+		</if>
+		<if test="textureId != null">
+			and c.texture_id = #{textureId,jdbcType=INTEGER}
+		</if>
+		<if test="packId != null">
+			and c.pack_id = #{packId,jdbcType=INTEGER}
+		</if>
+		<if test="orderPrice != null">
+			order by a.discount
+		</if>
+		<if test="orderShopLevel != null">
+			order by b.shop_level
+		</if>
+		<if test="orderValue != null">
+			order by a.order_value
+		</if>
+		<if test="orderSaleCount != null">
+			order by a.sale_count
+		</if>
+		<if test="orderByFlag != null">
+			desc
+		</if>
+		<if test="pageSize != null">
+			LIMIT #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</select>
+	<select id="selectItemSerchListCount" resultType="int"
+		parameterType="com.tmount.db.product.vo.GdItemInputInfo">
+		select count(*) from (
+		select count(*)
+		from gd_items_info a left join gd_items_exp_rice c on a.items_id =
+		c.items_id,gd_shop_info b,gd_itemstype_rel f
+		where a.shop_id = b.shop_id and a.items_id=f.items_id
+		and f.data_type=10 and a.state='Y'
+		<if test="itemsName != null">
+			and a.items_name like CONCAT ('%',#{itemsName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="shopId != null">
+			and a.shop_id = #{shopId,jdbcType=BIGINT}
+		</if>
+		<if test="itemsType != null">
+			and f.items_type=#{itemsType,jdbcType=INTEGER}
+		</if>
+		<if test="priceBegin != null">
+        <![CDATA[and a.discount >= #{priceBegin,jdbcType=DOUBLE}]]>
+		</if>
+		<if test="priceEnd != null">
+        <![CDATA[and a.discount < #{priceEnd,jdbcType=DOUBLE}]]>
+		</if>
+		<if test="deliverFlag != null">
+			and a.deliver_flag = #{deliverFlag,jdbcType=VARCHAR}
+		</if>
+		<if test="cityCode != null">
+			and a.city_code = #{cityCode,jdbcType=INTEGER}
+		</if>
+		<if test="provinceCode != null">
+			and a.province_code = #{provinceCode,jdbcType=INTEGER}
+		</if>
+		<if test="qualityId != null">
+			and c.quality_id = #{qualityId,jdbcType=INTEGER}
+		</if>
+		<if test="standId != null">
+			and c.stand_id = #{standId,jdbcType=INTEGER}
+		</if>
+		<if test="textureId != null">
+			and c.texture_id = #{textureId,jdbcType=INTEGER}
+		</if>
+		<if test="packId != null">
+			and c.pack_id = #{packId,jdbcType=INTEGER}
+		</if>
+		group by a.items_id) k
+	</select>
+
+	<select id="selectSearchWordItemCount" resultType="int"
+		parameterType="java.lang.String">
+		select count(*)
+		from gd_items_info a
+		where a.state='Y'
+		and a.items_name like CONCAT ('%',#{itemsName,jdbcType=VARCHAR},'%')
+	</select>
+	<select id="selectByUpdTime" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.sys.vo.StatisTime">
+		select
+		<include refid="Base_Column_List" />
+		from gd_items_info
+		where state='Y' and
+		update_time &lt; #{endTime,jdbcType=TIMESTAMP} and update_time >=
+		#{beginTime,jdbcType=TIMESTAMP}
+		order by items_id
+	</select>
+	<select id="selectItemDetail" resultMap="ItemDetailInfo"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Items_Detail_List" />
+		from gd_items_info a left join gd_items_exp_rice g on a.items_id =
+		g.items_id,gd_shop_info b,
+		sy_city_dict d,sy_city_dict e ,gd_items_deliver f
+		where a.shop_id = b.shop_id and a.city_code = d.city_code and a.state='Y'
+		and
+		a.province_code = e.city_code and a.items_id=f.items_id and a.items_id =
+		#{itemsId,jdbcType=BIGINT}
+	</select>
+
+	<update id="updateSaleCountForStatis" parameterType="com.tmount.db.product.dto.GdItemsInfo">
+		update gd_items_info
+		set sale_count = sale_count + #{saleCount,jdbcType=INTEGER}
+		where items_id = #{itemsId,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateDiscussForStatis" parameterType="com.tmount.db.product.dto.GdItemsInfo">
+		update gd_items_info
+		set discuss_count = discuss_count + #{discussCount,jdbcType=INTEGER},
+		comment_value = comment_value + #{commentValue,jdbcType=INTEGER}
+		where items_id = #{itemsId,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateCommentForStatis" parameterType="com.tmount.db.product.dto.GdItemsInfo">
+		update gd_items_info
+		set comment_value = comment_value + #{commentValue,jdbcType=INTEGER}
+		where items_id = #{itemsId,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectMaxForStatis" resultMap="ItemStatisMaxInfo">
+		select max(sale_count),max(collect_cout),max(browser_count)
+		from gd_items_info
+		where state='Y'
+		order by items_id
+	</select>
+
+	<select id="selectItemsCountStatis" resultType="int">
+		select count(*)
+		from gd_items_info
+		where state='Y'
+	</select>
+
+	<select id="selectItemsListForStatis" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.sys.vo.StatisTime">
+		select
+		<include refid="Base_Column_List" />
+		from gd_items_info
+		where state='Y'
+		order by items_id
+		<if test="startLimit != null">
+			LIMIT #{startLimit,jdbcType=INTEGER},#{countLimit,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<update id="updateBrowserForStatis" parameterType="com.tmount.db.product.dto.GdItemsInfo">
+		update gd_items_info
+		set browser_count = browser_count + #{browserCount,jdbcType=INTEGER}
+		where items_id = #{itemsId,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectItemsListByCollect" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.product.vo.GdItemInputInfo">
+		select
+		<include refid="Base_Column_List" />
+		from gd_items_info
+		where shop_id=#{shopId,jdbcType=BIGINT} and state='Y'
+		order by collect_cout desc
+		<if test="pageSize != null">
+			LIMIT 0,#{pageSize,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<select id="selectItemsListBySaleCount" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.product.vo.GdItemInputInfo">
+		select
+		<include refid="Base_Column_List" />
+		from gd_items_info
+		where shop_id=#{shopId,jdbcType=BIGINT} and state='Y'
+		order by sale_count desc
+		<if test="pageSize != null">
+			LIMIT 0,#{pageSize,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<select id="selectByFlashTime" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.sys.vo.StatisTime">
+		select
+		<include refid="Base_Column_List" />
+		from gd_items_info
+		where flash_time >= #{beginTime,jdbcType=TIMESTAMP} and flash_time &lt;
+		#{endTime,jdbcType=TIMESTAMP}
+		order by items_id
+		<if test="countLimit != null">
+			LIMIT 0,#{countLimit,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<select id="selectDelItemList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from gd_items_info
+		where state='N'
+		order by items_id
+	</select>
+	<select id="selectItemSerchListCountForShop" resultType="int"
+		parameterType="com.tmount.db.product.vo.GdItemInputInfo">
+		select count(*) from (
+		select count(*)
+		from gd_items_info a left join gd_items_exp_rice c on a.items_id =
+		c.items_id,gd_shop_info b,gd_shop_items_rel f
+		where a.shop_id = b.shop_id and a.items_id=f.items_id
+		and f.data_type=10 and a.state='Y'
+		<if test="itemsName != null">
+			and a.items_name like CONCAT ('%',#{itemsName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="shopId != null">
+			and a.shop_id = #{shopId,jdbcType=BIGINT}
+		</if>
+		<if test="itemsType != null">
+			and f.sitems_type=#{itemsType,jdbcType=INTEGER}
+		</if>
+		<if test="priceBegin != null">
+        <![CDATA[and a.discount >= #{priceBegin,jdbcType=DOUBLE}]]>
+		</if>
+		<if test="priceEnd != null">
+        <![CDATA[and a.discount < #{priceEnd,jdbcType=DOUBLE}]]>
+		</if>
+		<if test="deliverFlag != null">
+			and a.deliver_flag = #{deliverFlag,jdbcType=VARCHAR}
+		</if>
+		<if test="cityCode != null">
+			and a.city_code = #{cityCode,jdbcType=INTEGER}
+		</if>
+		<if test="provinceCode != null">
+			and a.province_code = #{provinceCode,jdbcType=INTEGER}
+		</if>
+		<if test="qualityId != null">
+			and c.quality_id = #{qualityId,jdbcType=INTEGER}
+		</if>
+		<if test="standId != null">
+			and c.stand_id = #{standId,jdbcType=INTEGER}
+		</if>
+		<if test="textureId != null">
+			and c.texture_id = #{textureId,jdbcType=INTEGER}
+		</if>
+		<if test="packId != null">
+			and c.pack_id = #{packId,jdbcType=INTEGER}
+		</if>
+		group by a.items_id) k
+	</select>
+
+	<select id="selectItemSerchListForShop" resultMap="ItemSearchInfo"
+		parameterType="com.tmount.db.product.vo.GdItemInputInfo">
+		select
+		<include refid="Search_Column_List" />
+		from gd_items_info a left join gd_items_exp_rice c on a.items_id =
+		c.items_id,gd_shop_info b,
+		sy_city_dict d,sy_city_dict e,gd_shop_items_rel f
+		where a.shop_id = b.shop_id and a.city_code = d.city_code and
+		a.province_code = e.city_code and a.items_id=f.items_id and
+		f.data_type=10 and a.state='Y'
+		<if test="itemsId != null">
+			and a.items_id = #{itemsId,jdbcType=BIGINT}
+		</if>
+		<if test="shopId != null">
+			and a.shop_id = #{shopId,jdbcType=BIGINT}
+		</if>
+		<if test="itemsType != null">
+			and f.sitems_type = #{itemsType,jdbcType=INTEGER}
+		</if>
+		<if test="itemsName != null">
+			and a.items_name like CONCAT ('%',#{itemsName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="priceBegin != null">
+        <![CDATA[and a.discount >= #{priceBegin,jdbcType=DOUBLE}]]>
+		</if>
+		<if test="priceEnd != null">
+        <![CDATA[and a.discount < #{priceEnd,jdbcType=DOUBLE}]]>
+		</if>
+		<if test="deliverFlag != null">
+			and a.deliver_flag = #{deliverFlag,jdbcType=VARCHAR}
+		</if>
+		<if test="cityCode != null">
+			and a.city_code = #{cityCode,jdbcType=INTEGER}
+		</if>
+		<if test="provinceCode != null">
+			and a.province_code = #{provinceCode,jdbcType=INTEGER}
+		</if>
+		<if test="qualityId != null">
+			and c.quality_id = #{qualityId,jdbcType=INTEGER}
+		</if>
+		<if test="standId != null">
+			and c.stand_id = #{standId,jdbcType=INTEGER}
+		</if>
+		<if test="textureId != null">
+			and c.texture_id = #{textureId,jdbcType=INTEGER}
+		</if>
+		<if test="packId != null">
+			and c.pack_id = #{packId,jdbcType=INTEGER}
+		</if>
+		<if test="orderPrice != null">
+			order by a.discount
+		</if>
+		<if test="orderShopLevel != null">
+			order by b.shop_level
+		</if>
+		<if test="orderValue != null">
+			order by a.order_value
+		</if>
+		<if test="orderSaleCount != null">
+			order by a.sale_count
+		</if>
+		<if test="orderByFlag != null">
+			desc
+		</if>
+		<if test="pageSize != null">
+			LIMIT #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</select>
+
+</mapper>

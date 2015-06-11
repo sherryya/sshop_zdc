@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	 xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/data/mongo  
+       http://www.springframework.org/schema/data/mongo/spring-mongo-1.3.xsd"
+       >
+
+	<context:annotation-config />
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 以字节为单位的最大上传文件的大小 -->
+		<property name="maxUploadSize" value="100000000" />
+	</bean>
+
+	<bean id="appConfig" class="com.tmount.system.EncryptPropsFactoryBean"
+		init-method="init">
+		<property name="location">
+			<value>classpath:jdbc.properties</value>
+		</property>
+		<property name="encryptFields">
+			<list>
+				<value>jdbc.username</value>
+				<value>jdbc.password</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="dataSourceAbstract" class="org.apache.commons.dbcp.BasicDataSource"
+		abstract="true">
+		<!-- Connection Info -->
+		<property name="driverClassName" value="#{appConfig['jdbc.driverClassName']}" />
+		<property name="username" value="#{appConfig['jdbc.username']}" />
+		<property name="password" value="#{appConfig['jdbc.password']}" />
+
+		<!-- Connection Pooling Info -->
+<!-- 		<property name="initialSize" value="5" />
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="30" />
+		<property name="maxWait" value="1000" /> -->
+		<property name="initialSize" value="5" />
+		<property name="maxActive" value="500" />
+		<property name="maxIdle" value="150" />
+		<property name="maxWait" value="1000" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="defaultAutoCommit" value="false" />
+	</bean>
+
+	<bean id="dsMaster" destroy-method="close" parent="dataSourceAbstract">
+		<property name="url" value="#{appConfig['jdbc.url.master']}" />
+	</bean>
+	<bean id="dsSalver1" destroy-method="close" parent="dataSourceAbstract">
+		<property name="url" value="#{appConfig['jdbc.url.slaver']}" />
+	</bean>
+
+	<bean id="dataSources" class="com.tmount.system.dal.DynamicDataSource">
+		<property name="targetDataSources">
+			<map>
+				<entry key="0" value-ref="dsSalver1" />
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="dsMaster" />
+	</bean>
+
+	<!-- 是对dataSources Bean的描述信息，是dataSources的辅助类，为内部路由使用。 -->
+	<bean id="dataSourceDesc" class="com.tmount.system.dal.DataSourceDesc">
+		<property name="targetDataSources">
+			<map>
+				<entry key="0" value="dsSalver1" />
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" value="dsMaster" />
+	</bean>
+
+	<!-- 装载mybatis SQL配置文件。 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="configLocation" value="classpath:mybatisConfiguration.xml" />
+		<property name="dataSource" ref="dataSources" />
+		<property name="mapperLocations">
+			<list>
+				<!-- 表示在com/tmount/db中，包含mapper子目录，以.xml结尾所有文件 -->
+				<value>classpath:com/tmount/db/**/mapper/*.xml</value>
+			</list>
+		</property>
+
+	</bean>
+
+	<!-- 使用mabatis的MapperScannerConfigurer工具自动实现com.tmount.db下DAO接口组件 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+		p:sqlSessionFactory-ref="sqlSessionFactory" p:basePackage="com.tmount.db.*.dao" />
+
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+
+	<bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSources"></property>
+	</bean>
+
+	<!--事务增强 -->
+	<tx:advice id="userTxAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="delete*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" no-rollback-for="java.lang.RuntimeException" />
+			<tx:method name="insert*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.RuntimeException" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="save*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+
+			<tx:method name="find*" propagation="SUPPORTS" />
+			<tx:method name="get*" propagation="SUPPORTS" />
+			<tx:method name="qry*" propagation="SUPPORTS" />
+			<tx:method name="select*" propagation="SUPPORTS" />
+			<tx:method name="*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 数据库路由拦截器类 -->
+	<bean id="routingInterceptor" class="com.tmount.system.dal.EventRoutingInterceptor" />
+
+	<aop:config>
+		<!--通过aop定义数据库路由切面，把数据库路由控制在Service层 -->
+		<aop:pointcut id="routingPointcut"
+			expression="execution(* com.tmount.business.*.service.*.*(..))" />
+
+		<!--引用数据库路由切面 -->
+		<aop:aspect id="routingAspect" ref="routingInterceptor">
+			<aop:before pointcut-ref="routingPointcut" method="route" />
+		</aop:aspect>
+	</aop:config>
+
+	<!--使用强大的切点表达式语言轻松定义目标方法 -->
+	<aop:config>
+		<!--通过aop定义事务增强切面，把事务控制在Service层 -->
+		<aop:pointcut id="txPointcut"
+			expression="execution(* com.tmount.business.*.service.*.*(..))" />
+
+		<!--引用事务增强 -->
+		<aop:advisor pointcut-ref="txPointcut" advice-ref="userTxAdvice" />
+	</aop:config>
+
+	<!-- 扫描包下所有标注@Service的服务组件 -->
+	<context:component-scan base-package="com.tmount.business.*.service" />
+	 <bean id="accountService" class="com.tmount.service.PttSubService"/>
+	  <bean id="pttsublogService" class="com.tmount.service.PttSubLogService"/>
+	<!-- 初始化数据字典 -->
+	<bean name="DataDictionary" class="com.tmount.config.DataDictionary"
+		init-method="init" />
+
+	<!-- 得到应用系统配置 -->
+	<bean name="AppPropertiesConfig" class="com.tmount.config.AppPropertiesConfig"
+		init-method="init" />
+
+	<!-- redis配置文件 -->
+	<import resource="redisbeanConfig.xml" />
+
+	<!-- 设置freeMarker的配置文件路径 -->
+	<bean id="freemarkerConfiguration"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:freemarker.properties" />
+	</bean>
+	<!-- 配置freeMarker的模板路径 -->
+	<bean id="freemarkerConfig"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="freemarkerSettings" ref="freemarkerConfiguration"/>
+		<property name="templateLoaderPath">
+			<value>classpath:/com/tmount/util/ftl/</value>
+		</property>
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="xml_escape" value-ref="fmXmlEscape" />
+			</map>
+		</property>
+	</bean>
+	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape" />
+
+    <!-- 后台自动计算积分 -->
+	<bean id="intergralAdd" class="com.tmount.crontab.IntergralAddCrontab"></bean>
+	<!-- 定义目标bean和bean中的方法 -->
+	<bean id="intergral"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref local="intergralAdd" />
+		</property>
+		<property name="targetMethod">
+			<!-- 要执行的方法名称 -->
+			<value>run</value>
+		</property>
+	</bean>
+	<!--定义触发的时间 -->
+	<bean id="cron" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="intergral" />
+		</property>
+		<property name="cronExpression">
+		<!-- 	<value>0 0 0/1 * * ?</value> -->
+		<value>0 0/50 * * * ?</value>
+		</property>
+	</bean>
+	<!-- 管理触发器 -->
+	<bean autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="cron" />
+			</list>
+		</property>
+	</bean>
+	
+<!-- 	
+<cron-expression>0 0/30 * * * ?</cron-expression>:每隔30分钟 
+<cron-expression>0 0/15 * * * ?</cron-expression>每隔15分钟 
+<cron-expression>0 0 0/1 * * ?</cron-expression>每隔1个小时  -->
+</beans>
+
+	

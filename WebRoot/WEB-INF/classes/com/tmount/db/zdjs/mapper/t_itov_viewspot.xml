@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.zdjs.dao.TItovViewspotMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.zdjs.dto.TItovViewspot" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="BIGINT" />
+    <result column="deviceuid" property="deviceuid" jdbcType="VARCHAR" />
+    <result column="lonlat" property="lonlat" jdbcType="VARCHAR" />
+    <result column="spot_name" property="spotName" jdbcType="VARCHAR" />
+    <result column="spot_tel" property="spotTel" jdbcType="VARCHAR" />
+    <result column="spot_address" property="spotAddress" jdbcType="VARCHAR" />
+    <result column="spot_manager" property="spotManager" jdbcType="VARCHAR" />
+    <result column="spot_introduction" property="spotIntroduction" jdbcType="VARCHAR" />
+    <result column="spot_note" property="spotNote" jdbcType="VARCHAR" />
+    <result column="lonlat_id" property="lonlatId" jdbcType="VARCHAR" />
+    <result column="spot_crt_date" property="spotCrtDate" jdbcType="TIMESTAMP" />
+    <result column="sport_note1" property="sportNote1" jdbcType="VARCHAR" />
+    <result column="sport_note2" property="sportNote2" jdbcType="VARCHAR" />
+    <result column="sport_note3" property="sportNote3" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,account_id,deviceuid,lonlat,spot_name,spot_tel,spot_address,spot_manager,spot_introduction,spot_note,lonlat_id,spot_crt_date,sport_note1,sport_note2,sport_note3
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.zdjs.dto.TItovViewspot">
+    insert into t_itov_viewspot (
+        account_id,deviceuid,lonlat,spot_name,spot_tel,spot_address,spot_manager,spot_introduction,
+        spot_note,lonlat_id,sport_note1,sport_note2,sport_note3)
+    values (
+        #{accountId,jdbcType=BIGINT},#{deviceuid,jdbcType=VARCHAR},
+        #{lonlat,jdbcType=VARCHAR},#{spotName,jdbcType=VARCHAR},#{spotTel,jdbcType=VARCHAR},
+        #{spotAddress,jdbcType=VARCHAR},#{spotManager,jdbcType=VARCHAR},#{spotIntroduction,jdbcType=VARCHAR},
+        #{spotNote,jdbcType=VARCHAR},#{lonlatId,jdbcType=VARCHAR},
+        #{sportNote1,jdbcType=VARCHAR},#{sportNote2,jdbcType=VARCHAR},#{sportNote3,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.zdjs.dto.TItovViewspot">
+    update t_itov_viewspot
+    <set>
+      <if test="spotName != null">
+        spot_name = #{spotName,jdbcType=VARCHAR},
+      </if>
+      <if test="spotTel != null">
+        spot_tel = #{spotTel,jdbcType=VARCHAR},
+      </if>
+      <if test="spotAddress != null">
+        spot_address = #{spotAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="spotManager != null">
+        spot_manager = #{spotManager,jdbcType=VARCHAR},
+      </if>
+      <if test="spotIntroduction != null">
+        spot_introduction = #{spotIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="spotNote != null">
+        spot_note = #{spotNote,jdbcType=VARCHAR},
+      </if>
+      <if test="sportNote1 != null">
+        sport_note1 = #{sportNote1,jdbcType=VARCHAR},
+      </if>
+      <if test="sportNote2 != null">
+        sport_note2 = #{sportNote2,jdbcType=VARCHAR},
+      </if>
+      <if test="sportNote3 != null">
+        sport_note3 = #{sportNote3,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where lonlat_id = #{lonlatId,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <delete id="deleteViewSpotByLonlatId" parameterType="com.tmount.db.zdjs.dto.TItovViewspot">
+    delete from t_itov_viewspot
+     where lonlat_id = #{lonlatId,jdbcType=VARCHAR}
+  </delete>
+  
+  
+  <select id="selectByLonlat_id" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+      from t_itov_viewspot
+   where lonlat_id = #{lonlatId,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+   select <include refid="Base_Column_List" />
+      from t_itov_viewspot
+  </select>
+  
+  
+  
+ <select id="selectByUID" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+      from t_itov_viewspot
+   where deviceuid = #{deviceuid,jdbcType=VARCHAR}
+  </select>
+  
+  
+</mapper>

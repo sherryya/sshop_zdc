@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.ReOrderDeliverMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.ReOrderDeliver" >
+    <id column="order_no" property="orderNo" jdbcType="BIGINT" />
+    <result column="province_code" property="provinceCode" jdbcType="INTEGER" />
+    <result column="city_code" property="cityCode" jdbcType="INTEGER" />
+    <result column="area_code" property="areaCode" jdbcType="INTEGER" />
+    <result column="arrival_time" property="arrivalTime" jdbcType="INTEGER" />
+    <result column="logistics_id" property="logisticsId" jdbcType="INTEGER" />
+    <result column="logistics_no" property="logisticsNo" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="mark" property="mark" jdbcType="VARCHAR" />
+    <result column="tx_logistics_id" property="txLogisticsId" jdbcType="VARCHAR" />
+    <result column="state_code" property="stateCode" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="logistics_type" property="logisticsType" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="send_online" property="sendOnline" jdbcType="CHAR" />
+  </resultMap>
+  <resultMap id="LogisticResultMap" type="com.tmount.db.order.vo.LogisticInfo" >
+    <result column="logistics_no" property="logisticsNo" jdbcType="VARCHAR" />
+    <result column="client_id" property="clientId" jdbcType="VARCHAR" />
+    <result column="logistic_provider_id" property="logisticProviderId" jdbcType="VARCHAR" />
+    <result column="send_online" jdbcType="CHAR" property="sendOnline" />
+    <result column="logistics_name" jdbcType="VARCHAR" property="logisticName" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_no, province_code, city_code, area_code, arrival_time, logistics_id, logistics_no, 
+    user_name, mobile, contact_phone, address, post_code, create_time, mark, tx_logistics_id, 
+    state_code, remark, logistics_type, order_id, send_online
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_order_deliver
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from re_order_deliver
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReOrderDeliver" >
+    insert into re_order_deliver (order_no, province_code, city_code, 
+      area_code, arrival_time, logistics_id, 
+      logistics_no, user_name, mobile, 
+      contact_phone, address, post_code, 
+      create_time, mark, tx_logistics_id, 
+      state_code, remark, logistics_type, 
+      order_id, send_online)
+    values (#{orderNo,jdbcType=BIGINT}, #{provinceCode,jdbcType=INTEGER}, #{cityCode,jdbcType=INTEGER}, 
+      #{areaCode,jdbcType=INTEGER}, #{arrivalTime,jdbcType=INTEGER}, #{logisticsId,jdbcType=INTEGER}, 
+      #{logisticsNo,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{contactPhone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{postCode,jdbcType=CHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{mark,jdbcType=VARCHAR}, #{txLogisticsId,jdbcType=VARCHAR}, 
+      #{stateCode,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{logisticsType,jdbcType=INTEGER}, 
+      #{orderId,jdbcType=INTEGER}, #{sendOnline,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReOrderDeliver" >
+    insert into re_order_deliver
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="provinceCode != null" >
+        province_code,
+      </if>
+      <if test="cityCode != null" >
+        city_code,
+      </if>
+      <if test="areaCode != null" >
+        area_code,
+      </if>
+      <if test="arrivalTime != null" >
+        arrival_time,
+      </if>
+      <if test="logisticsId != null" >
+        logistics_id,
+      </if>
+      <if test="logisticsNo != null" >
+        logistics_no,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="contactPhone != null" >
+        contact_phone,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="postCode != null" >
+        post_code,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="mark != null" >
+        mark,
+      </if>
+      <if test="txLogisticsId != null" >
+        tx_logistics_id,
+      </if>
+      <if test="stateCode != null" >
+        state_code,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="logisticsType != null" >
+        logistics_type,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="sendOnline != null" >
+        send_online,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="provinceCode != null" >
+        #{provinceCode,jdbcType=INTEGER},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=INTEGER},
+      </if>
+      <if test="arrivalTime != null" >
+        #{arrivalTime,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsId != null" >
+        #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsNo != null" >
+        #{logisticsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null" >
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        #{postCode,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mark != null" >
+        #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="txLogisticsId != null" >
+        #{txLogisticsId,jdbcType=VARCHAR},
+      </if>
+      <if test="stateCode != null" >
+        #{stateCode,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsType != null" >
+        #{logisticsType,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="sendOnline != null" >
+        #{sendOnline,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.ReOrderDeliver" >
+    update re_order_deliver
+    <set >
+      <if test="provinceCode != null" >
+        province_code = #{provinceCode,jdbcType=INTEGER},
+      </if>
+      <if test="cityCode != null" >
+        city_code = #{cityCode,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null" >
+        area_code = #{areaCode,jdbcType=INTEGER},
+      </if>
+      <if test="arrivalTime != null" >
+        arrival_time = #{arrivalTime,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsId != null" >
+        logistics_id = #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsNo != null" >
+        logistics_no = #{logisticsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null" >
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        post_code = #{postCode,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mark != null" >
+        mark = #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="txLogisticsId != null" >
+        tx_logistics_id = #{txLogisticsId,jdbcType=VARCHAR},
+      </if>
+      <if test="stateCode != null" >
+        state_code = #{stateCode,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsType != null" >
+        logistics_type = #{logisticsType,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="sendOnline != null" >
+        send_online = #{sendOnline,jdbcType=CHAR},
+      </if>
+    </set>
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.ReOrderDeliver" >
+    update re_order_deliver
+    set province_code = #{provinceCode,jdbcType=INTEGER},
+      city_code = #{cityCode,jdbcType=INTEGER},
+      area_code = #{areaCode,jdbcType=INTEGER},
+      arrival_time = #{arrivalTime,jdbcType=INTEGER},
+      logistics_id = #{logisticsId,jdbcType=INTEGER},
+      logistics_no = #{logisticsNo,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      post_code = #{postCode,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      mark = #{mark,jdbcType=VARCHAR},
+      tx_logistics_id = #{txLogisticsId,jdbcType=VARCHAR},
+      state_code = #{stateCode,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      logistics_type = #{logisticsType,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=INTEGER},
+      send_online = #{sendOnline,jdbcType=CHAR}
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectLogisticInfo" resultMap="LogisticResultMap" parameterType="java.lang.Long" >
+    select a.logistics_no,b.client_id,b.logistic_provider_id,a.send_online,b.logistics_name
+    from re_order_deliver a,re_logistics_dic b
+    where a.logistics_id=b.logistics_id and a.state_code=2 and 
+    a.order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+</mapper>

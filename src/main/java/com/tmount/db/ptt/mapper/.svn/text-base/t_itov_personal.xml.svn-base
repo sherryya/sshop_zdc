@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.ptt.dao.PttItovPersonalMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.ptt.dto.TItov_personal" >
+    <id column="personal_id" property="personal_id" jdbcType="BIGINT" />
+    <result column="personal_sex" property="personal_sex" jdbcType="VARCHAR" />
+    <result column="personal_real_name" property="personal_real_name" jdbcType="VARCHAR" />
+    <result column="personal_tel" property="personal_tel" jdbcType="VARCHAR" />
+    <result column="account_id" property="account_id" jdbcType="BIGINT" />
+    <result column="persion_create_date" property="persion_create_date" jdbcType="TIMESTAMP" />
+    <result column="callid" property="callid" jdbcType="VARCHAR" />
+     <result column="num" property="num" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <resultMap id="UserResultMap" type="com.tmount.db.user.dto.UsAccount" >
+    <id column="account_id" property="account_id" jdbcType="BIGINT" />
+    <result column="account_name" property="account_name" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectByAgentid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+<!--     SELECT personal_id, personal_real_name,personal_sex,personal_tel,persion_create_date,t_itov_personal.account_id,callid,'37e67149-372f-4a8b-b102-b0068e575024' as num FROM itov.t_itov_personal 
+inner join t_itov_ptt_call_log on callfrom=personal_tel  inner join t_itov_account_status    where agentid=#{agentid,jdbcType=BIGINT} order by starttime desc limit 1
+ -->  
+   SELECT personal_id, personal_real_name,personal_sex,personal_tel,persion_create_date,t_itov_personal.account_id,
+   callid,'37e67149-372f-4a8b-b102-b0068e575024' AS num FROM 
+   itov.t_itov_personal 
+INNER JOIN t_itov_ptt_call_log ON callfrom=personal_tel  
+INNER JOIN t_itov_account  ON t_itov_account.`account_id`=t_itov_personal.`account_id` AND t_itov_account.`account_type`='1'
+ WHERE agentid=#{agentid,jdbcType=BIGINT}  
+ ORDER BY starttime DESC LIMIT 1
+  
+  </select>
+  
+  <select id="selectByPersonTel" resultMap="UserResultMap" parameterType="java.lang.String">
+   SELECT account_id,account_name FROM t_itov_account WHERE  account_name=#{personal_tel,jdbcType=VARCHAR} 
+  </select>
+  
+  <!-- 修改个人基本信息 -->
+   <update id="update" parameterType="com.tmount.db.ptt.dto.TItov_personal">
+    update t_itov_personal
+    set 
+  <!--   personal_real_name=#{personal_real_name,jdbcType=VARCHAR}, -->
+    personal_sex=#{personal_sex,jdbcType=VARCHAR}<!-- , -->
+  <!--   personal_email=#{personal_email,jdbcType=VARCHAR},
+    personal_qq=#{personal_qq,jdbcType=VARCHAR},
+    personal_age=#{personal_age,jdbcType=INTEGER} -->
+    where account_id = #{account_id,jdbcType=BIGINT}
+  </update>
+  
+   <!-- 根据voip获得账户信息以便获得accountid在用户视频的时候使用 20141015-->
+    <select id="selectAccountByVoipAccount" resultMap="BaseResultMap" parameterType="java.lang.String">
+       SELECT per.*
+      FROM t_itov_ptt_subaccount t ,t_itov_personal  per WHERE t.account_id = per.account_id AND t.voipAccount = #{voipAccount}
+    </select>
+</mapper>

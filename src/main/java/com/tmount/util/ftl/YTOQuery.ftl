@@ -1,0 +1,9 @@
+<BatchQueryRequest>
+<logisticProviderID>${logisticProviderID}</logisticProviderID>
+<clientID>${clientID}</clientID>
+    <orders>
+        <order>
+            <mailNo>${mailNo}</mailNo>
+        </order>
+    </orders>
+</BatchQueryRequest>

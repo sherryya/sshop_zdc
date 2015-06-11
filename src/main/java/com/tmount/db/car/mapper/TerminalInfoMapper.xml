@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.car.dao.TerminalInfoMapper">
+   <resultMap id="BaseResultMap"
+		type="com.tmount.db.car.dto.QRcodeTerminalInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="qyid" property="qyid" jdbcType="INTEGER" />
+		<id column="DeviceUID" property="DeviceUID" jdbcType="VARCHAR" />
+		<id column="DeviceType" property="DeviceType"
+			jdbcType="VARCHAR" />
+		<id column="DeviceSN" property="DeviceSN" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="TerminalMap"
+		type="com.tmount.db.car.dto.QRcodeTerminalInfo">
+		<id column="terminal_imei" property="terminal_imei" jdbcType="VARCHAR" />
+		<id column="isprint" property="isprint" jdbcType="VARCHAR" />
+		<id column="terminal_status" property="terminal_status" jdbcType="VARCHAR" />
+		<id column="print_date" property="print_date" jdbcType="TIMESTAMP" />
+		<id column="user_id" property="user_id" jdbcType="INTEGER" />
+	</resultMap>
+	<select id="getUserIdByDeviceSn" resultType="java.lang.String"
+		parameterType="java.lang.String">
+		select user_id
+		from t_itov_terminal
+		where terminal_devicesn = #{device_sn,jdbcType=VARCHAR}
+	</select>
+
+
+	<select id="getPwdByDeviceSn" resultType="java.lang.String"
+		parameterType="java.lang.String">
+		select terminal_pwd
+		from t_itov_terminal
+		where terminal_devicesn = #{device_sn,jdbcType=VARCHAR}
+	</select>
+
+	<update id="updateTerminalStatus" parameterType="com.tmount.db.car.dto.TerminalInfo">
+
+		UPDATE `t_itov_terminal` SET
+		terminal_status=#{terminal_status,jdbcType=INTEGER},
+		terminal_binding_date=#{terminal_binding_date,jdbcType=TIMESTAMP}
+		WHERE terminal_imei=#{terminal_imei,jdbcType=VARCHAR}
+
+	</update>
+
+
+
+
+	<select id="getTerminalInfoByVoip" resultType="com.tmount.db.car.dto.TerminalInfo"
+		parameterType="java.lang.String">
+
+
+		SELECT t.* FROM `t_itov_ptt_subaccount` s INNER JOIN `t_itov_user` u ON
+		s.`account_id`=u.`account_id`
+		INNER JOIN `t_itov_terminal` t ON t.`user_id`=u.`user_id` WHERE
+		s.`voipAccount`= #{voipAccount,jdbcType=VARCHAR}
+	</select>
+      <select id="getVoipInfoByIMEI" resultType="com.tmount.db.ptt.dto.TItovPttSubaccount" 	parameterType="com.tmount.db.car.dto.TerminalInfo">
+		SELECT s.* FROM `t_itov_terminal`  t INNER JOIN  t_itov_user u ON t.`user_id`=u.`user_id` 
+		INNER JOIN t_itov_ptt_subaccount s ON s.`account_id`=u.`account_id`
+		WHERE t.`terminal_imei`=#{terminal_imei,jdbcType=VARCHAR} and  u.account_id=#{account_id,jdbcType=BIGINT}
+	</select>	
+	<!-- 根据imei号插入terminal信息 -->
+	<insert id="insertTerminalByImei" parameterType="com.tmount.db.car.dto.TerminalInfo">
+	  INSERT INTO `t_itov_terminal`  (terminal_name,terminal_imei,terminal_deviceuid,terminal_device_type,terminal_devicesn,terminal_sim,terminal_producer,
+      terminal_net_type,terminal_location_type,terminal_user_type,terminal_out_storage,terminal_status,terminal_binding_date,terminal_last_dynamic_data,terminal_pwd) 
+      VALUES(#{terminal_name},#{terminal_imei},#{terminal_deviceuid},#{terminal_device_type},#{terminal_devicesn},#{terminal_sim},
+      #{terminal_producer},#{terminal_net_type},#{terminal_location_type},#{terminal_user_type},#{terminal_out_storage},#{terminal_status},#{terminal_binding_date},#{terminal_last_dynamic_data},NULL)
+	</insert>
+	<select id="selectUserIdByImei" resultType="com.tmount.db.car.dto.TerminalInfo"  parameterType="java.lang.String" >
+         SELECT t.* FROM `t_itov_terminal` t WHERE t.`terminal_imei` = #{terminal_imei}
+	</select>
+	
+	
+	
+	<select id="selectAccountIDByIMEI" resultType="com.tmount.db.user.dto.UsAccount"  parameterType="java.lang.String" >
+         SELECT t.* FROM `t_itov_account` t WHERE t.`account_name` = #{account_name}
+	</select>
+	
+	<select id="selectTerminalInfo" resultType="com.tmount.db.car.dto.QRcodeTerminalInfo"  parameterType="com.tmount.db.car.dto.QRcodeTerminalInfo" >
+         SELECT t.* FROM `t_itov_terminal` t  WHERE terminal_status!=1
+          <if test="terminal_imei!=null">
+            AND terminal_imei=#{terminal_imei}
+          </if>
+          <if test="isprint!=null">
+            AND isprint=#{isprint}
+          </if>
+           GROUP BY terminal_imei ORDER BY terminal_binding_date LIMIT #{startLimit},#{pageSize}
+	</select>
+	<select id="selectCountTerminalInfo" resultType="java.lang.Integer"  parameterType="com.tmount.db.car.dto.QRcodeTerminalInfo" >
+         SELECT count(*) FROM `t_itov_terminal` t  WHERE terminal_status!=1
+          <if test="terminal_imei!=null">
+            AND terminal_imei=#{terminal_imei}
+          </if>
+          <if test="isprint!=null">
+            AND isprint=#{isprint}
+          </if>
+	</select>
+</mapper>

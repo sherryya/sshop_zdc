@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.ReUserOrderLogMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.ReUserOrderLog" >
+    <id column="login_accept" property="loginAccept" jdbcType="BIGINT" />
+    <id column="order_no" property="orderNo" jdbcType="BIGINT" />
+    <result column="oper_id" property="operId" jdbcType="INTEGER" />
+    <result column="old_state" property="oldState" jdbcType="INTEGER" />
+    <result column="new_state" property="newState" jdbcType="INTEGER" />
+    <result column="deal_mark" property="dealMark" jdbcType="VARCHAR" />
+    <result column="sys_mark" property="sysMark" jdbcType="VARCHAR" />
+    <result column="deal_time" property="dealTime" jdbcType="TIMESTAMP" />
+    <result column="deal_type" property="dealType" jdbcType="INTEGER" />
+    <result column="deal_no" property="dealNo" jdbcType="INTEGER" />
+    <result column="deal_name" property="dealName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    login_accept, order_no, oper_id, old_state, new_state, deal_mark, sys_mark, deal_time, 
+    deal_type, deal_no, deal_name
+  </sql>
+  <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_user_order_log
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.order.dto.ReUserOrderLogKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_user_order_log
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.order.dto.ReUserOrderLogKey" >
+    delete from re_user_order_log
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReUserOrderLog" >
+    insert into re_user_order_log (login_accept, order_no, oper_id, 
+      old_state, new_state, deal_mark, 
+      sys_mark, deal_time, deal_type, 
+      deal_no, deal_name)
+    values (#{loginAccept,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, #{operId,jdbcType=INTEGER}, 
+      #{oldState,jdbcType=INTEGER}, #{newState,jdbcType=INTEGER}, #{dealMark,jdbcType=VARCHAR}, 
+      #{sysMark,jdbcType=VARCHAR}, #{dealTime,jdbcType=TIMESTAMP}, #{dealType,jdbcType=INTEGER}, 
+      #{dealNo,jdbcType=INTEGER}, #{dealName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReUserOrderLog" >
+    insert into re_user_order_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loginAccept != null" >
+        login_accept,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="operId != null" >
+        oper_id,
+      </if>
+      <if test="oldState != null" >
+        old_state,
+      </if>
+      <if test="newState != null" >
+        new_state,
+      </if>
+      <if test="dealMark != null" >
+        deal_mark,
+      </if>
+      <if test="sysMark != null" >
+        sys_mark,
+      </if>
+      <if test="dealTime != null" >
+        deal_time,
+      </if>
+      <if test="dealType != null" >
+        deal_type,
+      </if>
+      <if test="dealNo != null" >
+        deal_no,
+      </if>
+      <if test="dealName != null" >
+        deal_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loginAccept != null" >
+        #{loginAccept,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="operId != null" >
+        #{operId,jdbcType=INTEGER},
+      </if>
+      <if test="oldState != null" >
+        #{oldState,jdbcType=INTEGER},
+      </if>
+      <if test="newState != null" >
+        #{newState,jdbcType=INTEGER},
+      </if>
+      <if test="dealMark != null" >
+        #{dealMark,jdbcType=VARCHAR},
+      </if>
+      <if test="sysMark != null" >
+        #{sysMark,jdbcType=VARCHAR},
+      </if>
+      <if test="dealTime != null" >
+        #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dealType != null" >
+        #{dealType,jdbcType=INTEGER},
+      </if>
+      <if test="dealNo != null" >
+        #{dealNo,jdbcType=INTEGER},
+      </if>
+      <if test="dealName != null" >
+        #{dealName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.ReUserOrderLog" >
+    update re_user_order_log
+    <set >
+      <if test="operId != null" >
+        oper_id = #{operId,jdbcType=INTEGER},
+      </if>
+      <if test="oldState != null" >
+        old_state = #{oldState,jdbcType=INTEGER},
+      </if>
+      <if test="newState != null" >
+        new_state = #{newState,jdbcType=INTEGER},
+      </if>
+      <if test="dealMark != null" >
+        deal_mark = #{dealMark,jdbcType=VARCHAR},
+      </if>
+      <if test="sysMark != null" >
+        sys_mark = #{sysMark,jdbcType=VARCHAR},
+      </if>
+      <if test="dealTime != null" >
+        deal_time = #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dealType != null" >
+        deal_type = #{dealType,jdbcType=INTEGER},
+      </if>
+      <if test="dealNo != null" >
+        deal_no = #{dealNo,jdbcType=INTEGER},
+      </if>
+      <if test="dealName != null" >
+        deal_name = #{dealName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.ReUserOrderLog" >
+    update re_user_order_log
+    set oper_id = #{operId,jdbcType=INTEGER},
+      old_state = #{oldState,jdbcType=INTEGER},
+      new_state = #{newState,jdbcType=INTEGER},
+      deal_mark = #{dealMark,jdbcType=VARCHAR},
+      sys_mark = #{sysMark,jdbcType=VARCHAR},
+      deal_time = #{dealTime,jdbcType=TIMESTAMP},
+      deal_type = #{dealType,jdbcType=INTEGER},
+      deal_no = #{dealNo,jdbcType=INTEGER},
+      deal_name = #{dealName,jdbcType=VARCHAR}
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+</mapper>

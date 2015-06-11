@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.integral.dao.IntegralMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.integral.dto.TItovIntegralTotal" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="account_id" property="account_id" jdbcType="BIGINT" />
+    <result column="rule_type" property="rule_type" jdbcType="INTEGER" />
+    <result column="integral" property="integral" jdbcType="INTEGER" />
+  </resultMap>
+   <resultMap id="BaseResultMap_ruleIntegral" type="com.tmount.db.integral.dto.TItovIntegralRule" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="integral" property="integral" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+ <resultMap id="BaseResultMap_NewUser" type="com.tmount.db.user.dto.UsAccount" >
+    <id column="account_id" property="account_id" jdbcType="BIGINT" />
+    <result column="crt_date" property="crt_date" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <insert id="insert_integral" parameterType="com.tmount.db.integral.dto.TItovIntegral">
+	INSERT INTO t_itov_integral
+	(
+		account_id,
+		rule_type,
+		integral,
+		crt_date,
+		comment,
+		note1,
+		note2,
+		note3
+	)
+	VALUES
+	(
+		#{account_id,jdbcType=BIGINT},
+		#{rule_type,jdbcType=INTEGER},
+		#{integral,jdbcType=INTEGER},
+		#{crt_date,jdbcType=TIMESTAMP},
+		#{comment,jdbcType=VARCHAR},
+		#{note1,jdbcType=VARCHAR},
+		#{note2,jdbcType=VARCHAR},
+		#{note3,jdbcType=VARCHAR}
+	)
+  </insert>
+  <insert id="insert_integral_total" parameterType="com.tmount.db.integral.dto.TItovIntegralTotal">
+	INSERT INTO t_itov_integral_total
+	(
+		account_id,
+		rule_type,
+		integral
+	)
+	VALUES
+	(
+		#{account_id,jdbcType=BIGINT},
+		#{rule_type,jdbcType=INTEGER},
+		#{integral,jdbcType=INTEGER}
+	)
+  </insert>
+  <update id="update_integral_total" parameterType="com.tmount.db.integral.dto.TItovIntegralTotal">
+		update t_itov_integral_total
+		set integral =integral+ #{integral,jdbcType=INTEGER}
+		where account_id = #{account_id,jdbcType=BIGINT}
+ </update>
+
+  <select id="selectTotalByAccount" resultMap="BaseResultMap" parameterType="com.tmount.db.integral.dto.TItovIntegralTotal">
+		select account_id,rule_type,integral
+		from t_itov_integral_total a
+		where a.account_id = #{account_id,jdbcType=BIGINT}
+	</select>
+	
+  <select id="selectIntegralByType" resultMap="BaseResultMap_ruleIntegral" parameterType="com.tmount.db.integral.dto.TItovIntegralRule">
+	select id,type,integral,name
+	from t_itov_integral_rule a
+	where a.type = #{type,jdbcType=INTEGER}
+  </select>
+  <!-- 得到新建账号的用户积分 -->
+  <select id="selectNewUser" resultMap="BaseResultMap_NewUser" parameterType="com.tmount.db.user.dto.UsAccount">
+	select account_id,crt_date from t_itov_account where account_type=1 
+	<if test="crt_date != null">
+     and crt_date > #{crt_date,jdbcType=TIMESTAMP}
+    </if>
+    order by crt_date asc
+  </select>
+  <!-- 得到拨打IVR用户的积分 -->
+  <select id="selectIVR" resultMap="BaseResultMap_NewUser" parameterType="com.tmount.db.user.dto.UsAccount">
+	SELECT a.account_id, calldatetime crt_date FROM `t_itov_ptt_call_log`  c INNER JOIN `t_itov_personal` p ON c.callfrom=p.personal_tel 
+	INNER JOIN `t_itov_account` a ON a.account_id=p.account_id
+	WHERE callduration >0  AND (errorcode='0'  OR errorcode='104026') AND agentid IS NOT NULL 
+	AND   a.account_type=1  
+	<if test="crt_date != null">
+	AND calldatetime > #{crt_date,jdbcType=TIMESTAMP}
+	</if>
+	ORDER BY calldatetime ASC
+  </select>
+
+  <select id="selectVOIP" resultMap="BaseResultMap_NewUser" parameterType="com.tmount.db.user.dto.UsAccount">
+	SELECT s.`account_id`, g.crtdate crt_date FROM `t_itov_ptt_subaccount` s INNER JOIN `t_itov_ptt_subaccount_log` g ON s.`voipAccount`=g.`caller`
+	WHERE (byetype=1  OR byetype=2) 
+	<if test="crt_date != null">
+	AND g.crtdate > #{crt_date,jdbcType=TIMESTAMP}
+	</if>
+	ORDER BY crtdate ASC
+  </select>
+</mapper>

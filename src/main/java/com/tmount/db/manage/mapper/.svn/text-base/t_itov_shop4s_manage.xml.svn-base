@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.manage.dao.TItov_shop4sManageMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.manage.dto.TItov_shop4s_manage" >
+    <id column="4s_id" property="shop4s_id" jdbcType="INTEGER" />
+    <result column="4s_name" property="shop4s_name" jdbcType="VARCHAR" />
+    <result column="4s_address" property="shop4s_address" jdbcType="VARCHAR" />
+    <result column="4s_principal" property="shop4s_principal" jdbcType="VARCHAR" />    
+    <result column="4s_principal_tel" property="shop4s_principal_tel" jdbcType="VARCHAR" />
+    <result column="4s_tel" property="shop4s_tel" jdbcType="VARCHAR" />
+    <result column="4s_city_id" property="shop4s_city_id" jdbcType="VARCHAR" />
+    <result column="4s_city_name" property="shop4s_city_name" jdbcType="VARCHAR" />
+    <result column="4s_country_id" property="shop4s_country_id" jdbcType="VARCHAR" />
+    <result column="4s_country_name" property="shop4s_country_name" jdbcType="VARCHAR" />    
+    <result column="4s_province_id" property="shop4s_province_id" jdbcType="VARCHAR" />
+    <result column="4s_province_name" property="shop4s_province_name" jdbcType="VARCHAR" />
+    <result column="4s_isuse" property="shop4s_isuse" jdbcType="INTEGER" />
+    <result column="4s_note" property="shop4s_note" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <resultMap id="BaseResultMap2" type="com.tmount.db.manage.dto.TItov_shop4s_user" >
+    <id column="account_id" property="account_id" jdbcType="BIGINT" />
+    <result column="company_id" property="company_id" jdbcType="BIGINT" />     
+    <result column="account_name" property="account_name" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" /> 
+    <result column="personal_real_name" property="real_name" jdbcType="VARCHAR" /> 
+    <result column="personal_sex" property="person_sex" jdbcType="VARCHAR" /> 
+    <result column="personal_tel" property="person_tel" jdbcType="VARCHAR" />     
+    <result column="personal_email" property="person_email" jdbcType="VARCHAR" /> 
+    <result column="company_name" property="company_name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+    <!-- 查询lookup4s店信息-->
+  <select id="selectShop4sByUser" resultMap="BaseResultMap" parameterType="com.tmount.db.manage.dto.TItov_shop4s_manage">
+  
+  SELECT  shop.4s_id,shop.4s_name,shop.4s_address,shop.4s_principal,shop.4s_principal_tel,shop.4s_tel
+	,shop.4s_city_id,(select name from t_city where code=shop.4s_city_id limit 0,1 ) as shop4s_city_name,
+	shop.4s_country_id,(select name from t_town where id=shop.4s_country_id limit 0,1)as shop4s_country_name ,shop.4s_province_id,
+	(select name from t_province where id=shop.4s_province_id limit 0,1 )as shop4s_province_name,shop.4s_isuse,shop.4s_note
+ 	from t_zdc_4sshopinfo shop  where shop.4s_name like CONCAT ('%',#{shop4s_name,jdbcType=VARCHAR},'%')  
+		  ORDER BY shop.`4s_id` ASC  LIMIT  #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select> 
+  
+  
+     <!-- 查询lookup  4s店信息   数量  -->
+  <select id="selectShop4sSizeByUser" resultType="java.lang.Integer" parameterType="com.tmount.db.manage.dto.TItov_shop4s_manage">
+  SELECT  count(shop.4s_id)
+ 	from t_zdc_4sshopinfo shop  where shop.4s_name like CONCAT ('%',#{shop4s_name,jdbcType=VARCHAR},'%')  
+  </select> 
+  
+  
+
+  <!-- 查询4s店信息-->
+  <select id="selectByWhere" resultMap="BaseResultMap" parameterType="com.tmount.db.manage.dto.TItov_shop4s_manage">
+  
+  SELECT  shop.4s_id,shop.4s_name,shop.4s_address,shop.4s_principal,shop.4s_principal_tel,shop.4s_tel
+	,shop.4s_city_id,(select name from t_city where code=shop.4s_city_id limit 0,1 ) as shop4s_city_name,
+	shop.4s_country_id,(select name from t_town where id=shop.4s_country_id limit 0,1)as shop4s_country_name ,shop.4s_province_id,
+	(select name from t_province where id=shop.4s_province_id limit 0,1 )as shop4s_province_name,shop.4s_isuse,shop.4s_note
+ 	from t_zdc_4sshopinfo shop 
+  
+  where shop.4s_province_id like  CONCAT ('%',#{pId,jdbcType=VARCHAR},'%')    
+  and shop.4s_city_id like  CONCAT ('%',#{cId,jdbcType=VARCHAR},'%')    
+  AND shop.4s_country_id like  CONCAT ('%',#{dId,jdbcType=VARCHAR},'%')      
+  ORDER BY shop.`4s_id` ASC  LIMIT  #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select> 
+   <!-- 查询4s店 数量    -->
+  <select id="selectSizeByWhere" resultType="java.lang.Integer" parameterType="com.tmount.db.manage.dto.TItov_shop4s_manage">
+  
+  SELECT count(shop.4s_id)
+ 	from t_zdc_4sshopinfo shop
+ 	 where shop.4s_province_id like  CONCAT ('%',#{pId,jdbcType=VARCHAR},'%')    
+  and shop.4s_city_id like  CONCAT ('%',#{cId,jdbcType=VARCHAR},'%')    
+  AND shop.4s_country_id like  CONCAT ('%',#{dId,jdbcType=VARCHAR},'%')   
+  </select> 
+  
+  <insert id="insert" parameterType="com.tmount.db.manage.dto.TItov_shop4s_manage">
+    insert into t_zdc_4sshopinfo (
+        4s_name,4s_address,4s_principal,4s_tel,4s_city_id,4s_country_id,4s_province_id,4s_isuse,4s_note)
+    values (
+        #{shop4s_name,jdbcType=VARCHAR},
+        #{shop4s_address,jdbcType=VARCHAR},
+        #{shop4s_principal,jdbcType=VARCHAR},
+        #{shop4s_tel,jdbcType=VARCHAR},
+        #{shop4s_city_id,jdbcType=VARCHAR},
+        #{shop4s_country_id,jdbcType=VARCHAR},
+        #{shop4s_province_id,jdbcType=VARCHAR},
+        #{shop4s_isuse,jdbcType=INTEGER},
+        #{shop4s_note,jdbcType=VARCHAR}
+    )
+  </insert>
+  
+  
+  
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  SELECT  shop.4s_id,shop.4s_name,shop.4s_address,shop.4s_principal,shop.4s_principal_tel,shop.4s_tel
+	,shop.4s_city_id,(select name from t_city where code=shop.4s_city_id limit 0,1 ) as shop4s_city_name,
+	shop.4s_country_id,(select name from t_town where id=shop.4s_country_id limit 0,1)as shop4s_country_name ,shop.4s_province_id,
+	(select name from t_province where id=shop.4s_province_id limit 0,1 )as shop4s_province_name,shop.4s_isuse,shop.4s_note
+      from t_zdc_4sshopinfo shop
+     where 4s_id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+  
+    <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.manage.dto.TItov_shop4s_manage">
+    update t_zdc_4sshopinfo
+    <set>
+      <if test="shop4s_id != null">
+        4s_id = #{shop4s_id,jdbcType=INTEGER},
+      </if>
+      <if test="shop4s_name != null">
+        4s_name = #{shop4s_name,jdbcType=VARCHAR},
+      </if>
+      <if test="shop4s_address != null">
+        4s_address = #{shop4s_address,jdbcType=VARCHAR},
+      </if>
+      <if test="shop4s_principal != null">
+        4s_principal = #{shop4s_principal,jdbcType=VARCHAR},
+      </if>
+      <if test="shop4s_principal_tel != null">
+        4s_principal_tel = #{shop4s_principal_tel,jdbcType=VARCHAR},
+      </if>
+      <if test="shop4s_tel != null">
+        4s_tel = #{shop4s_tel,jdbcType=VARCHAR},
+      </if>
+      <if test="shop4s_province_id != null">
+        4s_province_id = #{shop4s_province_id,jdbcType=VARCHAR},
+      </if>
+      <if test="shop4s_city_id != null">
+        4s_city_id = #{shop4s_city_id,jdbcType=VARCHAR},
+      </if>
+      <if test="shop4s_country_id != null">
+        4s_country_id = #{shop4s_country_id,jdbcType=VARCHAR},
+      </if>
+      <if test="shop4s_note != null">
+        4s_note = #{shop4s_note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where 4s_id = #{shop4s_id,jdbcType=INTEGER}
+  </update>
+  
+  
+    <!-- 查询4s店用户信息-->
+  <select id="selectUserByWhere" resultMap="BaseResultMap2" parameterType="com.tmount.db.manage.dto.TItov_shop4s_user">
+  
+	SELECT acc.`account_id`,acc.`account_name`,acc.`account_type`,acc.`nickname`,per.`personal_real_name`,per.`personal_sex`,per.`personal_tel`,per.`personal_email`  
+	,shop.`4s_name` as company_name
+	FROM `t_itov_account` acc  INNER JOIN  `t_itov_personal` per ON acc.`account_id`=per.`account_id`  INNER JOIN   `t_zdc_4sshopinfo` shop ON acc.`company_id`=shop.`4s_id`
+	   
+   where acc.account_type='7'
+   
+  AND acc.account_name  like  CONCAT ('%',#{account_name,jdbcType=VARCHAR},'%')      
+  ORDER BY acc.`account_id` ASC  LIMIT  #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select> 
+  
+  
+     <!-- 查询4s店 用户数量    -->
+  <select id="selectUserSizeByWhere" resultType="java.lang.Integer" parameterType="com.tmount.db.manage.dto.TItov_shop4s_user">
+  
+	SELECT count(acc.account_id)  
+
+	FROM `t_itov_account` acc  where acc.account_type='7'
+ 
+  AND acc.account_name  like  CONCAT ('%',#{account_name,jdbcType=VARCHAR},'%')      
+  ORDER BY acc.`account_id` ASC  LIMIT  #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select> 
+  
+  
+   <update id="saveShop4sUser" parameterType="com.tmount.db.manage.dto.TItov_shop4s_user">
+    update t_itov_account
+    <set>
+      <if test="company_id != null">
+        company_id = #{company_id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where account_id = #{account_id,jdbcType=BIGINT}
+  </update>
+    
+<!--   SELECT menu.* FROM itov.t_itov_account a inner join t_itov_menu_assgn_rule rule
+on a.account_role_id=rule.Role_ID inner join t_itov_menu_class  menu on rule.Class_ID=menu.Class_ID
+where rule.Role_ID=1  order by Class_Levels, Class_Taxis  -->
+  
+  <!-- 查询4s用户信息 -->
+    <select id="selectUser4sById" resultMap="BaseResultMap2" parameterType="java.lang.Integer">
+	SELECT acc.`account_id`,acc.`account_name`,acc.`account_type`,acc.`nickname`,per.`personal_real_name`,per.`personal_sex`,per.`personal_tel`,per.`personal_email`  
+	,shop.`4s_name` as company_name,acc.company_id
+	FROM `t_itov_account` acc  INNER JOIN  `t_itov_personal` per ON acc.`account_id`=per.`account_id`  INNER JOIN   `t_zdc_4sshopinfo` shop ON acc.`company_id`=shop.`4s_id`
+	   
+   where acc.account_type='7'
+   and   acc.account_id = #{id,jdbcType=INTEGER}
+   
+  </select>
+  
+  <update id="updateByPrimaryKeySelective2" parameterType="com.tmount.db.manage.dto.TItov_shop4s_user">
+    update t_itov_account acc,t_itov_personal per
+    <set>
+      <if test="company_id != null">
+        acc.company_id = #{company_id,jdbcType=BIGINT},
+      </if>
+      
+      <if test="account_name != null">
+        acc.account_name = #{account_name,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="account_password != null">
+        acc.account_password = #{account_password,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="nickname != null">
+        acc.nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="real_name != null">
+        per.personal_real_name = #{real_name,jdbcType=VARCHAR},
+      </if>
+      <if test="person_sex != null">
+        per.personal_sex = #{person_sex,jdbcType=VARCHAR},
+      </if>
+      <if test="person_tel != null">
+        per.personal_tel = #{person_tel,jdbcType=VARCHAR},
+      </if>
+       <if test="person_email != null">
+        per.personal_email = #{person_email,jdbcType=VARCHAR},
+      </if>
+      
+    </set>
+    where acc.account_id = #{account_id,jdbcType=BIGINT} and acc.account_id=per.account_id
+  </update>
+    
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdShopFloorRelMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdShopFloorRelInfo" >
+    <id column="shop_floor_id" property="shopFloorId" jdbcType="INTEGER" />
+    <result column="floor_id" property="floorId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="play_pic" property="playPic" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="update_no" property="updateNo" jdbcType="CHAR" />
+    <result column="floor_name" property="floorName" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    a.shop_floor_id, a.floor_id, a.shop_id, a.play_pic, a.create_time, a.update_time, a.state, a.update_no, b.floor_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_shop_floor_rel a, sy_floor_dic b
+    where a.floor_id = b.floor_id
+      and a.shop_floor_id = #{shopFloorId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByShopId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_shop_floor_rel a, sy_floor_dic b
+    where a.floor_id = b.floor_id
+      and a.shop_id = #{shopId,jdbcType=INTEGER}
+  </select>
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.mileage.dao.TZdcCanstreamOriginalMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.mileage.dto.TZdcCanstreamOriginal" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="deviceid" property="deviceid" jdbcType="VARCHAR" />
+    <result column="stream" property="stream" jdbcType="VARCHAR" />
+    <result column="is_deal" property="isDeal" jdbcType="INTEGER" />
+    <result column="crt_date" property="crtDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,deviceid,stream,is_deal,crt_date
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.mileage.dto.TZdcCanstreamOriginal">
+    insert into t_zdc_canstream_original (
+        id,deviceid,stream,is_deal,crt_date)
+    values (
+        #{id,jdbcType=BIGINT},#{deviceid,jdbcType=VARCHAR},#{stream,jdbcType=VARCHAR},
+        #{isDeal,jdbcType=INTEGER},#{crtDate,jdbcType=TIMESTAMP}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.mileage.dto.TZdcCanstreamOriginal">
+    update t_zdc_canstream_original
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="deviceid != null">
+        deviceid = #{deviceid,jdbcType=VARCHAR},
+      </if>
+      <if test="stream != null">
+        stream = #{stream,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeal != null">
+        is_deal = #{isDeal,jdbcType=INTEGER},
+      </if>
+      <if test="crtDate != null">
+        crt_date = #{crtDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT},
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_zdc_canstream_original
+     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+      from t_zdc_canstream_original
+     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      t_zdc_canstream_original
+  </select>
+   <insert id="insertValues" parameterType="com.tmount.db.mileage.dto.TZdcCanstreamOriginal">
+    insert into t_zdc_canstream_original (
+        deviceid,stream,is_deal)
+    values (
+       #{deviceid,jdbcType=VARCHAR},#{stream,jdbcType=VARCHAR}, #{isDeal,jdbcType=INTEGER}
+    )
+  </insert>
+   <select id="selectCanOriginal" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT t.`ID`,t.`deviceid`,t.`stream`,t.`is_deal`,t.`crt_date` FROM `t_zdc_canstream_original` t WHERE LENGTH(t.`stream`)=33 
+     AND t.`deviceid`=#{deviceid,jdbcType=VARCHAR} ORDER BY t.`crt_date` DESC  LIMIT 1
+  </select>
+</mapper>

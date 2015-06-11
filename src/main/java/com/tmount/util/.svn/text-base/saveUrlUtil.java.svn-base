@@ -1,0 +1,54 @@
+package com.tmount.util;
+
+import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Random;
+
+import javax.imageio.ImageIO;
+
+public class saveUrlUtil {
+	public static String getImgFromUrl(String urlstr, String savepath)
+    {
+		String ROOTPATH =Thread.currentThread().getContextClassLoader().getResource("").getPath().substring(1);
+		ROOTPATH=ROOTPATH.substring(0, ROOTPATH.lastIndexOf("WEB-INF"));
+	
+        int num = urlstr.indexOf('/',8);
+        int extnum = urlstr.lastIndexOf('.');
+        String u = urlstr.substring(0,num);
+        String ext = urlstr.substring(extnum+1,urlstr.length());
+        try{
+            long curTime = System.currentTimeMillis();
+            Random random = new Random(100000000);
+            String fileName = String.valueOf(curTime) + "_"
+                    + random.nextInt(100000000) + "."+ext;
+            // 图片的路径
+            String realPath = ROOTPATH + savepath;
+            
+            URL url = new URL(urlstr);
+            URLConnection connection = url.openConnection();
+            connection.setDoOutput(true);
+            connection.setRequestProperty("referer", u);       //通过这个http头的伪装来反盗链
+            BufferedImage image = ImageIO.read(connection.getInputStream());
+            FileOutputStream fout=new FileOutputStream(realPath+fileName);
+            if("gif".equals(ext)||"png".equals("png"))
+            {
+                 ImageIO.write(image, ext, fout);
+            }
+            ImageIO.write(image, "jpg", fout);
+            fout.flush();
+            fout.close();
+                   
+            return savepath+fileName;
+        }       
+        catch(Exception e)
+        {
+           // System.out.print(e.getMessage().toString());
+        }
+        return "";
+    }
+	public static void main(String[] args) {
+		saveUrlUtil.getImgFromUrl("http://file.api.dbscar.com/auto_logos/1161.png", "/images/car_logo/");
+	}
+}

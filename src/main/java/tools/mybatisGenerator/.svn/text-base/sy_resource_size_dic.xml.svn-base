@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="t_zdc_Mileage">
+  <select id="selectAll">
+    select *
+      from t_zdc_Mileage
+  </select>
+</table>

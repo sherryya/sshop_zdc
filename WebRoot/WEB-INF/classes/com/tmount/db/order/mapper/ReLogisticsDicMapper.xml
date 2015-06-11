@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmount.db.order.dao.ReLogisticsDicMapper">
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.ReLogisticsDic">
+    <id column="logistics_id" jdbcType="INTEGER" property="logisticsId" />
+    <result column="logistics_name" jdbcType="VARCHAR" property="logisticsName" />
+    <result column="client_id" jdbcType="VARCHAR" property="clientId" />
+    <result column="logistic_provider_id" jdbcType="VARCHAR" property="logisticProviderId" />
+    <result column="pay_rate" jdbcType="DOUBLE" property="payRate" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_no" jdbcType="INTEGER" property="updateNo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    logistics_id, logistics_name, client_id, logistic_provider_id, pay_rate, update_time, 
+    update_no
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from re_logistics_dic
+    where logistics_id = #{logisticsId,jdbcType=INTEGER}
+  </select>
+  <select id="selectLogistics" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from re_logistics_dic
+  </select>
+  <select id="selectClientId" resultType="String" parameterType="java.lang.Integer">
+    select 
+    client_id
+    from re_logistics_dic
+    where logistics_id = #{logisticsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from re_logistics_dic
+    where logistics_id = #{logisticsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReLogisticsDic">
+    insert into re_logistics_dic (logistics_id, logistics_name, client_id, 
+      logistic_provider_id, pay_rate, update_time, 
+      update_no)
+    values (#{logisticsId,jdbcType=INTEGER}, #{logisticsName,jdbcType=VARCHAR}, #{clientId,jdbcType=VARCHAR}, 
+      #{logisticProviderId,jdbcType=VARCHAR}, #{payRate,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateNo,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReLogisticsDic">
+    insert into re_logistics_dic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logisticsId != null">
+        logistics_id,
+      </if>
+      <if test="logisticsName != null">
+        logistics_name,
+      </if>
+      <if test="clientId != null">
+        client_id,
+      </if>
+      <if test="logisticProviderId != null">
+        logistic_provider_id,
+      </if>
+      <if test="payRate != null">
+        pay_rate,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateNo != null">
+        update_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logisticsId != null">
+        #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsName != null">
+        #{logisticsName,jdbcType=VARCHAR},
+      </if>
+      <if test="clientId != null">
+        #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticProviderId != null">
+        #{logisticProviderId,jdbcType=VARCHAR},
+      </if>
+      <if test="payRate != null">
+        #{payRate,jdbcType=DOUBLE},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateNo != null">
+        #{updateNo,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.ReLogisticsDic">
+    update re_logistics_dic
+    <set>
+      <if test="logisticsName != null">
+        logistics_name = #{logisticsName,jdbcType=VARCHAR},
+      </if>
+      <if test="clientId != null">
+        client_id = #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticProviderId != null">
+        logistic_provider_id = #{logisticProviderId,jdbcType=VARCHAR},
+      </if>
+      <if test="payRate != null">
+        pay_rate = #{payRate,jdbcType=DOUBLE},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateNo != null">
+        update_no = #{updateNo,jdbcType=INTEGER},
+      </if>
+    </set>
+    where logistics_id = #{logisticsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.ReLogisticsDic">
+    update re_logistics_dic
+    set logistics_name = #{logisticsName,jdbcType=VARCHAR},
+      client_id = #{clientId,jdbcType=VARCHAR},
+      logistic_provider_id = #{logisticProviderId,jdbcType=VARCHAR},
+      pay_rate = #{payRate,jdbcType=DOUBLE},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_no = #{updateNo,jdbcType=INTEGER}
+    where logistics_id = #{logisticsId,jdbcType=INTEGER}
+  </update>
+</mapper>

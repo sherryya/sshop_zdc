@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.advertise.dao.AdShowcaseDictMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.advertise.dto.AdShowcaseDict" >
+    <id column="show_id" property="showId" jdbcType="BIGINT" />
+    <result column="showarea_id" property="showareaId" jdbcType="INTEGER" />
+    <result column="show_name" property="showName" jdbcType="VARCHAR" />
+    <result column="show_parent_id" property="showParentId" jdbcType="BIGINT" />
+    <result column="show_level" property="showLevel" jdbcType="INTEGER" />
+    <result column="is_leaf" property="isLeaf" jdbcType="CHAR" />
+    <result column="items_type" property="itemsType" jdbcType="INTEGER" />
+    <result column="order_by" property="orderBy" jdbcType="INTEGER" />
+    <result column="child_layout" property="childLayout" jdbcType="INTEGER" />
+    <result column="show_width" property="showWidth" jdbcType="DOUBLE" />
+    <result column="show_high" property="showHigh" jdbcType="DOUBLE" />
+    <result column="page_count" property="pageCount" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="AdShowcaseDictVo" type="com.tmount.db.advertise.vo.AdShowcaseDictVo" >
+    <id column="show_id" property="showId" jdbcType="BIGINT" />
+    <result column="showarea_id" property="showareaId" jdbcType="INTEGER" />
+    <result column="show_name" property="showName" jdbcType="VARCHAR" />
+    <result column="show_parent_id" property="showParentId" jdbcType="BIGINT" />
+    <result column="show_level" property="showLevel" jdbcType="INTEGER" />
+    <result column="is_leaf" property="isLeaf" jdbcType="CHAR" />
+    <result column="items_type" property="itemsType" jdbcType="INTEGER" />
+    <result column="order_by" property="orderBy" jdbcType="INTEGER" />
+    <result column="child_layout" property="childLayout" jdbcType="INTEGER" />
+    <result column="show_width" property="showWidth" jdbcType="DOUBLE" />
+    <result column="show_high" property="showHigh" jdbcType="DOUBLE" />
+    <result column="page_count" property="pageCount" jdbcType="INTEGER" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="showarea_name" property="showareaName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="AdShowAreaCaseVo" type="com.tmount.db.advertise.vo.AdShowAreaCaseVo" >
+    <id column="show_id" property="showId" jdbcType="BIGINT" />
+    <result column="showarea_id" property="showareaId" jdbcType="INTEGER" />
+    <result column="show_name" property="showName" jdbcType="VARCHAR" />
+    <result column="showarea_name" property="showareaName" jdbcType="VARCHAR" />
+    <result column="show_width" property="showWidth" jdbcType="DOUBLE" />
+    <result column="show_high" property="showHigh" jdbcType="DOUBLE" />
+    <result column="page_count" property="pageCount" jdbcType="INTEGER" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    show_id, showarea_id, show_name, show_parent_id, show_level, is_leaf, items_type, 
+    order_by, child_layout, show_width, show_high, page_count
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ad_showcase_dict
+    where show_id = #{showId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+    from ad_showcase_dict
+    where showarea_id = #{showareaId,jdbcType=INTEGER}
+    ORDER BY order_by ASC
+  </select>  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from ad_showcase_dict
+    where show_id = #{showId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.advertise.dto.AdShowcaseDict" >
+    insert into ad_showcase_dict (show_id, showarea_id, show_name, 
+      show_parent_id, show_level, is_leaf, 
+      items_type, order_by, child_layout, 
+      show_width, show_high, page_count
+      )
+    values (nextval('show_id'), #{showareaId,jdbcType=INTEGER}, #{showName,jdbcType=VARCHAR}, 
+      #{showParentId,jdbcType=BIGINT}, #{showLevel,jdbcType=INTEGER}, #{isLeaf,jdbcType=CHAR}, 
+      #{itemsType,jdbcType=INTEGER}, #{orderBy,jdbcType=INTEGER}, #{childLayout,jdbcType=INTEGER}, 
+      #{showWidth,jdbcType=DOUBLE}, #{showHigh,jdbcType=DOUBLE}, #{pageCount,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.advertise.dto.AdShowcaseDict" >
+    insert into ad_showcase_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="showId != null" >
+        show_id,
+      </if>
+      <if test="showareaId != null" >
+        showarea_id,
+      </if>
+      <if test="showName != null" >
+        show_name,
+      </if>
+      <if test="showParentId != null" >
+        show_parent_id,
+      </if>
+      <if test="showLevel != null" >
+        show_level,
+      </if>
+      <if test="isLeaf != null" >
+        is_leaf,
+      </if>
+      <if test="itemsType != null" >
+        items_type,
+      </if>
+      <if test="orderBy != null" >
+        order_by,
+      </if>
+      <if test="childLayout != null" >
+        child_layout,
+      </if>
+      <if test="showWidth != null" >
+        show_width,
+      </if>
+      <if test="showHigh != null" >
+        show_high,
+      </if>
+      <if test="pageCount != null" >
+        page_count,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="showId != null" >
+        #{showId,jdbcType=BIGINT},
+      </if>
+      <if test="showareaId != null" >
+        #{showareaId,jdbcType=INTEGER},
+      </if>
+      <if test="showName != null" >
+        #{showName,jdbcType=VARCHAR},
+      </if>
+      <if test="showParentId != null" >
+        #{showParentId,jdbcType=BIGINT},
+      </if>
+      <if test="showLevel != null" >
+        #{showLevel,jdbcType=INTEGER},
+      </if>
+      <if test="isLeaf != null" >
+        #{isLeaf,jdbcType=CHAR},
+      </if>
+      <if test="itemsType != null" >
+        #{itemsType,jdbcType=INTEGER},
+      </if>
+      <if test="orderBy != null" >
+        #{orderBy,jdbcType=INTEGER},
+      </if>
+      <if test="childLayout != null" >
+        #{childLayout,jdbcType=INTEGER},
+      </if>
+      <if test="showWidth != null" >
+        #{showWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="showHigh != null" >
+        #{showHigh,jdbcType=DOUBLE},
+      </if>
+      <if test="pageCount != null" >
+        #{pageCount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.advertise.dto.AdShowcaseDict" >
+    update ad_showcase_dict
+    <set >
+      <if test="showareaId != null" >
+        showarea_id = #{showareaId,jdbcType=INTEGER},
+      </if>
+      <if test="showName != null" >
+        show_name = #{showName,jdbcType=VARCHAR},
+      </if>
+      <if test="showParentId != null" >
+        show_parent_id = #{showParentId,jdbcType=BIGINT},
+      </if>
+      <if test="showLevel != null" >
+        show_level = #{showLevel,jdbcType=INTEGER},
+      </if>
+      <if test="isLeaf != null" >
+        is_leaf = #{isLeaf,jdbcType=CHAR},
+      </if>
+      <if test="itemsType != null" >
+        items_type = #{itemsType,jdbcType=INTEGER},
+      </if>
+      <if test="orderBy != null" >
+        order_by = #{orderBy,jdbcType=INTEGER},
+      </if>
+      <if test="childLayout != null" >
+        child_layout = #{childLayout,jdbcType=INTEGER},
+      </if>
+      <if test="showWidth != null" >
+        show_width = #{showWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="showHigh != null" >
+        show_high = #{showHigh,jdbcType=DOUBLE},
+      </if>
+      <if test="pageCount != null" >
+        page_count = #{pageCount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where show_id = #{showId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.advertise.dto.AdShowcaseDict" >
+    update ad_showcase_dict
+    set showarea_id = #{showareaId,jdbcType=INTEGER},
+      show_name = #{showName,jdbcType=VARCHAR},
+      show_parent_id = #{showParentId,jdbcType=BIGINT},
+      show_level = #{showLevel,jdbcType=INTEGER},
+      is_leaf = #{isLeaf,jdbcType=CHAR},
+      items_type = #{itemsType,jdbcType=INTEGER},
+      order_by = #{orderBy,jdbcType=INTEGER},
+      child_layout = #{childLayout,jdbcType=INTEGER},
+      show_width = #{showWidth,jdbcType=DOUBLE},
+      show_high = #{showHigh,jdbcType=DOUBLE},
+      page_count = #{pageCount,jdbcType=INTEGER}
+    where show_id = #{showId,jdbcType=BIGINT}
+  </update>
+  <select id="selectShowCaseDictList" resultMap="AdShowcaseDictVo" parameterType="java.util.Map" >
+	  SELECT
+	  a.show_id,
+	  a.show_name,
+	  b.type_name,
+	  c.showarea_name
+	FROM ad_showcase_dict a,
+	  gd_items_type_dic b,
+	  ad_showarea_dict c
+	WHERE a.items_type = b.items_type
+	    AND a.showarea_id = c.showarea_id
+	    AND b.data_type = '10'
+	    AND b.parent_id = '-1'
+	    <trim suffixOverrides=",">
+	    	<if test="showareaName != null">
+				and c.showarea_name like CONCAT('%',#{showareaName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="showName != null">
+				and a.show_name like CONCAT('%',#{showName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="itemsType != null">
+				and a.items_type = #{itemsType,jdbcType=INTEGER}
+			</if>
+			<if test="typeName != null">
+				and b.type_name like CONCAT('%',#{typeName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="start != null">
+				limit #{start},#{offset}
+			</if>
+	    </trim>
+    </select>
+  <select id="selectShowCaseDictListCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+	  SELECT
+	  count(1)
+	FROM ad_showcase_dict a,
+	  gd_items_type_dic b,
+	  ad_showarea_dict c
+	WHERE a.items_type = b.items_type
+	    AND a.showarea_id = c.showarea_id
+	    AND b.data_type = '10'
+	    AND b.parent_id = '-1'
+	    <trim suffixOverrides=",">
+	    	<if test="showareaName != null">
+				and c.showarea_name like CONCAT('%',#{showareaName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="showName != null">
+				and a.show_name like CONCAT('%',#{showName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="items_type != null">
+				and a.items_type = #{itemsType,jdbcType=INTEGER}
+			</if>
+			<if test="typeName != null">
+				and b.type_name like CONCAT('%',#{typeName,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="start != null">
+				limit #{start},#{offset}
+			</if>
+	    </trim>
+    </select>   
+    <select id="selectAreaCaseList" resultMap="AdShowAreaCaseVo" parameterType="java.util.Map" >
+	  	SELECT 
+			a.showarea_id,
+			a.showarea_name,
+			b.show_id,
+			b.show_name,
+			b.show_width,
+			b.show_high,
+			b.page_count,
+			(SELECT COUNT(*) FROM ad_showpage_dict c WHERE c.show_id = b.show_id) AS flag
+		FROM 
+			ad_showarea_dict a,
+			ad_showcase_dict b 
+		WHERE a.showarea_id = b.showarea_id
+	    <trim suffixOverrides=",">
+	    	<if test="showareaId != -1">
+				and a.showarea_id = #{showareaId,jdbcType=INTEGER}
+			</if>
+			<if test="showId != -1">
+				and b.show_id = #{showId,jdbcType=INTEGER}
+			</if>
+			<if test="pageCount != null">
+				and b.page_count = #{pageCount,jdbcType=INTEGER}
+			</if>
+			<if test="flag != -1">
+				AND (SELECT COUNT(*) FROM ad_showpage_dict c WHERE c.show_id = b.show_id) = #{flag,jdbcType=INTEGER}
+			</if>
+			<if test="start != null">
+				limit #{start},#{offset}
+			</if>
+	    </trim>
+    </select> 
+    <select id="selectAreaCaseListCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+	  	SELECT 
+			count(1)
+		FROM 
+			ad_showarea_dict a,
+			ad_showcase_dict b 
+		WHERE a.showarea_id = b.showarea_id
+	    <trim suffixOverrides=",">
+	    	<if test="showareaId != -1">
+				and a.showarea_id = #{showareaId,jdbcType=INTEGER}
+			</if>
+			<if test="showId != -1">
+				and b.show_id = #{showId,jdbcType=INTEGER}
+			</if>
+			<if test="pageCount != null">
+				and b.page_count = #{pageCount,jdbcType=INTEGER}
+			</if>
+			<if test="flag != -1">
+				AND (SELECT COUNT(*) FROM ad_showpage_dict c WHERE c.show_id = b.show_id) = #{flag,jdbcType=INTEGER}
+			</if>
+			<if test="start != null">
+				limit #{start},#{offset}
+			</if>
+	    </trim>
+    </select>     
+</mapper>

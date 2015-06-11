@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlMaps>
+	<jointable name="GdSubItemInfo">
+		<select id="selectByItemsId">
+	    select
+	    a.items_id, a.shop_id, a.show_type, a.data_type, a.has_child, a.items_name, a.name_spr, a.items_intro, a.
+	    small_pic, a.big_pic, a.http_url, a.price, a.aunit, a.discount, a.member_price, a.update_time, a.
+	    state, a.update_no, b.orders_time
+	    from gd_items_info a, gd_items_item_rel b
+	    where a.items_id = b.items_child
+	      and b.items_id = ?
+	    order by orders_time desc
+		</select>
+	</jointable>
+</sqlMaps>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.sys.dao.SyClientVerMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.sys.dto.SyClientVer" >
+    <id column="client_id" property="clientId" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="client_name" property="clientName" jdbcType="VARCHAR" />
+    <result column="client_type" property="clientType" jdbcType="CHAR" />
+    <result column="client_ver" property="clientVer" jdbcType="INTEGER" />
+    <result column="ver_desc" property="verDesc" jdbcType="VARCHAR" />
+    <result column="update_now" property="updateNow" jdbcType="CHAR" />
+    <result column="update_url" property="updateUrl" jdbcType="VARCHAR" />
+    <result column="update_desc" property="updateDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    client_id, company_id, client_name, client_type, client_ver, ver_desc, update_now, 
+    update_url, update_desc
+  </sql>
+  <select id="selectMaxId" resultType="Integer">
+    select max(client_id)
+    from sy_client_ver
+  </select>
+  <select id="selectItemList" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select 
+    <include refid="Base_Column_List" />
+    from sy_client_ver
+    <where>
+        <if test="clientId != null">
+            AND client_id = #{clientId,jdbcType=INTEGER}
+        </if> 
+        <if test="companyId != null">
+            AND company_id = #{companyId,jdbcType=INTEGER}
+        </if> 
+        <if test="clientName != null">  
+            AND client_name like CONCAT('%',#{clientName,jdbcType=VARCHAR},'%')  
+        </if> 
+        <if test="clientType != null">  
+            AND client_type = #{clientType,jdbcType=CHAR}  
+        </if>
+    </where>  
+  </select>
+  <select id="selectItemListCount" resultType="int" parameterType="java.util.Map">
+    select 
+    count(1)
+    from sy_client_ver
+    <where>
+        <if test="clientId != null">
+            AND client_id = #{clientId,jdbcType=INTEGER}
+        </if> 
+        <if test="companyId != null">
+            AND company_id = #{companyId,jdbcType=INTEGER}
+        </if> 
+        <if test="clientName != null">  
+            AND client_name like CONCAT('%',#{clientName,jdbcType=VARCHAR},'%')  
+        </if> 
+        <if test="clientType != null">  
+            AND client_type = #{clientType,jdbcType=CHAR}  
+        </if>
+    </where>  
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_client_ver
+    where client_id = #{clientId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sy_client_ver
+    where client_id = #{clientId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.sys.dto.SyClientVer" >
+    insert into sy_client_ver (client_id, company_id, client_name, 
+      client_type, client_ver, ver_desc, 
+      update_now, update_url, update_desc
+      )
+    values (#{clientId,jdbcType=INTEGER}, #{companyId,jdbcType=INTEGER}, #{clientName,jdbcType=VARCHAR}, 
+      #{clientType,jdbcType=CHAR}, #{clientVer,jdbcType=INTEGER}, #{verDesc,jdbcType=VARCHAR}, 
+      #{updateNow,jdbcType=CHAR}, #{updateUrl,jdbcType=VARCHAR}, #{updateDesc,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.sys.dto.SyClientVer" >
+    insert into sy_client_ver
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="clientId != null" >
+        client_id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="clientName != null" >
+        client_name,
+      </if>
+      <if test="clientType != null" >
+        client_type,
+      </if>
+      <if test="clientVer != null" >
+        client_ver,
+      </if>
+      <if test="verDesc != null" >
+        ver_desc,
+      </if>
+      <if test="updateNow != null" >
+        update_now,
+      </if>
+      <if test="updateUrl != null" >
+        update_url,
+      </if>
+      <if test="updateDesc != null" >
+        update_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="clientId != null" >
+        #{clientId,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="clientName != null" >
+        #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="clientType != null" >
+        #{clientType,jdbcType=CHAR},
+      </if>
+      <if test="clientVer != null" >
+        #{clientVer,jdbcType=INTEGER},
+      </if>
+      <if test="verDesc != null" >
+        #{verDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="updateNow != null" >
+        #{updateNow,jdbcType=CHAR},
+      </if>
+      <if test="updateUrl != null" >
+        #{updateUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDesc != null" >
+        #{updateDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.sys.dto.SyClientVer" >
+    update sy_client_ver
+    <set >
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="clientName != null" >
+        client_name = #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="clientType != null" >
+        client_type = #{clientType,jdbcType=CHAR},
+      </if>
+      <if test="clientVer != null" >
+        client_ver = #{clientVer,jdbcType=INTEGER},
+      </if>
+      <if test="verDesc != null" >
+        ver_desc = #{verDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="updateNow != null" >
+        update_now = #{updateNow,jdbcType=CHAR},
+      </if>
+      <if test="updateUrl != null" >
+        update_url = #{updateUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDesc != null" >
+        update_desc = #{updateDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where client_id = #{clientId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.sys.dto.SyClientVer" >
+    update sy_client_ver
+    set company_id = #{companyId,jdbcType=INTEGER},
+      client_name = #{clientName,jdbcType=VARCHAR},
+      client_type = #{clientType,jdbcType=CHAR},
+      client_ver = #{clientVer,jdbcType=INTEGER},
+      ver_desc = #{verDesc,jdbcType=VARCHAR},
+      update_now = #{updateNow,jdbcType=CHAR},
+      update_url = #{updateUrl,jdbcType=VARCHAR},
+      update_desc = #{updateDesc,jdbcType=VARCHAR}
+    where client_id = #{clientId,jdbcType=INTEGER}
+  </update>
+</mapper>

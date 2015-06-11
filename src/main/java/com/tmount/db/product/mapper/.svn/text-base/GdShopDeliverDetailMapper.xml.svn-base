@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdShopDeliverDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdShopDeliverDetail" >
+    <id column="city_code" property="cityCode" jdbcType="INTEGER" />
+    <id column="deliver_id" property="deliverId" jdbcType="BIGINT" />
+    <id column="deliver_type" property="deliverType" jdbcType="INTEGER" />
+    <id column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="province_code" property="provinceCode" jdbcType="INTEGER" />
+    <result column="orders" property="orders" jdbcType="INTEGER" />
+    <result column="default_flag" property="defaultFlag" jdbcType="CHAR" />
+    <result column="first_count" property="firstCount" jdbcType="INTEGER" />
+    <result column="first_money" property="firstMoney" jdbcType="DOUBLE" />
+    <result column="add_count" property="addCount" jdbcType="INTEGER" />
+    <result column="add_money" property="addMoney" jdbcType="DOUBLE" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap type="com.tmount.db.product.vo.GdShopDeliverDetailExpl" id="gdShopDeliverDetailExplMap" extends="BaseResultMap">
+    <result column="deliver_name" property="deliverName" jdbcType="VARCHAR" />
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="ExtendResultMap" type="com.tmount.db.product.vo.GdItemDeliverInfo" >
+    <id column="deliver_type" property="deliverType" jdbcType="INTEGER" />
+    <result column="first_count" property="firstCount" jdbcType="INTEGER" />
+    <result column="first_money" property="firstMoney" jdbcType="DOUBLE" />
+    <result column="add_count" property="addCount" jdbcType="INTEGER" />
+    <result column="add_money" property="addMoney" jdbcType="DOUBLE" />
+    <result column="deliver_name" property="deliverName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="CityResultMap" type="java.lang.Integer" >
+    <result column="distinct(city_code)" property="cityCode" jdbcType="INTEGER" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    city_code, deliver_id, deliver_type, shop_id, province_code, orders, default_flag, 
+    first_count, first_money, add_count, add_money, update_time
+  </sql>
+  <select id="selectMaxOrders" resultType="java.lang.Integer" parameterType="com.tmount.db.product.dto.GdShopDeliverDetailKey" >
+    select max(orders)
+    from gd_shop_deliver_detail
+    where deliver_id = #{deliverId,jdbcType=BIGINT}
+      and deliver_type = #{deliverType,jdbcType=INTEGER}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByShopId" resultMap="gdShopDeliverDetailExplMap" parameterType="java.lang.Long" >
+    select 
+     a.city_code, a.deliver_id, a.deliver_type, a.shop_id, a.province_code, a.orders, a.default_flag, 
+     a.first_count, a.first_money, a.add_count, a.add_money, a.update_time,
+     b.deliver_name, c.city_name province_name, d.city_name city_name
+    from gd_shop_deliver_detail a, gd_deliver_dic b, sy_city_dict c, sy_city_dict d
+    where a.deliver_type = b.deliver_type
+      and a.province_code = c.city_code
+      and a.city_code = d.city_code
+      and a.shop_id = #{shopId,jdbcType=BIGINT}
+    order by a.deliver_id, a.deliver_type, a.province_code, a.city_code
+  </select>
+ 
+  <select id="selectByCityCode" resultMap="ExtendResultMap" parameterType="com.tmount.db.product.dto.GdShopDeliverDetail" >
+    select a.deliver_type,b.deliver_name,a.first_count,a.first_money,a.add_count,a.add_money
+    from gd_shop_deliver_detail a,gd_deliver_dic b
+    where a.deliver_id=#{deliverId,jdbcType=BIGINT} and a.shop_id = #{shopId,jdbcType=BIGINT}
+    and a.deliver_type=b.deliver_type and a.city_code=#{cityCode,jdbcType=INTEGER}
+    order by a.deliver_type
+  </select>
+  
+  <select id="selectCityCodeByDeliverId" resultMap="CityResultMap" parameterType="com.tmount.db.product.dto.GdShopDeliver" >
+    select distinct(city_code)
+    from gd_shop_deliver_detail
+    where deliver_id=#{deliverId,jdbcType=BIGINT} and shop_id = #{shopId,jdbcType=BIGINT}
+    order by city_code
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.GdShopDeliverDetailKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_shop_deliver_detail
+    where city_code = #{cityCode,jdbcType=INTEGER}
+      and deliver_id = #{deliverId,jdbcType=BIGINT}
+      and deliver_type = #{deliverType,jdbcType=INTEGER}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.product.dto.GdShopDeliverDetailKey" >
+    delete from gd_shop_deliver_detail
+    where city_code = #{cityCode,jdbcType=INTEGER}
+      and deliver_id = #{deliverId,jdbcType=BIGINT}
+      and deliver_type = #{deliverType,jdbcType=INTEGER}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.GdShopDeliverDetail" >
+    insert into gd_shop_deliver_detail (city_code, deliver_id, deliver_type, 
+      shop_id, province_code, orders, 
+      default_flag, first_count, first_money, 
+      add_count, add_money, update_time
+      )
+    values (#{cityCode,jdbcType=INTEGER}, #{deliverId,jdbcType=BIGINT}, #{deliverType,jdbcType=INTEGER}, 
+      #{shopId,jdbcType=BIGINT}, #{provinceCode,jdbcType=INTEGER}, #{orders,jdbcType=INTEGER}, 
+      #{defaultFlag,jdbcType=CHAR}, #{firstCount,jdbcType=INTEGER}, #{firstMoney,jdbcType=DOUBLE}, 
+      #{addCount,jdbcType=INTEGER}, #{addMoney,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.GdShopDeliverDetail" >
+    insert into gd_shop_deliver_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cityCode != null" >
+        city_code,
+      </if>
+      <if test="deliverId != null" >
+        deliver_id,
+      </if>
+      <if test="deliverType != null" >
+        deliver_type,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="provinceCode != null" >
+        province_code,
+      </if>
+      <if test="orders != null" >
+        orders,
+      </if>
+      <if test="defaultFlag != null" >
+        default_flag,
+      </if>
+      <if test="firstCount != null" >
+        first_count,
+      </if>
+      <if test="firstMoney != null" >
+        first_money,
+      </if>
+      <if test="addCount != null" >
+        add_count,
+      </if>
+      <if test="addMoney != null" >
+        add_money,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=INTEGER},
+      </if>
+      <if test="deliverId != null" >
+        #{deliverId,jdbcType=BIGINT},
+      </if>
+      <if test="deliverType != null" >
+        #{deliverType,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="provinceCode != null" >
+        #{provinceCode,jdbcType=INTEGER},
+      </if>
+      <if test="orders != null" >
+        #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="defaultFlag != null" >
+        #{defaultFlag,jdbcType=CHAR},
+      </if>
+      <if test="firstCount != null" >
+        #{firstCount,jdbcType=INTEGER},
+      </if>
+      <if test="firstMoney != null" >
+        #{firstMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="addCount != null" >
+        #{addCount,jdbcType=INTEGER},
+      </if>
+      <if test="addMoney != null" >
+        #{addMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.GdShopDeliverDetail" >
+    update gd_shop_deliver_detail
+    <set >
+      <if test="provinceCode != null" >
+        province_code = #{provinceCode,jdbcType=INTEGER},
+      </if>
+      <if test="orders != null" >
+        orders = #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="defaultFlag != null" >
+        default_flag = #{defaultFlag,jdbcType=CHAR},
+      </if>
+      <if test="firstCount != null" >
+        first_count = #{firstCount,jdbcType=INTEGER},
+      </if>
+      <if test="firstMoney != null" >
+        first_money = #{firstMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="addCount != null" >
+        add_count = #{addCount,jdbcType=INTEGER},
+      </if>
+      <if test="addMoney != null" >
+        add_money = #{addMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where city_code = #{cityCode,jdbcType=INTEGER}
+      and deliver_id = #{deliverId,jdbcType=BIGINT}
+      and deliver_type = #{deliverType,jdbcType=INTEGER}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.GdShopDeliverDetail" >
+    update gd_shop_deliver_detail
+    set province_code = #{provinceCode,jdbcType=INTEGER},
+      orders = #{orders,jdbcType=INTEGER},
+      default_flag = #{defaultFlag,jdbcType=CHAR},
+      first_count = #{firstCount,jdbcType=INTEGER},
+      first_money = #{firstMoney,jdbcType=DOUBLE},
+      add_count = #{addCount,jdbcType=INTEGER},
+      add_money = #{addMoney,jdbcType=DOUBLE},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where city_code = #{cityCode,jdbcType=INTEGER}
+      and deliver_id = #{deliverId,jdbcType=BIGINT}
+      and deliver_type = #{deliverType,jdbcType=INTEGER}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+  </update>
+ </mapper>

@@ -1,0 +1,84 @@
+package com.tmount.business.host.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.tmount.business.host.service.TItovHostUserService;
+import com.tmount.business.itov.controller.Getlistbypage;
+import com.tmount.business.user.service.UserService;
+import com.tmount.db.host.dto.TZdcHostUser;
+import com.tmount.db.user.dto.UsAccount;
+import com.tmount.exception.ShopException;
+import com.tmount.util.ControllerBase;
+import com.tmount.util.ParamData;
+import com.tmount.util.RequestParam;
+
+/**
+ * 查询全天的里程
+ * 
+ * @author
+ * 
+ */
+@Controller
+public class SelectHostPicController extends ControllerBase {
+	Logger logger = Logger.getLogger(Getlistbypage.class);
+	@Autowired
+	private TItovHostUserService zdcHostService;
+
+	@RequestMapping(value = "selectHostPic.get")
+	@Override
+	public void doRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		sendData(request, response);
+	}
+
+	@Override
+	protected void doService(RequestParam requestParam, JsonGenerator responseBodyJson) throws ShopException, JsonGenerationException, IOException {
+		int pageSize = ParamData.getInt(requestParam.getBodyNode(), "pageSize"); //每页多少条
+		Integer pageNo = new Integer(ParamData.getInt(requestParam.getBodyNode(),"pageNum",-1));//第几页
+		logger.info("selectHostPic.get 查询主播照片列表");
+		//根据imei查询terminal是否存在此imei信息
+		TZdcHostUser tZdcHostUser = new TZdcHostUser();
+		if (pageNo != -1) {
+				int startLimit = (pageNo-1)*pageSize;
+				tZdcHostUser.setStartLimit(startLimit);		
+			}
+		tZdcHostUser.setPageSize(pageSize);
+		List<TZdcHostUser> hostList = zdcHostService.selectAll(tZdcHostUser);
+		responseBodyJson.writeArrayFieldStart("hostPicList");
+		
+		for(int t=0;t<hostList.size();t++)
+		{
+			responseBodyJson.writeStartObject();
+			if(null !=hostList.get(t).getPic())
+			{
+				String tt = hostList.get(t).getPic();
+				String [] pic= tt.split(";");
+				if(pic.length >1)
+				{
+					responseBodyJson.writeStringField("middlePic",pic[1]);
+				}
+				else
+				{
+					//默认一个图片路径
+					responseBodyJson.writeStringField("middlePic","");
+				}
+			}
+			
+			responseBodyJson.writeEndObject();
+			
+		}		
+				
+		responseBodyJson.writeEndArray();
+	}
+
+}

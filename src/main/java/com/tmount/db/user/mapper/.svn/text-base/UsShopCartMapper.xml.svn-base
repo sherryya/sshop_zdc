@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.user.dao.UsShopCartMapper" >
+  <resultMap id="usShopCartMap" type="com.tmount.db.user.dto.UsShopCart" >
+    <id column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <id column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="acount" property="acount" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="usShopCartItemsMap" type="com.tmount.db.user.vo.UsShopCartItems" extends="usShopCartMap">
+    <result column="show_type" property="showType" jdbcType="INTEGER" />
+    <result column="data_type" property="dataType" jdbcType="INTEGER" />
+    <result column="newtype_type" property="newtypeType" jdbcType="INTEGER" />
+    <result column="item_type" property="itemType" jdbcType="INTEGER" />
+    <result column="has_child" property="hasChild" jdbcType="CHAR" />
+    <result column="items_name" property="itemsName" jdbcType="VARCHAR" />
+    <result column="name_spr" property="nameSpr" jdbcType="VARCHAR" />
+    <result column="items_intro" property="itemsIntro" jdbcType="VARCHAR" />
+    <result column="small_pic" property="smallPic" jdbcType="BIGINT" />
+    <result column="big_pic" property="bigPic" jdbcType="BIGINT" />
+    <result column="http_url" property="httpUrl" jdbcType="VARCHAR" />
+    <result column="web_url" property="webUrl" jdbcType="VARCHAR" />
+    <result column="items_count" property="itemsCount" jdbcType="INTEGER" />
+    <result column="aunit" property="aunit" jdbcType="CHAR" />
+    <result column="member_price" property="memberPrice" jdbcType="DOUBLE" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="sale_count" property="saleCount" jdbcType="INTEGER" />
+    <result column="discuss30_count" property="discuss30Count" jdbcType="INTEGER" />
+    <result column="discuss_count" property="discussCount" jdbcType="INTEGER" />
+    <result column="collect_cout" property="collectCout" jdbcType="INTEGER" />
+    <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
+    <result column="serch_up" property="serchUp" jdbcType="CHAR" />
+    <result column="credit_percent" property="creditPercent" jdbcType="INTEGER" />
+    <result column="credit" property="credit" jdbcType="INTEGER" />
+    <result column="deliver_flag" property="deliverFlag" jdbcType="CHAR" />
+    <result column="out_code" property="outCode" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="order_value" property="orderValue" jdbcType="INTEGER" />
+    <result column="invoice_flag" property="invoiceFlag" jdbcType="CHAR" />
+    <result column="back_order_flag" property="backOrderFlag" jdbcType="CHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_no" property="updateNo" jdbcType="INTEGER" />
+    <result column="city_code" property="cityCode" jdbcType="INTEGER" />
+    <result column="province_code" property="provinceCode" jdbcType="INTEGER" />
+    <result column="comment_value" property="commentValue" jdbcType="INTEGER" />
+    <result column="items_weight" property="itemsWeight" jdbcType="DOUBLE" />
+    <result column="shop_name" property="shopName" jdbcType="CHAR" />
+    <result column="shop_web_url" property="shopWebUrl" jdbcType="CHAR" />
+    <result column="shop_http_url" property="shopHttpUrl" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    items_id, shop_id, user_id, discount, create_time, acount
+  </sql>
+  <select id="selectBySelective" resultMap="usShopCartItemsMap" parameterType="com.tmount.db.user.dto.UsShopCartKey" >
+    select 
+    a.items_id, a.shop_id, a.user_id, b.discount, a.create_time, a.acount, b.show_type, b.data_type, b.newtype_type, b.item_type, b.has_child, b.items_name, 
+    b.name_spr, b.items_intro, b.small_pic, b.big_pic, b.http_url, b.web_url, b.items_count, b.price, 
+    b.aunit, b.state,b.member_price, b.sale_count, b.discuss30_count, b.discuss_count, 
+    b.collect_cout, b.bar_code, b.serch_up, b.credit_percent, b.credit, b.deliver_flag, b.out_code, 
+    b.product_id, b.order_value, b.invoice_flag, b.back_order_flag, b.update_time, b.update_no, b.city_code, 
+    b.province_code, b.comment_value, b.items_weight, c.shop_name, c.web_url as shop_web_url, c.http_url as shop_http_url
+    from us_shop_cart a, gd_items_info b, gd_shop_info c
+    where a.items_id = b.items_id
+      and a.shop_id = c.shop_id
+      <if test="itemsId != null" >
+      and a.items_id = #{itemsId,jdbcType=BIGINT}
+      </if>
+      <if test="shopId != null" >
+      and a.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="userId != null" >
+      and a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+    order by a.shop_id
+  </select>
+  
+  <select id="selectItemsCount" resultType="Integer" parameterType="com.tmount.db.user.dto.UsShopCartKey" >
+    select count(1)
+      from us_shop_cart
+    where user_id = #{userId,jdbcType=BIGINT}
+      <if test="shopId != null" >
+      and a.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="usShopCartMap" parameterType="com.tmount.db.user.dto.UsShopCartKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from us_shop_cart
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.user.dto.UsShopCartKey" >
+    delete from us_shop_cart
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.user.dto.UsShopCart" >
+    insert into us_shop_cart (items_id, shop_id, user_id, 
+      discount, create_time, acount
+      )
+    values (#{itemsId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{discount,jdbcType=DOUBLE}, #{createTime,jdbcType=TIMESTAMP}, #{acount,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.user.dto.UsShopCart" >
+    insert into us_shop_cart
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemsId != null" >
+        items_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="discount != null" >
+        discount,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="acount != null" >
+        acount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemsId != null" >
+        #{itemsId,jdbcType=BIGINT},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="discount != null" >
+        #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="acount != null" >
+        #{acount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.user.dto.UsShopCart" >
+    update us_shop_cart
+    <set >
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="acount != null" >
+        acount = #{acount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.user.dto.UsShopCart" >
+    update us_shop_cart
+    set discount = #{discount,jdbcType=DOUBLE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      acount = #{acount,jdbcType=INTEGER}
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and shop_id = #{shopId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+</mapper>

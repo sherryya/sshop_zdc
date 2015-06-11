@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.staff.dao.LogLoginAcceptMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.staff.dto.LogLoginAccept" >
+    <id column="login_accept" property="loginAccept" jdbcType="BIGINT" />
+    <result column="staff_id" property="staffId" jdbcType="INTEGER" />
+    <result column="op_time" property="opTime" jdbcType="TIMESTAMP" />
+    <result column="function_code" property="functionCode" jdbcType="VARCHAR" />
+    <result column="op_type" property="opType" jdbcType="CHAR" />
+    <result column="op_mark" property="opMark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    login_accept, staff_id, op_time, function_code, op_type, op_mark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from log_login_accept
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from log_login_accept
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.staff.dto.LogLoginAccept" >
+    insert into log_login_accept (login_accept, staff_id, op_time, 
+      function_code, op_type, op_mark
+      )
+    values (#{loginAccept,jdbcType=BIGINT}, #{staffId,jdbcType=INTEGER}, #{opTime,jdbcType=TIMESTAMP}, 
+      #{functionCode,jdbcType=VARCHAR}, #{opType,jdbcType=CHAR}, #{opMark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.staff.dto.LogLoginAccept" >
+    insert into log_login_accept
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="loginAccept != null" >
+        login_accept,
+      </if>
+      <if test="staffId != null" >
+        staff_id,
+      </if>
+      <if test="opTime != null" >
+        op_time,
+      </if>
+      <if test="functionCode != null" >
+        function_code,
+      </if>
+      <if test="opType != null" >
+        op_type,
+      </if>
+      <if test="opMark != null" >
+        op_mark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="loginAccept != null" >
+        #{loginAccept,jdbcType=BIGINT},
+      </if>
+      <if test="staffId != null" >
+        #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="opTime != null" >
+        #{opTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="functionCode != null" >
+        #{functionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="opType != null" >
+        #{opType,jdbcType=CHAR},
+      </if>
+      <if test="opMark != null" >
+        #{opMark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.staff.dto.LogLoginAccept" >
+    update log_login_accept
+    <set >
+      <if test="staffId != null" >
+        staff_id = #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="opTime != null" >
+        op_time = #{opTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="functionCode != null" >
+        function_code = #{functionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="opType != null" >
+        op_type = #{opType,jdbcType=CHAR},
+      </if>
+      <if test="opMark != null" >
+        op_mark = #{opMark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.staff.dto.LogLoginAccept" >
+    update log_login_accept
+    set staff_id = #{staffId,jdbcType=INTEGER},
+      op_time = #{opTime,jdbcType=TIMESTAMP},
+      function_code = #{functionCode,jdbcType=VARCHAR},
+      op_type = #{opType,jdbcType=CHAR},
+      op_mark = #{opMark,jdbcType=VARCHAR}
+    where login_accept = #{loginAccept,jdbcType=BIGINT}
+  </update>
+</mapper>

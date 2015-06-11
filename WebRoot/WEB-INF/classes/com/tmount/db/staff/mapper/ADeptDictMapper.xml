@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.staff.dao.ADeptDictMapper">
+	<resultMap id="DeptDictMap" type="com.tmount.db.staff.dto.ADeptDict">
+		<id column="dept_code" property="deptCode" jdbcType="INTEGER" />
+		<result column="company_id" property="companyId" jdbcType="INTEGER" />
+		<result column="dept_name" property="deptName" jdbcType="VARCHAR" />
+		<result column="parent_dept_code" property="parentDeptCode"
+			jdbcType="INTEGER" />
+		<result column="dept_desc" property="deptDesc" jdbcType="VARCHAR" />
+		<result column="create_staff_id" property="createStaffId"
+			jdbcType="VARCHAR" />
+		<result column="op_date" property="opDate" jdbcType="TIMESTAMP" />
+		<result column="parent_dept_name" property="parentDeptName"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		dept_code, company_id, dept_name, parent_dept_code, dept_desc, create_staff_id,
+		op_date
+	</sql>
+
+  <select id="selectDeptList" resultMap="DeptDictMap" parameterType="com.tmount.db.staff.dto.ADeptDict" >
+    select 
+    <include refid="Base_Column_List" />
+    from a_dept_dict
+    where company_id = #{companyId}
+    order by dept_code
+  </select>
+	<select id="selectByPrimaryKey" resultMap="DeptDictMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from a_dept_dict
+		where dept_code = #{deptCode,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from a_dept_dict
+		where dept_code = #{deptCode,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.tmount.db.staff.dto.ADeptDict">
+		insert into a_dept_dict (dept_code, company_id, dept_name,
+		parent_dept_code, dept_desc, create_staff_id,
+		op_date)
+		values (#{deptCode,jdbcType=INTEGER}, #{companyId,jdbcType=INTEGER},
+		#{deptName,jdbcType=VARCHAR},
+		#{parentDeptCode,jdbcType=INTEGER}, #{deptDesc,jdbcType=VARCHAR}, #{createStaffId,jdbcType=VARCHAR},
+		#{opDate,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.tmount.db.staff.dto.ADeptDict">
+		insert into a_dept_dict
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="deptCode != null">
+				dept_code,
+			</if>
+			<if test="companyId != null">
+				company_id,
+			</if>
+			<if test="deptName != null">
+				dept_name,
+			</if>
+			<if test="parentDeptCode != null">
+				parent_dept_code,
+			</if>
+			<if test="deptDesc != null">
+				dept_desc,
+			</if>
+			<if test="createStaffId != null">
+				create_staff_id,
+			</if>
+			<if test="opDate != null">
+				op_date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="deptCode != null">
+				#{deptCode,jdbcType=INTEGER},
+			</if>
+			<if test="companyId != null">
+				#{companyId,jdbcType=INTEGER},
+			</if>
+			<if test="deptName != null">
+				#{deptName,jdbcType=VARCHAR},
+			</if>
+			<if test="parentDeptCode != null">
+				#{parentDeptCode,jdbcType=INTEGER},
+			</if>
+			<if test="deptDesc != null">
+				#{deptDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="createStaffId != null">
+				#{createStaffId,jdbcType=VARCHAR},
+			</if>
+			<if test="opDate != null">
+				#{opDate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.staff.dto.ADeptDict">
+		update a_dept_dict
+		<set>
+			<if test="companyId != null">
+				company_id = #{companyId,jdbcType=INTEGER},
+			</if>
+			<if test="deptName != null">
+				dept_name = #{deptName,jdbcType=VARCHAR},
+			</if>
+			<if test="parentDeptCode != null">
+				parent_dept_code = #{parentDeptCode,jdbcType=INTEGER},
+			</if>
+			<if test="deptDesc != null">
+				dept_desc = #{deptDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="createStaffId != null">
+				create_staff_id = #{createStaffId,jdbcType=VARCHAR},
+			</if>
+			<if test="opDate != null">
+				op_date = #{opDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where dept_code = #{deptCode,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.tmount.db.staff.dto.ADeptDict">
+		update a_dept_dict
+		set company_id = #{companyId,jdbcType=INTEGER},
+		dept_name = #{deptName,jdbcType=VARCHAR},
+		parent_dept_code = #{parentDeptCode,jdbcType=INTEGER},
+		dept_desc = #{deptDesc,jdbcType=VARCHAR},
+		create_staff_id = #{createStaffId,jdbcType=VARCHAR},
+		op_date = #{opDate,jdbcType=TIMESTAMP}
+		where dept_code = #{deptCode,jdbcType=INTEGER}
+	</update>
+
+	<select id="queryADeptDictForList" resultMap="DeptDictMap" parameterType="java.lang.Integer">
+		select a.dept_code,a.dept_name,
+		(select b.dept_name from a_dept_dict b where b.dept_code =
+		a.parent_dept_code) parent_dept_name,
+		a.parent_dept_code,a.dept_desc
+		from a_dept_dict a
+		<if test="_parameter != null">
+				where a.company_id = #{_parameter,jdbcType=INTEGER}
+		</if>
+	</select>
+</mapper>

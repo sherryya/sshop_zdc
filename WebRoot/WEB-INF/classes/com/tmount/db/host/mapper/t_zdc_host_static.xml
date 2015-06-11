@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.host.dao.TZdcHostStaticMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.host.dto.TZdcHostStatic" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="voipAccount" property="voipaccount" jdbcType="VARCHAR" />
+    <result column="onlineTime" property="onlinetime" jdbcType="TIMESTAMP" />
+    <result column="offTime" property="offtime" jdbcType="TIMESTAMP" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="hostid" property="hostid" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,voipAccount,onlineTime,offTime,createTime,hostid
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.host.dto.TZdcHostStatic">
+    insert into re_user_order (
+        id,voipAccount,onlineTime,offTime,createTime,hostid)
+    values (
+        #{id,jdbcType=BIGINT},#{voipaccount,jdbcType=VARCHAR},#{onlinetime,jdbcType=DATE},
+        #{offtime,jdbcType=DATE},#{createtime,jdbcType=TIMESTAMP},#{hostid,jdbcType=BIGINT}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.host.dto.TZdcHostStatic">
+    update t_zdc_host_static
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="voipaccount != null">
+        voipaAcount = #{voipaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="onlinetime != null">
+        onlineTime = #{onlineTime,jdbcType=DATE},
+      </if>
+      <if test="offtime != null">
+        offTime = #{offTime,jdbcType=DATE},
+      </if>
+      <if test="createtime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hostid != null">
+        hostid = #{hostid,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT},
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_zdc_host_static
+     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+      from t_zdc_host_static
+     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      t_zdc_host_static
+    </select>
+   <select id="selectInfoByVoipAccount" resultMap="BaseResultMap" parameterType="com.tmount.db.host.dto.TZdcHostStatic">
+    select <include refid="Base_Column_List" /> from
+      t_zdc_host_static WHERE voipAccount=#{voipaccount} order by id limit  #{startLimit},#{pageSize}
+    </select>
+    <select id="selectCountByVoipAccount" resultType="INTEGER" parameterType="java.lang.String">
+    select count(*)
+      from t_zdc_host_static WHERE voipAccount=#{voipAccount} 
+    </select>
+</mapper>

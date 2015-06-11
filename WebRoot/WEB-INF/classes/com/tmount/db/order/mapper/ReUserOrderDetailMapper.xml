@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.ReUserOrderDetailMapper" >
+  <resultMap id="orderDetailMap" type="com.tmount.db.order.dto.ReUserOrderDetail" >
+    <id column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <id column="order_no" property="orderNo" jdbcType="BIGINT" />
+    <result column="data_type" property="dataType" jdbcType="INTEGER" />
+    <result column="items_type" property="itemsType" jdbcType="INTEGER" />
+    <result column="acount" property="acount" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="all_price" property="allPrice" jdbcType="DOUBLE" />
+    <result column="op_time" property="opTime" jdbcType="TIMESTAMP" />
+    <result column="get_point" property="getPoint" jdbcType="INTEGER" />
+    <result column="gift_status" property="giftStatus" jdbcType="CHAR" />
+    <result column="actions_id" property="actionsId" jdbcType="BIGINT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="orderDetailInfoMap" type="com.tmount.db.order.vo.ReUserOrderDetailInfo" extends="orderDetailMap">
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="show_type" property="showType" jdbcType="INTEGER" />
+    <result column="newtype_type" property="newtypeType" jdbcType="INTEGER" />
+    <result column="item_type" property="itemType" jdbcType="INTEGER" />
+    <result column="has_child" property="hasChild" jdbcType="CHAR" />
+    <result column="items_name" property="itemsName" jdbcType="VARCHAR" />
+    <result column="name_spr" property="nameSpr" jdbcType="VARCHAR" />
+    <result column="items_intro" property="itemsIntro" jdbcType="VARCHAR" />
+    <result column="small_pic" property="smallPic" jdbcType="BIGINT" />
+    <result column="big_pic" property="bigPic" jdbcType="BIGINT" />
+    <result column="http_url" property="httpUrl" jdbcType="VARCHAR" />
+    <result column="web_url" property="webUrl" jdbcType="VARCHAR" />
+    <result column="items_count" property="itemsCount" jdbcType="INTEGER" />
+    <result column="aunit" property="aunit" jdbcType="CHAR" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="member_price" property="memberPrice" jdbcType="DOUBLE" />
+    <result column="sale_count" property="saleCount" jdbcType="INTEGER" />
+    <result column="discuss30_count" property="discuss30Count" jdbcType="INTEGER" />
+    <result column="discuss_count" property="discussCount" jdbcType="INTEGER" />
+    <result column="collect_cout" property="collectCout" jdbcType="INTEGER" />
+    <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
+    <result column="serch_up" property="serchUp" jdbcType="CHAR" />
+    <result column="credit_percent" property="creditPercent" jdbcType="INTEGER" />
+    <result column="credit" property="credit" jdbcType="INTEGER" />
+    <result column="deliver_flag" property="deliverFlag" jdbcType="CHAR" />
+    <result column="out_code" property="outCode" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="order_value" property="orderValue" jdbcType="INTEGER" />
+    <result column="invoice_flag" property="invoiceFlag" jdbcType="CHAR" />
+    <result column="back_order_flag" property="backOrderFlag" jdbcType="CHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_no" property="updateNo" jdbcType="INTEGER" />
+    <result column="city_code" property="cityCode" jdbcType="INTEGER" />
+    <result column="province_code" property="provinceCode" jdbcType="INTEGER" />
+    <result column="comment_value" property="commentValue" jdbcType="INTEGER" />
+  </resultMap>
+   
+  <resultMap id="productMonthConsumerDetailMap" type="com.tmount.db.order.vo.ProductMonthConsumerDetail" >
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="state_name" property="stateName" jdbcType="TIMESTAMP" />
+    <result column="all_price" property="allPrice" jdbcType="DOUBLE" />
+    <result column="acount" property="acount" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="orderStatisMap" type="com.tmount.db.order.vo.ReUserOrderStatis" >
+    <id column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <result column="sum(a.acount)" property="acount" jdbcType="INTEGER" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    items_id, order_no, data_type, items_type, acount, price, all_price, op_time, get_point, gift_status, 
+    actions_id, state
+  </sql>
+  <select id="selectDetailByOrderNo" resultMap="orderDetailInfoMap" parameterType="java.lang.Long" >
+    select 
+    a.items_id, a.order_no, a.data_type, a.items_type, a.acount, a.price, a.all_price, a.op_time, a.get_point, a.gift_status, 
+    a.actions_id, a.state, b.shop_id, b.show_type, b.newtype_type, b.item_type, b.has_child, b.items_name, 
+    b.name_spr, b.items_intro, b.small_pic, b.big_pic, b.http_url, b.web_url, b.items_count, b.price, 
+    b.aunit, b.discount, b.member_price, b.sale_count, b.discuss30_count, b.discuss_count, 
+    b.collect_cout, b.bar_code, b.serch_up, b.credit_percent, b.credit, b.deliver_flag, b.out_code, 
+    b.product_id, b.order_value, b.invoice_flag, b.back_order_flag, b.update_time, b.update_no, b.city_code, 
+    b.province_code, b.comment_value
+    from re_user_order_detail a, gd_items_info b
+    where a.items_id = b.items_id
+      and a.order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+  <select id="statConsumerByItemsId" resultMap="productMonthConsumerDetailMap" parameterType="java.util.Map" >
+    select 
+    b.user_id, d.user_name, d.user_account, b.create_date, b.state, c.state_name, sum(a.all_price) as all_price, sum(a.acount) as acount
+    from re_user_order_detail a, re_user_order b, re_state_dic c, us_user_info d
+    where a.order_no= b.order_no
+      and b.state = c.order_state
+      and b.user_id = d.user_id
+      and a.items_id = #{itemsId,jdbcType=BIGINT}
+      and DATE_FORMAT(b.create_date, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
+      <if test="state != null" >
+      and b.state = #{state,jdbcType=CHAR}
+      </if>
+    group by b.user_id, d.user_name, d.user_account, b.create_date, b.state, c.state_name
+    limit #{start},#{end}
+  </select>
+  <select id="statConsumerByItemsIdCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select 
+     count(1)
+    from re_user_order_detail a, re_user_order b, re_state_dic c, us_user_info d
+    where a.order_no= b.order_no
+      and b.state = c.order_state
+      and b.user_id = d.user_id
+      and a.items_id = #{itemsId,jdbcType=BIGINT}
+      and DATE_FORMAT(b.create_date, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
+      <if test="state != null" >
+      and b.state = #{state,jdbcType=CHAR}
+      </if>
+  </select>
+  <select id="selectByOrderNo" resultMap="orderDetailMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_user_order_detail
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+  <update id="updateStatusByOrderNo" parameterType="com.tmount.db.order.dto.ReUserOrderDetail" >
+    update re_user_order_detail
+    set op_time = #{opTime,jdbcType=TIMESTAMP},
+        state = #{state,jdbcType=INTEGER}
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="orderDetailMap" parameterType="com.tmount.db.order.dto.ReUserOrderDetailKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_user_order_detail
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.order.dto.ReUserOrderDetailKey" >
+    delete from re_user_order_detail
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReUserOrderDetail" >
+    insert into re_user_order_detail (items_id, order_no, data_type, items_type, 
+      acount, price, all_price, 
+      op_time, get_point, gift_status, 
+      actions_id, state)
+    values (#{itemsId,jdbcType=BIGINT}, #{orderNo,jdbcType=BIGINT}, #{dataType,jdbcType=INTEGER}, #{itemsType,jdbcType=INTEGER}, 
+      #{acount,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{allPrice,jdbcType=DOUBLE}, 
+      #{opTime,jdbcType=TIMESTAMP}, #{getPoint,jdbcType=INTEGER}, #{giftStatus,jdbcType=CHAR}, 
+      #{actionsId,jdbcType=BIGINT}, #{state,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReUserOrderDetail" >
+    insert into re_user_order_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemsId != null" >
+        items_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="dataType != null" >
+        data_type,
+      </if>
+      <if test="itemsType != null" >
+        items_type,
+      </if>
+      <if test="acount != null" >
+        acount,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="allPrice != null" >
+        all_price,
+      </if>
+      <if test="opTime != null" >
+        op_time,
+      </if>
+      <if test="getPoint != null" >
+        get_point,
+      </if>
+      <if test="giftStatus != null" >
+        gift_status,
+      </if>
+      <if test="actionsId != null" >
+        actions_id,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemsId != null" >
+        #{itemsId,jdbcType=BIGINT},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="itemsType != null" >
+        #{itemsType,jdbcType=INTEGER},
+      </if>
+      <if test="acount != null" >
+        #{acount,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="allPrice != null" >
+        #{allPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="opTime != null" >
+        #{opTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="getPoint != null" >
+        #{getPoint,jdbcType=INTEGER},
+      </if>
+      <if test="giftStatus != null" >
+        #{giftStatus,jdbcType=CHAR},
+      </if>
+      <if test="actionsId != null" >
+        #{actionsId,jdbcType=BIGINT},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.ReUserOrderDetail" >
+    update re_user_order_detail
+    <set >
+      <if test="dataType != null" >
+        data_type = #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="itemsType != null" >
+        items_type = #{itemsType,jdbcType=INTEGER},
+      </if>
+      <if test="acount != null" >
+        acount = #{acount,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="allPrice != null" >
+        all_price = #{allPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="opTime != null" >
+        op_time = #{opTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="getPoint != null" >
+        get_point = #{getPoint,jdbcType=INTEGER},
+      </if>
+      <if test="giftStatus != null" >
+        gift_status = #{giftStatus,jdbcType=CHAR},
+      </if>
+      <if test="actionsId != null" >
+        actions_id = #{actionsId,jdbcType=BIGINT},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.ReUserOrderDetail" >
+    update re_user_order_detail
+    set data_type = #{dataType,jdbcType=INTEGER},
+      items_type = #{itemsType,jdbcType=INTEGER},
+      acount = #{acount,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE},
+      all_price = #{allPrice,jdbcType=DOUBLE},
+      op_time = #{opTime,jdbcType=TIMESTAMP},
+      get_point = #{getPoint,jdbcType=INTEGER},
+      gift_status = #{giftStatus,jdbcType=CHAR},
+      actions_id = #{actionsId,jdbcType=BIGINT},
+      state = #{state,jdbcType=INTEGER}
+    where items_id = #{itemsId,jdbcType=BIGINT}
+      and order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectByOrderTimeForStatis" resultMap="orderStatisMap" parameterType="com.tmount.db.sys.vo.StatisTime">
+    select 
+    a.items_id,sum(a.acount)
+    from re_user_order_detail a,re_user_order b,gd_items_info c
+    where a.order_no=b.order_no and b.state=50  and a.items_id = c.items_id and c.state='Y'
+    and b.update_time &lt; #{endTime,jdbcType=TIMESTAMP} and b.update_time >= #{beginTime,jdbcType=TIMESTAMP}
+    group by a.items_id
+  </select>
+  
+  <select id="selectAcountByDays" resultType="int" parameterType="com.tmount.db.sys.vo.StatisTime">
+    select IFNULL(sum(a.acount),0)
+    from re_user_order_detail a,re_user_order b,gd_items_info c
+    where a.order_no=b.order_no and b.state=50 and a.items_id = #{itemsId,jdbcType=BIGINT}
+    and b.update_time &lt; #{endTime,jdbcType=TIMESTAMP} and a.items_id = c.items_id and c.state='Y' and
+    b.update_time >= DATE_SUB(#{endTime,jdbcType=TIMESTAMP},INTERVAL 30 DAY)
+  </select>
+</mapper>

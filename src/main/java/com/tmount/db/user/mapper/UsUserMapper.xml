@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.user.dao.UsUserMapper">
+	<resultMap id="BaseResultMap" type="com.tmount.db.user.dto.UsUser">
+		<id column="user_id" property="user_id" jdbcType="VARCHAR" />
+		<result column="user_name" property="user_name" jdbcType="VARCHAR" />
+		<result column="user_name_other" property="user_name_other"
+			jdbcType="VARCHAR" />
+		<result column="account_id" property="account_id" jdbcType="VARCHAR" />
+		<result column="terminal_id" property="terminal_id" jdbcType="VARCHAR" />
+		<result column="user_create_date" property="user_create_date"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="LoginResultMap" type="com.tmount.db.util.dto.CommonBean">		
+		<result column="terminal_deviceuid" property="terminal_deviceuid" jdbcType="VARCHAR" />
+		<result column="car_id" property="car_id" jdbcType="BIGINT" />
+		<result column="car_name" property="car_name"
+			jdbcType="VARCHAR" />
+		<result column="car_plate_number" property="car_plate_number" jdbcType="VARCHAR" />
+		<result column="picture_url" property="picture_url" jdbcType="VARCHAR" />
+		<result column="picture_name" property="picture_name" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	
+	<resultMap id="LoginResultMap_uid" type="com.tmount.db.util.dto.CommonBean">		
+		<result column="terminal_deviceuid" property="terminal_deviceuid" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="terminal_carMap" type="com.tmount.db.car.dto.UserRelationCarInfo">		
+		<result column="user_id" property="user_id" jdbcType="INTEGER" />
+		<result column="car_id" property="car_id" jdbcType="INTEGER" />
+		<result column="is_default" property="is_default" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		user_id,user_name,user_name_other,account_id,terminal_id,user_create_date
+	</sql>
+	<select id="getUsUser" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_itov_user
+		where user_name = #{userAccount,jdbcType=VARCHAR} or user_name_other=
+		#{userAccount,jdbcType=VARCHAR}
+	</select>
+
+	<insert id="insertUserInfo" parameterType="com.tmount.db.user.dto.UsUser">
+		INSERT INTO t_itov_user(user_id,account_id)
+		VALUES (#{user_id,jdbcType=BIGINT},#{account_id,jdbcType=BIGINT})
+	</insert>
+	
+	<insert id="insertRelationUserAndCar" parameterType="com.tmount.db.car.dto.UserRelationCarInfo">
+		INSERT INTO t_itov_terminal_car(user_id,car_id,is_default)
+		VALUES (#{user_id,jdbcType=BIGINT},#{car_id,jdbcType=BIGINT},#{is_default,jdbcType=VARCHAR})
+	</insert>
+	<select id="getUserMessage" resultType="java.lang.Long" parameterType="java.lang.Long">
+		select  user_id from t_itov_user t where t.account_id=#{account_id,jdbcType=BIGINT}
+	</select>
+	<select id="getRetMessageList" resultMap="LoginResultMap" parameterType="java.lang.Long">
+
+		SELECT DISTINCT termianl.terminal_imei  terminal_deviceuid,car.car_id,car.car_name,car.car_plate_number,
+		car_brand.url_itov picture_url,car_brand.url_itov picture_name,terminalcar.is_default,car.access_id,car.access_token
+ 		FROM   t_itov_account account  INNER JOIN   t_itov_car car ON account.`account_id`=car.`account_id`
+ 		LEFT JOIN    t_itov_terminal_car terminalcar ON terminalcar.`car_id`=car.`car_id`
+ 		LEFT JOIN  t_itov_terminal termianl ON termianl.`user_id`=terminalcar.`user_id`
+ 		LEFT JOIN   t_itov_car_brand_golo3  car_brand ON car_brand.id=car.car_type
+        where account.account_id =#{account_id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="getRelationCarInfoCompare" resultType="java.lang.String" parameterType="java.lang.Long">
+		select car_id from t_itov_terminal_car t where t.user_id=#{user_id,jdbcType=BIGINT} 
+	</select>
+	<select id="getRelationCarInfo" resultMap="terminal_carMap" parameterType="java.lang.Long">
+		select * from t_itov_terminal_car t where t.user_id=#{user_id,jdbcType=BIGINT} 
+	</select>
+	
+	<select id="getPictureMessage" resultType="com.tmount.db.util.dto.CommonBean" parameterType="java.lang.String">
+		SELECT DISTINCT car_brand.picture_url,car_brand.picture_name
+ 		FROM  t_itov_car_brand car_brand 
+		WHERE  car_brand.car_brands =#{car_brands,jdbcType=VARCHAR}
+	</select>
+	<select id="getRelationUserInfoByAccountId" resultType="java.lang.String" parameterType="java.lang.Integer">
+		select distinct account_id from t_itov_user t where t.account_id=#{account_id,jdbcType=BIGINT}
+	</select>
+	<select id="getVersion" resultType="com.tmount.db.util.dto.CommonBean" parameterType="java.lang.Integer">
+		select version,versionurl,ver_important from t_itov_version t where platform=#{platform,jdbcType=BIGINT}
+	</select>
+	
+  <select id="getVersion_ter" resultType="com.tmount.db.util.dto.CommonBean" parameterType="java.lang.Integer">
+	
+		select version,versionurl,ver_important from t_itov_version t where platform=#{platform,jdbcType=BIGINT}
+		and ver_type=#{ver_type,jdbcType=INTEGER }
+	</select>
+	<select id="getAgentId" resultType="java.lang.Integer"
+		parameterType="java.lang.String">
+		select nextval_agentid(#{agent_id,jdbcType=VARCHAR})
+	</select>
+	
+		<select id="getCommonDeviceUid" resultMap="LoginResultMap" parameterType="java.lang.Long">
+		SELECT DISTINCT termianl.terminal_deviceuid,car.car_id,car.car_name,car.car_plate_number,car_brand.picture_url,car_brand.picture_name,terminalcar.is_default
+ 		FROM t_itov_user tuser, t_itov_terminal_car terminalcar,t_itov_account account,
+			t_itov_car car,t_itov_car_brand car_brand,t_itov_terminal termianl
+		WHERE tuser.user_id = terminalcar.user_id
+			  AND tuser.user_id = termianl.user_id 
+			  AND terminalcar.car_id = car.car_id
+			  AND car.car_brands = car_brand.car_brands
+			  AND account.account_id = tuser.account_id
+			  AND account.account_id =#{account_id,jdbcType=BIGINT}
+			   AND terminalcar.is_default=1
+	</select>
+		
+		
+	<select id="getCommonDeviceUidForGPS" resultMap="LoginResultMap_uid" parameterType="java.lang.String">
+		select DISTINCT d.terminal_deviceuid from t_itov_personal a inner join t_itov_user  b on a.account_id=b.account_id
+		inner join t_itov_terminal_car  c on c.user_id=b.user_id  inner join t_itov_terminal d on d.user_id=c.user_id 
+		where c.is_default=1  and a.personal_tel=#{personal_tel,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- //设置昵称  可以当用户名登录系统 -->
+	  <update id="updateNickNameByAccount" parameterType="com.tmount.db.user.dto.UsAccount" >
+		    update t_itov_account
+		    set    nickname = #{nickname,jdbcType=VARCHAR}
+		    where account_id = #{account_id,jdbcType=BIGINT}
+      </update>
+      
+       <update id="updatePicName" parameterType="com.tmount.db.user.dto.UsAccount" >
+		    update t_itov_account
+		    set    pic_name = #{pic_name,jdbcType=VARCHAR}
+		    where account_name = #{account_name,jdbcType=VARCHAR}
+      </update>  
+      
+      
+      
+       <update id="updatePwd" parameterType="com.tmount.db.user.dto.UsAccount" >
+		    update t_itov_account
+		    set    account_password = #{account_password,jdbcType=VARCHAR}
+		    where account_name = #{account_name,jdbcType=VARCHAR}
+      </update>  
+      <!-- 车热了吗解除车辆绑定关系 20150422 用nackname暂时存贮新的accountName-->
+        <update id="updateAccountName" parameterType="com.tmount.db.user.dto.UsAccount" >
+		    update t_itov_account
+		    set    account_name = #{nickname,jdbcType=VARCHAR}
+		    where account_name = #{account_name,jdbcType=VARCHAR}
+      </update>    
+</mapper>

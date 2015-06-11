@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.SyServDicMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.SyServDic" >
+    <id column="servtype_id" property="servtypeId" jdbcType="INTEGER" />
+    <result column="servtype_name" property="servtypeName" jdbcType="VARCHAR" />
+    <result column="servtype_desc" property="servtypeDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    a.servtype_id, a.servtype_name, a.servtype_desc
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_serv_dic a
+    where a.servtype_id = #{servtypeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sy_serv_dic
+    where servtype_id = #{servtypeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.SyServDic" >
+    insert into sy_serv_dic (servtype_id, servtype_name, servtype_desc
+      )
+    values (#{servtypeId,jdbcType=INTEGER}, #{servtypeName,jdbcType=VARCHAR}, #{servtypeDesc,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.SyServDic" >
+    insert into sy_serv_dic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="servtypeId != null" >
+        servtype_id,
+      </if>
+      <if test="servtypeName != null" >
+        servtype_name,
+      </if>
+      <if test="servtypeDesc != null" >
+        servtype_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="servtypeId != null" >
+        #{servtypeId,jdbcType=INTEGER},
+      </if>
+      <if test="servtypeName != null" >
+        #{servtypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="servtypeDesc != null" >
+        #{servtypeDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.SyServDic" >
+    update sy_serv_dic
+    <set >
+      <if test="servtypeName != null" >
+        servtype_name = #{servtypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="servtypeDesc != null" >
+        servtype_desc = #{servtypeDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where servtype_id = #{servtypeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.SyServDic" >
+    update sy_serv_dic
+    set servtype_name = #{servtypeName,jdbcType=VARCHAR},
+      servtype_desc = #{servtypeDesc,jdbcType=VARCHAR}
+    where servtype_id = #{servtypeId,jdbcType=INTEGER}
+  </update>
+  <select id="selectSyServDicByShopId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_serv_dic a,gd_shop_serv_rel b
+    where a.servtype_id = b.servtype_id and b.shop_id = #{shopId,jdbcType=BIGINT}
+  </select>
+  <select id="selectCountByShopId" resultType="int" parameterType="java.lang.Long" >
+    select count(*)
+    from sy_serv_dic a,gd_shop_serv_rel b
+    where a.servtype_id = b.servtype_id and b.shop_id = #{shopId,jdbcType=BIGINT}
+  </select>
+</mapper>

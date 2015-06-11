@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.user.dao.UsUserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.user.dto.UsAccount" >
+   <id column="account_id" property="account_id" jdbcType="BIGINT" />
+    <result column="account_name" property="account_name" jdbcType="VARCHAR" />
+    <result column="account_password" property="account_password" jdbcType="VARCHAR" />
+    <result column="account_type" property="account_type" jdbcType="INTEGER" />
+    <result column="account_role_id" property="account_role_id" jdbcType="INTEGER" />
+    <result column="company_id" property="company_id" jdbcType="VARCHAR" />
+    <result column="account_create_date" property="account_create_date" jdbcType="TIMESTAMP" />
+    <result column="access_id" property="access_id" jdbcType="VARCHAR" />
+    <result column="access_token" property="access_token" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="is_login" property="is_login" jdbcType="INTEGER" />
+       <result column="pic_name" property="pic_name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <resultMap id="TradeUserResultMap" type="com.tmount.db.user.dto.UsAccount" >
+   <id column="account_id" property="account_id" jdbcType="BIGINT" />
+    <result column="account_name" property="account_name" jdbcType="VARCHAR" />
+    <result column="account_password" property="account_password" jdbcType="VARCHAR" />
+    <result column="account_type" property="account_type" jdbcType="INTEGER" />
+    <result column="account_role_id" property="account_role_id" jdbcType="INTEGER" />
+    <result column="company_id" property="company_id" jdbcType="VARCHAR" />
+    <result column="account_create_date" property="account_create_date" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    account_id,account_name,account_password,account_type,account_role_id,company_id,account_create_date,access_id,access_token,nickname,is_login,pic_name
+  </sql>
+  <select id="selectByUserAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_itov_account
+    where account_name = #{account_name,jdbcType=VARCHAR}  or  nickname = #{account_name,jdbcType=VARCHAR} 
+  </select>
+   <select id="getUsUserInfo" resultMap="BaseResultMap" parameterType="com.tmount.db.user.dto.UsAccount" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_itov_account
+    where account_name = #{account_name,jdbcType=VARCHAR} 
+    <!--  and account_type= #{account_type,jdbcType=BIGINT}-->
+  </select>
+  
+  
+  <select id="getUsUserInfoByAccountId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_itov_account
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getTradeUserInfoByUserAccount" resultMap="TradeUserResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_itov_account
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </select>
+  
+  
+  
+  	  <update id="updateLoginStatus" parameterType="com.tmount.db.user.dto.UsAccount" >
+		    update t_itov_account
+		    set    is_login = #{is_login,jdbcType=INTEGER}
+		    where account_id = #{account_id,jdbcType=BIGINT}
+      </update>
+</mapper>

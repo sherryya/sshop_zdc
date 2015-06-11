@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.ptt.dao.PttSubaccountMapper">
+	<resultMap id="BaseResultMap" type="com.tmount.db.ptt.dto.TItovPttSubaccount">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="account_id" property="accountId" jdbcType="BIGINT" />
+		<result column="subaccountsid" property="subaccountsid"
+			jdbcType="VARCHAR" />
+		<result column="subtoken" property="subtoken" jdbcType="VARCHAR" />
+		<result column="voipaccount" property="voipaccount" jdbcType="VARCHAR" />
+		<result column="voippwd" property="voippwd" jdbcType="VARCHAR" />
+		<result column="datecreated" property="datecreated" jdbcType="VARCHAR" />
+		<result column="agentstate" property="agentstate" jdbcType="VARCHAR" />
+		<result column="last_login_time" property="lastLoginTime"
+			jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+		<result column="is_use" property="isUse" jdbcType="INTEGER" />
+		<result column="subtype" property="subtype" jdbcType="INTEGER" />
+		<result column="account_type" property="account_type" jdbcType="INTEGER" />
+	</resultMap>
+
+
+	<resultMap id="BaseSingleResultMap" type="com.tmount.db.ptt.dto.TItovPttSubaccount">
+		<result column="terminal_imei" property="terminal_imei"
+			jdbcType="VARCHAR" />
+
+		<result column="account_name" property="account_name" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,account_id,subaccountsid,subtoken,voipaccount,voippwd,datecreated,agentstate,last_login_time,is_delete,is_use,subtype,account_type
+	</sql>
+
+	<insert id="insert" parameterType="com.tmount.db.ptt.dto.TItovPttSubaccount">
+		insert into
+		t_itov_ptt_subaccount (
+		account_id,subaccountsid,subtoken,voipaccount,voippwd,datecreated,account_type)
+		values (
+		#{accountId,jdbcType=BIGINT},#{subaccountsid,jdbcType=VARCHAR},
+		#{subtoken,jdbcType=VARCHAR},#{voipaccount,jdbcType=VARCHAR},#{voippwd,jdbcType=VARCHAR},
+		#{datecreated,jdbcType=VARCHAR},#{account_type,jdbcType=INTEGER}
+		)
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.ptt.dto.TItovPttSubaccount">
+		update
+		t_itov_ptt_subaccount
+
+		set agentstate = #{agentstate,jdbcType=VARCHAR}
+
+		where voipaccount = #{voipaccount,jdbcType=VARCHAR}
+	</update>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		t_itov_ptt_subaccount
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+
+	<select id="selectByAccount_id" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from t_itov_ptt_subaccount
+		where account_id =
+		#{account_id,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_itov_ptt_subaccount
+	</select>
+
+	<select id="selectForZDC" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		FROM t_itov_ptt_subaccount WHERE account_type=1 AND voip_status=0
+		ORDER BY last_login_time ASC LIMIT 1
+	</select>
+	<!-- 增加IMEI查询 通过从t_itov_user表中获取的user_id 在 t_itov_terminal表中查询IMEI信息 -->
+	<select id="selectForIMEI" resultMap="BaseSingleResultMap">
+
+		SELECT b.`account_name` AS terminal_imei FROM t_itov_account b INNER JOIN
+		t_zdc_terminal_account a ON b.`account_id`=a.account_id_ter
+		WHERE a.account_id_tel=#{account_id,jdbcType=VARCHAR}
+
+	</select>
+
+	<!-- 通过IMEI 号得到TEL 号 -->
+	<select id="selectForTEL" resultMap="BaseSingleResultMap">
+
+		SELECT c.account_name FROM t_itov_account c WHERE c.account_id=(
+
+		SELECT b.account_id_tel FROM t_itov_account a INNER JOIN
+		t_zdc_terminal_account b ON a.account_id=b.account_id_ter WHERE
+		a.account_name=#{terminal_imei,jdbcType=VARCHAR} )
+
+
+	</select>
+<<<<<<< .mine
+<!-- 根据voipaccount查询客服的登陆时间及音频录制信息等 20141125 -->	
+<select id="selectHostSubLogInfo" resultMap="BaseHostLogMap"  parameterType="com.tmount.db.ptt.vo.HostSubAccountLog">
+	SELECT sublog.`called`,sublog.`caller`,sublog.`endtime`,sublog.`starttime`,sublog.`recordurl`,sublog.`byetype`,sublog.`type`,subacc.`account_id`,subacc.`voip_status`,hostuser.`name`,hostuser.`telphone`,hostuser.`sex`,hostuser.`email` FROM   `t_itov_ptt_subaccount_log` sublog,`t_itov_ptt_subaccount` subacc ,`t_itov_account` account,`t_zdc_host_user` hostuser WHERE sublog.`called`=subacc.`voipAccount`
+    AND subacc.`account_id` = account.`account_id`AND subacc.`account_id` = hostuser.`accountid` AND subacc.`account_type`=1  
+    <if test="called!=null">
+      AND sublog.`called` =#{called} 
+    </if>
+    ORDER BY subacc.`account_id` LIMIT #{startLimit},#{pageSize}
+</select>
+<!-- 根据搜索条件查询主播日志信息20141125 -->
+<select id="selectHostStaticCondition" resultMap="BaseHostLogMap" parameterType="com.tmount.db.ptt.vo.HostSubAccountLog" >
+   SELECT sublog.`called`,sublog.`caller`,sublog.`endtime`,sublog.`starttime`,sublog.`recordurl`,sublog.`byetype`,sublog.`type`,subacc.`account_id`,subacc.`voip_status`,hostuser.`name`,hostuser.`telphone`,hostuser.`sex`,hostuser.`email` FROM   `t_itov_ptt_subaccount_log` sublog,`t_itov_ptt_subaccount` subacc ,`t_itov_account` account,`t_zdc_host_user` hostuser WHERE sublog.`called`=subacc.`voipAccount`
+    AND subacc.`account_id` = account.`account_id`AND subacc.`account_id` = hostuser.`accountid` AND subacc.`account_type`=1  AND sublog.`called` =#{called} 
+    <if test="voip_status!=null">
+      AND subacc.`voip_status`=#{voip_status}
+    </if>
+      <if test="starttime!=null">
+       AND DATE(sublog.`starttime`) &gt;=#{starttime} 
+      </if>
+      <if test="endtime!=null">
+       AND DATE(sublog.`endtime`) &lt;=#{endtime}
+      </if>
+    ORDER BY subacc.`account_id` LIMIT #{startLimit},#{pageSize}
+</select>
+=======
+>>>>>>> .r1106
+<!-- 根据搜索条件查询主播日志信息20141125 -->
+<select id="selectHostStaticCount" resultMap="BaseHostLogMap" parameterType="com.tmount.db.ptt.vo.HostSubAccountLog" >
+   SELECT  count(DISTINCT subacc.`voipAccount`) FROM   `t_itov_ptt_subaccount_log` sublog,`t_itov_ptt_subaccount` subacc ,`t_itov_account` account,`t_zdc_host_user` hostuser WHERE sublog.`called`=subacc.`voipAccount`
+    AND subacc.`account_id` = account.`account_id`AND subacc.`account_id` = hostuser.`accountid` AND subacc.`account_type`=1  AND sublog.`called` =#{called} 
+    <if test="voip_status!=null">
+      AND subacc.`voip_status`=#{voip_status}
+    </if>
+    <if test="starttime!=null">
+       AND DATE(sublog.`starttime`) &gt;=#{starttime} 
+      </if>
+      <if test="endtime!=null">
+       AND DATE(sublog.`endtime`)&lt;=#{endtime}
+      </if>
+    ORDER BY subacc.`account_id` LIMIT #{startLimit},#{pageSize}
+</select>
+<!-- 查询主播账户信息及状态 -->
+<select id="selectHostAccount" resultMap="BaseHostLogMap" parameterType="com.tmount.db.ptt.vo.HostSubAccountLog" >
+ SELECT DISTINCT(subacc.`voipAccount`),account.`account_name`,subacc.`account_id`,subacc.`voip_status`,hostuser.`name`,hostuser.`telphone`,hostuser.`sex`,hostuser.`email` FROM  `t_itov_ptt_subaccount` subacc ,`t_itov_account` account,`t_zdc_host_user` hostuser WHERE 
+ subacc.`account_id` = account.`account_id`AND subacc.`account_id` = hostuser.`accountid` AND subacc.`account_type`=1 
+   <if test="voip_status!=null">
+      AND subacc.`voip_status`=#{voip_status}
+    </if>
+ ORDER BY subacc.`account_id` LIMIT #{startLimit},#{pageSize} 
+</select>
+<!-- 查询主播账户信息及状态 -->
+<select id="selectHostAccountCount" resultType="INTEGER" parameterType="com.tmount.db.ptt.vo.HostSubAccountLog">
+ SELECT COUNT(DISTINCT subacc.`voipAccount`) FROM  `t_itov_ptt_subaccount` subacc ,`t_itov_account` account,`t_zdc_host_user` hostuser WHERE 
+ subacc.`account_id` = account.`account_id`AND subacc.`account_id` = hostuser.`accountid` AND subacc.`account_type`=1 
+   <if test="voip_status!=null">
+      AND subacc.`voip_status`=#{voip_status}
+    </if>
+ ORDER BY subacc.`account_id`
+</select>
+</mapper>

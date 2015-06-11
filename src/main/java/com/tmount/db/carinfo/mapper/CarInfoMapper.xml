@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.carinfo.dao.TZdcCarinfoMapper">
+  <resultMap id="BaseResultMap" type="com.tmount.db.carinfo.dto.TItov_car_info" >
+    <id column="car_id" property="car_id" jdbcType="BIGINT" />
+    <result column="car_name" property="car_name" jdbcType="VARCHAR" />
+    <result column="car_plate_number" property="car_plate_number" jdbcType="VARCHAR" />
+    <result column="car_type" property="car_type" jdbcType="INTEGER" />
+    <result column="car_type_name" property="car_type_name" jdbcType="VARCHAR" />
+    <result column="car_engine_num" property="car_engine_num" jdbcType="VARCHAR" />
+    <result column="car_carcase_num" property="car_carcase_num" jdbcType="VARCHAR" />
+    <result column="account_name" property="account_name" jdbcType="VARCHAR" />
+    <result column="terminal_binding_date" property="binding_date" jdbcType="DATE" />
+  </resultMap>
+	
+   <!-- 查询车辆信息-->
+  <select id="selectByWhere" resultMap="BaseResultMap" parameterType="com.tmount.db.carinfo.dto.TItov_car_info">
+	  SELECT  DISTINCT car.`car_id`,car.`car_name`,car.`car_plate_number`,car.`car_type`,car.`car_engine_num`,
+	  car.`car_carcase_num`,car.`car_factory_date`,golo.`carSeriesName` AS car_type_name, acc.`account_name`,t.`terminal_binding_date`
+ 	  FROM `t_itov_car` car LEFT JOIN `t_itov_car_brand_golo3` golo ON car.`car_type`=golo.`id` LEFT JOIN  `t_itov_terminal_car` tc ON car.`car_id`= tc.`car_id` 
+	  LEFT JOIN  `t_itov_user` u ON tc.`user_id`=u.`user_id` LEFT JOIN `t_itov_account` acc ON u.`account_id`=acc.`account_id` LEFT JOIN `t_itov_terminal` t ON t.`user_id`=tc.`user_id`
+	  
+	  where car.car_type like #{car_type_query,jdbcType=VARCHAR} and 
+	  car.car_plate_number like CONCAT ('%',#{car_plate_number,jdbcType=VARCHAR},'%')
+	 <if test="begin_time !=null and begin_time !=''">
+	  <![CDATA[ and DATE_FORMAT(t.terminal_binding_date,'%Y-%m-%d')>= DATE_FORMAT(#{begin_time,jdbcType=VARCHAR},'%Y-%m-%d') ]]>                
+      </if>
+	   
+	  <if test="end_time !=null and end_time !=''">
+	  <![CDATA[AND DATE_FORMAT(t.terminal_binding_date,'%Y-%m-%d')<=  DATE_FORMAT(#{end_time,jdbcType=VARCHAR},'%Y-%m-%d')]]>
+      </if> 
+	  
+	  order by car.car_id asc LIMIT  #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	  
+  </select> 
+   <!-- 查询车辆信息   数量  -->
+  <select id="selectSizeByWhere" resultType="java.lang.Integer" parameterType="com.tmount.db.carinfo.dto.TItov_car_info">
+	  SELECT  count(car.car_id)
+ 	  FROM `t_itov_car` car LEFT JOIN `t_itov_car_brand_golo3` golo ON car.`car_type`=golo.`id` LEFT JOIN  `t_itov_terminal_car` tc ON car.`car_id`= tc.`car_id` 
+	  LEFT JOIN  `t_itov_user` u ON tc.`user_id`=u.`user_id` LEFT JOIN `t_itov_account` acc ON u.`account_id`=acc.`account_id` LEFT JOIN `t_itov_terminal` t ON t.`user_id`=tc.`user_id`
+	  where car.car_type like #{car_type_query,jdbcType=VARCHAR} and 
+	  car.car_plate_number like CONCAT ('%',#{car_plate_number,jdbcType=VARCHAR},'%')
+	  <if test="begin_time !=null and begin_time !=''">
+	  <![CDATA[ and DATE_FORMAT(t.terminal_binding_date,'%Y-%m-%d')>= DATE_FORMAT(#{begin_time,jdbcType=VARCHAR},'%Y-%m-%d') ]]>                
+      </if>
+	  <if test="end_time !=null and end_time !=''">
+	  <![CDATA[AND DATE_FORMAT(t.terminal_binding_date,'%Y-%m-%d')<=  DATE_FORMAT(#{end_time,jdbcType=VARCHAR},'%Y-%m-%d')]]>
+      </if> 
+  </select> 
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.pub.dao.DictMapper" >
+  <select id="re_pay_way" resultType="com.tmount.db.pub.dto.Dict">
+    SELECT pay_way_id AS CODE,pay_way_name AS NAME FROM re_pay_way
+  </select>
+   <select id="re_state_dic" resultType="com.tmount.db.pub.dto.Dict">
+     SELECT order_state AS CODE,state_name AS NAME FROM re_state_dic
+  </select>
+  <select id="re_arrival_time_dic" resultType="com.tmount.db.pub.dto.Dict">
+  	SELECT arrival_time AS CODE,arrival_name AS NAME FROM re_arrival_time_dic
+  </select>
+  <select id="re_logistics_dic" resultType="com.tmount.db.pub.dto.Dict">
+  SELECT DISTINCT logistics_id AS CODE, logistics_name AS NAME FROM re_logistics_dic
+  </select>
+  
+  <select id="re_pay_type" resultType="com.tmount.db.pub.dto.Dict">
+  SELECT DISTINCT pay_type AS CODE, pay_name AS NAME FROM re_pay_type
+  </select>
+  
+  <select id="re_order_oper_dict" resultType="com.tmount.db.pub.dto.Dict">
+  SELECT DISTINCT oper_id AS CODE, oper_name AS NAME FROM re_order_oper_dict
+  </select>
+  
+</mapper>

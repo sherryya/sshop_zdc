@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdItemsItemRelMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdSubItemInfo" >
+    <id column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="show_type" property="showType" jdbcType="INTEGER" />
+    <result column="data_type" property="dataType" jdbcType="INTEGER" />
+    <result column="has_child" property="hasChild" jdbcType="CHAR" />
+    <result column="items_name" property="itemsName" jdbcType="VARCHAR" />
+    <result column="name_spr" property="nameSpr" jdbcType="VARCHAR" />
+    <result column="items_intro" property="itemsIntro" jdbcType="VARCHAR" />
+    <result column="small_pic" property="smallPic" jdbcType="BIGINT" />
+    <result column="big_pic" property="bigPic" jdbcType="BIGINT" />
+    <result column="http_url" property="httpUrl" jdbcType="VARCHAR" />
+    <result column="web_url" property="webUrl" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="aunit" property="aunit" jdbcType="CHAR" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="member_price" property="memberPrice" jdbcType="DOUBLE" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="update_no" property="updateNo" jdbcType="CHAR" />
+    <result column="discuss_count" property="discussCount" jdbcType="INTEGER" />
+    <result column="comment_value" property="commentValue" jdbcType="INTEGER" />
+    <result column="orders_time" property="ordersTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    a.items_id, a.shop_id, a.show_type, a.data_type, a.has_child, a.items_name, a.name_spr, a.items_intro, a.
+    small_pic, a.big_pic, a.http_url, a.web_url, a.price, a.aunit, a.discount, a.member_price, a.update_time, a.
+    state, a.update_no, a.discuss_count, a.comment_value, b.orders_time
+  </sql>
+  <select id="selectByItemsId" resultMap="BaseResultMap" parameterType="com.tmount.db.product.vo.GdItemsItemRelConditions" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_items_info a, gd_items_item_rel b
+    where a.items_id = b.items_child
+      and b.items_id = #{itemsId,jdbcType=BIGINT}
+    order by orders_time desc
+  </select>
+
+  <select id="selectByItemsIdLimit" resultMap="BaseResultMap" parameterType="com.tmount.db.product.vo.GdItemsItemRelConditions" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_items_info a, gd_items_item_rel b
+    where a.items_id = b.items_child
+      and b.items_id = #{itemsId,jdbcType=BIGINT}
+      and b.orders_time &lt; #{ordersTime,jdbcType=TIMESTAMP}
+    order by orders_time desc
+    limit #{fetchRows,jdbcType=INTEGER}
+  </select>
+</mapper>

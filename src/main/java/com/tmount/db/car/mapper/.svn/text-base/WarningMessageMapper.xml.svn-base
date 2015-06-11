@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.car.dao.WarningMessageMapper">
+<insert id="insertWarningMessage" parameterType="com.tmount.db.car.dto.WarningMessage" >
+      INSERT INTO tbl_drivingfiledwarning (carId,content,warntype,lonlat)
+       VALUES (#{carId,jdbcType=INTEGER},#{content,jdbcType=VARCHAR},#{warntype,jdbcType=VARCHAR},
+       #{lonlat,jdbcType=VARCHAR})
+  </insert>
+</mapper>

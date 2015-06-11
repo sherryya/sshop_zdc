@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.integration.dao.CarBrandAddMapper" >
+  <insert id="insert" parameterType="com.tmount.db.integration.dto.CarBrand" >
+    insert into t_itov_car_brand_golo3 (carSeriesId, carSeriesName, url,parentID,url_itov
+      )
+    values (#{carSeriesId,jdbcType=BIGINT}, #{carSeriesName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{parentID,jdbcType=BIGINT}
+     , #{url_itov,jdbcType=VARCHAR} )
+  </insert>
+ 	<resultMap id="BaseResultMap" type="com.tmount.db.integration.dto.CarBrand">
+	<id column="id" property="id" jdbcType="INTEGER" />
+	<id column="carSeriesId" property="carSeriesId" jdbcType="BIGINT" />
+	<id column="carSeriesName" property="carSeriesName" jdbcType="VARCHAR" />
+	<id column="url" property="url" jdbcType="VARCHAR" />
+	<id column="parentID" property="parentID" jdbcType="BIGINT" />
+	<id column="is_hot" property="is_hot" jdbcType="INTEGER" />
+	<id column="is_stop" property="is_stop" jdbcType="INTEGER" />
+   </resultMap>
+    <resultMap id="BaseResultMap_Style" type="com.tmount.db.integration.dto.CarStyle">
+	<id column="id" property="id" jdbcType="INTEGER" />
+	<id column="car_style_id_golo" property="car_style_id_golo" jdbcType="INTEGER" />
+	<id column="car_style_name" property="car_style_name" jdbcType="VARCHAR" />
+	<id column="car_url" property="car_url" jdbcType="VARCHAR" />
+	<id column="car_model_id" property="car_model_id" jdbcType="INTEGER" />
+	<id column="car_model_id_golo" property="car_model_id_golo" jdbcType="INTEGER" />
+	<id column="is_hot" property="is_hot" jdbcType="INTEGER" />
+	<id column="is_stop" property="is_stop" jdbcType="INTEGER" />
+	<id column="last_time" property="last_time" jdbcType="VARCHAR" />
+   </resultMap> 
+   
+    <resultMap id="BaseResultMap_Model" type="com.tmount.db.integration.dto.CarModel">
+	<id column="id" property="id" jdbcType="INTEGER" />
+	<id column="car_model_id_golo" property="car_model_id_golo" jdbcType="INTEGER" />
+	<id column="car_model_name" property="car_model_name" jdbcType="VARCHAR" />
+	<id column="car_url" property="car_url" jdbcType="VARCHAR" />
+	<id column="car_brand_id" property="car_brand_id" jdbcType="INTEGER" />
+	<id column="car_brand_id_golo" property="car_brand_id_golo" jdbcType="INTEGER" />
+	<id column="is_hot" property="is_hot" jdbcType="INTEGER" />
+	<id column="is_stop" property="is_stop" jdbcType="INTEGER" />
+	<id column="last_time" property="last_time" jdbcType="VARCHAR" />
+   </resultMap>
+   
+   
+   <resultMap id="BaseResultMap_Version" type="com.tmount.db.integration.dto.SoftVersion">
+	<id column="id" property="id" jdbcType="INTEGER" />
+	<id column="ver_name" property="ver_name" jdbcType="VARCHAR" />
+	<id column="ver_value" property="ver_value" jdbcType="VARCHAR" />
+   </resultMap>
+   
+   
+   	<select id="getCarBrand" resultMap="BaseResultMap" parameterType="com.tmount.db.integration.dto.CarBrand">
+	 select id,carSeriesId,carSeriesName,url,parentID,is_hot,is_stop from t_itov_car_brand_golo3  
+	</select>
+	<select id="getCarModel" resultMap="BaseResultMap_Model" parameterType="com.tmount.db.integration.dto.CarModel">
+	 select id,car_model_id_golo,car_model_name,car_url,car_brand_id,car_brand_id_golo,is_hot,is_stop,last_time from t_itov_car_model  
+	</select>
+	<select id="getCarStyle" resultMap="BaseResultMap_Style" parameterType="com.tmount.db.integration.dto.CarStyle">
+	 select id,car_style_id_golo,car_style_name,car_url,car_model_id,car_model_id_golo,is_hot,is_stop,last_time from t_itov_car_style  
+	</select>
+	<select id="getSoftVersion" resultMap="BaseResultMap_Version" parameterType="com.tmount.db.integration.dto.SoftVersion">
+	 select id,ver_name,ver_value from t_itov_softversion  
+	</select>
+</mapper>
+
+
+

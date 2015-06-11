@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.ptt.dao.PttEmpAgentMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.ptt.dto.TItovPttEmpAgent" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="agent_id" property="agentId" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="VARCHAR" />
+    <result column="subaccountsid" property="subaccountsid" jdbcType="VARCHAR" />
+    <result column="subtoken" property="subtoken" jdbcType="VARCHAR" />
+    <result column="voipaccount" property="voipaccount" jdbcType="VARCHAR" />
+    <result column="voippwd" property="voippwd" jdbcType="VARCHAR" />
+    <result column="datecreated" property="datecreated" jdbcType="VARCHAR" />
+    <result column="agentstate" property="agentstate" jdbcType="VARCHAR" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="BIGINT" />
+    <result column="is_use" property="isUse" jdbcType="BIGINT" />
+    <result column="agentType" property="agentType" jdbcType="VARCHAR" />
+    <result column="agent_name" property="agent_name" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="SelectResultMap" type="com.tmount.db.ptt.dto.TItovPttEmpAgent" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="agent_id" property="agentId" jdbcType="BIGINT" />
+    <result column="subaccountsid" property="subaccountsid" jdbcType="VARCHAR" />
+    <result column="subtoken" property="subtoken" jdbcType="VARCHAR" />
+    <result column="voipaccount" property="voipaccount" jdbcType="VARCHAR" />
+    <result column="voippwd" property="voippwd" jdbcType="VARCHAR" />
+    <result column="datecreated" property="datecreated" jdbcType="VARCHAR" />
+    <result column="agentstate" property="agentstate" jdbcType="VARCHAR" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="BIGINT" />
+    <result column="is_use" property="isUse" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,agent_id,account_id,subaccountsid,subtoken,voipaccount,voippwd,datecreated,agentstate,last_login_time,is_delete,is_use,agentType,agent_name
+  </sql>
+   <sql id="Select_Column_List" >
+    id,agent_id,subaccountsid,subtoken,voipaccount,voippwd,datecreated,agentstate,last_login_time,is_delete,is_use
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.ptt.dto.TItovPttEmpAgent">
+    insert into t_itov_ptt_emp_agent (
+        id,agent_id,account_id,subaccountsid,subtoken,voipaccount,voippwd,datecreated,agentstate,last_login_time)
+    values (
+        #{id,jdbcType=BIGINT},#{agentId,jdbcType=INTEGER},#{accountId,jdbcType=BIGINT},
+        #{subaccountsid,jdbcType=VARCHAR},#{subtoken,jdbcType=VARCHAR},#{voipaccount,jdbcType=VARCHAR},
+        #{voippwd,jdbcType=VARCHAR},#{datecreated,jdbcType=VARCHAR},#{agentstate,jdbcType=VARCHAR},
+        #{lastLoginTime,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.ptt.dto.TItovPttEmpAgent">
+    update t_itov_ptt_emp_agent
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null">
+        agent_id = #{agentId,jdbcType=INT},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="subaccountsid != null">
+        subaccountsid = #{subaccountsid,jdbcType=VARCHAR},
+      </if>
+      <if test="subtoken != null">
+        subtoken = #{subtoken,jdbcType=VARCHAR},
+      </if>
+      <if test="voipaccount != null">
+        voipaccount = #{voipaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="voippwd != null">
+        voippwd = #{voippwd,jdbcType=VARCHAR},
+      </if>
+      <if test="datecreated != null">
+        datecreated = #{datecreated,jdbcType=VARCHAR},
+      </if>
+      <if test="agentstate != null">
+        agentstate = #{agentstate,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null">
+        last_login_time = #{lastLoginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INT},
+      </if>
+      <if test="isUse != null">
+        is_use = #{isUse,jdbcType=INT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT},
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_itov_ptt_emp_agent
+     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+      from t_itov_ptt_emp_agent
+     where account_id = #{accountId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_itov_ptt_emp_agent
+    </select>
+    <select id="selectBySubToken" resultMap="SelectResultMap" parameterType="java.lang.String">
+    select <include refid="Select_Column_List" />
+      from t_itov_ptt_emp_agent agent,t_itov_account account where agent.account_id = account.account_id
+      and agent.subtoken = #{subToken,jdbcType=VARCHAR}
+    </select>
+    
+    
+    
+  <select id="selectAgentByAgentType" resultMap="BaseResultMap" parameterType="com.tmount.db.ptt.dto.TItovPttEmpAgent">
+     select 
+     <include refid="Base_Column_List" />
+      from t_itov_ptt_emp_agent
+     where  agentType = #{agentType,jdbcType=VARCHAR} 
+      and agentstate=#{agentstate,jdbcType=VARCHAR}
+  </select>
+   <select id="selectAgentByAgentTypeForLD" resultMap="BaseResultMap" parameterType="com.tmount.db.ptt.dto.TItovPttEmpAgent">
+     select 
+     <include refid="Base_Column_List" />
+      from t_itov_ptt_emp_agent
+     where  agentType = #{agentType,jdbcType=VARCHAR} 
+  </select> 
+       <update id="updateAgentStateByAgentID" parameterType="com.tmount.db.ptt.dto.TItovPttEmpAgent">
+    update t_itov_ptt_emp_agent
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="subaccountsid != null">
+        subaccountsid = #{subaccountsid,jdbcType=VARCHAR},
+      </if>
+      <if test="subtoken != null">
+        subtoken = #{subtoken,jdbcType=VARCHAR},
+      </if>
+      <if test="voipaccount != null">
+        voipaccount = #{voipaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="voippwd != null">
+        voippwd = #{voippwd,jdbcType=VARCHAR},
+      </if>
+      <if test="datecreated != null">
+        datecreated = #{datecreated,jdbcType=VARCHAR},
+      </if>
+      <if test="agentstate != null">
+        agentstate = #{agentstate,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null">
+        last_login_time = #{lastLoginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=INT},
+      </if>
+      <if test="isUse != null">
+        is_use = #{isUse,jdbcType=INT},
+      </if>
+    </set>
+    where agent_id = #{agentId,jdbcType=BIGINT}
+  </update>
+  
+  
+    <!-- 得到当前就绪的坐席信息 -->
+    <select id="selectAgentByAgentState" resultMap="SelectResultMap" parameterType="java.lang.String">
+     select 
+    <include refid="Select_Column_List" />
+     FROM t_itov_ptt_emp_agent agent,t_itov_account account WHERE agent.account_id = account.account_id
+      AND account.`account_type`=4  AND agent.`agentstate`=#{agentstate,jdbcType=VARCHAR} AND agent.`agentType`=0   LIMIT 1
+  </select>
+</mapper>

@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.ReBankAcceptMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.ReBankAccept" >
+    <id column="bank_accept" property="bankAccept" jdbcType="BIGINT" />
+    <id column="org_id" property="orgId" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="pay_type" property="payType" jdbcType="CHAR" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="pay_commit_time" property="payCommitTime" jdbcType="TIMESTAMP" />
+    <result column="check_type" property="checkType" jdbcType="CHAR" />
+    <result column="pay_id" property="payId" jdbcType="BIGINT" />
+    <result column="ret_msg" property="retMsg" jdbcType="VARCHAR" />
+    <result column="ret_accept" property="retAccept" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResultMap_2" type="com.tmount.db.order.vo.ReBankAcceptPayOrg" >
+    <id column="bank_accept" property="bankAccept" jdbcType="BIGINT" />
+    <id column="org_id" property="orgId" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="pay_type" property="payType" jdbcType="CHAR" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="pay_commit_time" property="payCommitTime" jdbcType="TIMESTAMP" />
+    <result column="check_type" property="checkType" jdbcType="CHAR" />
+    <result column="pay_id" property="payId" jdbcType="BIGINT" />
+    <result column="ret_msg" property="retMsg" jdbcType="VARCHAR" />
+    <result column="ret_accept" property="retAccept" jdbcType="VARCHAR" />
+     <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+    <result column="org_name" property="orgName" jdbcType="VARCHAR" />
+    <result column="branch_id" property="branchId" jdbcType="VARCHAR" />
+    <result column="co_no" property="coNo" jdbcType="VARCHAR" />
+    <result column="change_type" property="changeType" jdbcType="INTEGER" />
+    <result column="ones_fee" property="onesFee" jdbcType="DOUBLE" />
+    <result column="ones_scan" property="onesScan" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    bank_accept, org_id, price, pay_type, pay_time, pay_commit_time, check_type, pay_id, 
+    ret_msg, ret_accept
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.tmount.db.order.dto.ReBankAcceptExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from re_bank_accept
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.order.dto.ReBankAcceptKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_bank_accept
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=INTEGER}
+  </select>
+  <select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.tmount.db.order.dto.ReBankAccept" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_bank_accept
+    where 1=1
+   	  <if test="bankAccept != null" >
+        and bank_accept = #{bankAccept,jdbcType=BIGINT}
+      </if>
+      <if test="orgId != null" >
+        and org_id = #{orgId,jdbcType=INTEGER}
+      </if>
+      <if test="price != null" >
+        and price = #{price,jdbcType=DOUBLE}
+      </if>
+      <if test="payType != null" >
+        and pay_type = #{payType,jdbcType=CHAR}
+      </if>
+      <if test="payTime != null" >
+        and pay_time = #{payTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="payCommitTime != null" >
+        and pay_commit_time = #{payCommitTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="checkType != null" >
+        and check_type = #{checkType,jdbcType=CHAR}
+      </if>
+      <if test="payId != null" >
+        and pay_id = #{payId,jdbcType=BIGINT}
+      </if>
+      <if test="retMsg != null" >
+        and ret_msg = #{retMsg,jdbcType=VARCHAR}
+      </if>
+      <if test="retAccept != null" >
+        and ret_accept = #{retAccept,jdbcType=VARCHAR}
+      </if>
+      order by pay_time
+  </select>
+  <select id="selectBankPayOrgByAccept" resultMap="BaseResultMap_2" parameterType="java.lang.Long" >
+    select 
+    a.bank_accept,a.org_id,a.price,a.pay_type,a.pay_time,a.pay_commit_time,a.check_type,a.pay_id,a.ret_msg,a.ret_accept,
+    b.org_code,b.org_name,b.branch_id,b.co_no,b.change_type,b.ones_fee,b.ones_scan
+    from re_bank_accept a,sy_payorg_dict b
+    where a.bank_accept = #{bankAccept,jdbcType=BIGINT}
+    and a.org_id = b.org_id
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.order.dto.ReBankAcceptKey" >
+    delete from re_bank_accept
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.tmount.db.order.dto.ReBankAcceptExample" >
+    delete from re_bank_accept
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReBankAccept" >
+    insert into re_bank_accept (bank_accept, org_id, price, 
+      pay_type, pay_time, pay_commit_time, 
+      check_type, pay_id, ret_msg, 
+      ret_accept)
+    values (#{bankAccept,jdbcType=BIGINT}, #{orgId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, 
+      #{payType,jdbcType=CHAR}, #{payTime,jdbcType=TIMESTAMP}, #{payCommitTime,jdbcType=TIMESTAMP}, 
+      #{checkType,jdbcType=CHAR}, #{payId,jdbcType=BIGINT}, #{retMsg,jdbcType=VARCHAR}, 
+      #{retAccept,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReBankAccept" >
+    insert into re_bank_accept
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bankAccept != null" >
+        bank_accept,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="payCommitTime != null" >
+        pay_commit_time,
+      </if>
+      <if test="checkType != null" >
+        check_type,
+      </if>
+      <if test="payId != null" >
+        pay_id,
+      </if>
+      <if test="retMsg != null" >
+        ret_msg,
+      </if>
+      <if test="retAccept != null" >
+        ret_accept,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bankAccept != null" >
+        #{bankAccept,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=CHAR},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payCommitTime != null" >
+        #{payCommitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkType != null" >
+        #{checkType,jdbcType=CHAR},
+      </if>
+      <if test="payId != null" >
+        #{payId,jdbcType=BIGINT},
+      </if>
+      <if test="retMsg != null" >
+        #{retMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="retAccept != null" >
+        #{retAccept,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.tmount.db.order.dto.ReBankAcceptExample" resultType="java.lang.Integer" >
+    select count(*) from re_bank_accept
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update re_bank_accept
+    <set >
+      <if test="record.bankAccept != null" >
+        bank_accept = #{record.bankAccept,jdbcType=BIGINT},
+      </if>
+      <if test="record.orgId != null" >
+        org_id = #{record.orgId,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=DOUBLE},
+      </if>
+      <if test="record.payType != null" >
+        pay_type = #{record.payType,jdbcType=CHAR},
+      </if>
+      <if test="record.payTime != null" >
+        pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.payCommitTime != null" >
+        pay_commit_time = #{record.payCommitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.checkType != null" >
+        check_type = #{record.checkType,jdbcType=CHAR},
+      </if>
+      <if test="record.payId != null" >
+        pay_id = #{record.payId,jdbcType=BIGINT},
+      </if>
+      <if test="record.retMsg != null" >
+        ret_msg = #{record.retMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.retAccept != null" >
+        ret_accept = #{record.retAccept,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update re_bank_accept
+    set bank_accept = #{record.bankAccept,jdbcType=BIGINT},
+      org_id = #{record.orgId,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DOUBLE},
+      pay_type = #{record.payType,jdbcType=CHAR},
+      pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      pay_commit_time = #{record.payCommitTime,jdbcType=TIMESTAMP},
+      check_type = #{record.checkType,jdbcType=CHAR},
+      pay_id = #{record.payId,jdbcType=BIGINT},
+      ret_msg = #{record.retMsg,jdbcType=VARCHAR},
+      ret_accept = #{record.retAccept,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.ReBankAccept" >
+    update re_bank_accept
+    <set >
+      <if test="price != null" >
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=CHAR},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payCommitTime != null" >
+        pay_commit_time = #{payCommitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkType != null" >
+        check_type = #{checkType,jdbcType=CHAR},
+      </if>
+      <if test="payId != null" >
+        pay_id = #{payId,jdbcType=BIGINT},
+      </if>
+      <if test="retMsg != null" >
+        ret_msg = #{retMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="retAccept != null" >
+        ret_accept = #{retAccept,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.ReBankAccept" >
+    update re_bank_accept
+    set price = #{price,jdbcType=DOUBLE},
+      pay_type = #{payType,jdbcType=CHAR},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      pay_commit_time = #{payCommitTime,jdbcType=TIMESTAMP},
+      check_type = #{checkType,jdbcType=CHAR},
+      pay_id = #{payId,jdbcType=BIGINT},
+      ret_msg = #{retMsg,jdbcType=VARCHAR},
+      ret_accept = #{retAccept,jdbcType=VARCHAR}
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=INTEGER}
+  </update>
+</mapper>

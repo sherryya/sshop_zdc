@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.ReOrderStateRelMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.ReOrderStateRel" >
+    <id column="function_code" property="functionCode" jdbcType="VARCHAR" />
+    <id column="order_condition" property="orderCondition" jdbcType="INTEGER" />
+    <id column="order_state" property="orderState" jdbcType="INTEGER" />
+    <result column="next_order_state" property="nextOrderState" jdbcType="INTEGER" />
+    <result column="mark" property="mark" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_no" property="updateNo" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    function_code, order_condition, order_state, next_order_state, mark, update_time, 
+    update_no
+  </sql>
+  <select id="selectStateRelList" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_order_state_rel
+    <where>
+      <if test="functionCode != null" >
+       function_code = #{functionCode,jdbcType=VARCHAR}
+      </if>
+      <if test="orderCondition != null" >
+       and order_condition = #{orderCondition,jdbcType=INTEGER}
+      </if>
+      <if test="orderState != null" >
+        and order_state = #{orderState,jdbcType=INTEGER}
+      </if>
+      <if test="nextOrderState != null" >
+        and next_order_state = #{nextOrderState,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.order.dto.ReOrderStateRelKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_order_state_rel
+    where function_code = #{functionCode,jdbcType=VARCHAR}
+      and order_condition = #{orderCondition,jdbcType=INTEGER}
+      and order_state = #{orderState,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.order.dto.ReOrderStateRelKey" >
+    delete from re_order_state_rel
+    where function_code = #{functionCode,jdbcType=VARCHAR}
+      and order_condition = #{orderCondition,jdbcType=INTEGER}
+      and order_state = #{orderState,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReOrderStateRel" >
+    insert into re_order_state_rel (function_code, order_condition, order_state, 
+      next_order_state, mark, update_time, 
+      update_no)
+    values (#{functionCode,jdbcType=VARCHAR}, #{orderCondition,jdbcType=INTEGER}, #{orderState,jdbcType=INTEGER}, 
+      #{nextOrderState,jdbcType=INTEGER}, #{mark,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateNo,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReOrderStateRel" >
+    insert into re_order_state_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="functionCode != null" >
+        function_code,
+      </if>
+      <if test="orderCondition != null" >
+        order_condition,
+      </if>
+      <if test="orderState != null" >
+        order_state,
+      </if>
+      <if test="nextOrderState != null" >
+        next_order_state,
+      </if>
+      <if test="mark != null" >
+        mark,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateNo != null" >
+        update_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="functionCode != null" >
+        #{functionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderCondition != null" >
+        #{orderCondition,jdbcType=INTEGER},
+      </if>
+      <if test="orderState != null" >
+        #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="nextOrderState != null" >
+        #{nextOrderState,jdbcType=INTEGER},
+      </if>
+      <if test="mark != null" >
+        #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateNo != null" >
+        #{updateNo,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.ReOrderStateRel" >
+    update re_order_state_rel
+    <set >
+      <if test="nextOrderState != null" >
+        next_order_state = #{nextOrderState,jdbcType=INTEGER},
+      </if>
+      <if test="mark != null" >
+        mark = #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateNo != null" >
+        update_no = #{updateNo,jdbcType=INTEGER},
+      </if>
+    </set>
+    where function_code = #{functionCode,jdbcType=VARCHAR}
+      and order_condition = #{orderCondition,jdbcType=INTEGER}
+      and order_state = #{orderState,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.ReOrderStateRel" >
+    update re_order_state_rel
+    set next_order_state = #{nextOrderState,jdbcType=INTEGER},
+      mark = #{mark,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_no = #{updateNo,jdbcType=INTEGER}
+    where function_code = #{functionCode,jdbcType=VARCHAR}
+      and order_condition = #{orderCondition,jdbcType=INTEGER}
+      and order_state = #{orderState,jdbcType=INTEGER}
+  </update>
+</mapper>

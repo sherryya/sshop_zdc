@@ -1,0 +1,10 @@
+bug:
+	1.1:
+  		修改文件：	com\xxx\shop\web\GetGdShopItemstypeDicListByShopIdServlet.java
+  			解决问题：修改字段改为：itemtype_list。
+		修改文件：	com\xxx\system\ZipUtil.java
+			解决问题：解决苹果压缩和解压缩问题，把TBUCompression.java文件中的内容这个到了ZipUtil.java文件中，扩展了对输入流的处理。
+		修改文件：	com\xxx\shop\web\HttpServletBase.java
+			解决问题：恢复成了使用压缩方式的报文传输。
+		修改文件：	test\ConnUtil.java
+			解决问题：恢复成了使用压缩方式的测试程序。

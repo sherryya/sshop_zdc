@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.SyNormalDicsMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.SyNormalDics" >
+    <id column="column_name" property="columnName" jdbcType="VARCHAR" />
+    <id column="dic_value" property="dicValue" jdbcType="INTEGER" />
+    <id column="table_name" property="tableName" jdbcType="VARCHAR" />
+    <result column="dic_name" property="dicName" jdbcType="VARCHAR" />
+    <result column="dic_mark" property="dicMark" jdbcType="VARCHAR" />
+    <result column="dic_state" property="dicState" jdbcType="CHAR" />
+    <result column="create_no" property="createNo" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ExtendResultMap" type="com.tmount.db.product.vo.SyNormalDicsInfo" >
+    <id column="column_name" property="columnName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="DicResultMap" type="com.tmount.db.product.vo.SyNormalDicsList" >
+    <result column="dic_value" property="dicValue" jdbcType="INTEGER" />
+    <result column="dic_name" property="dicName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    column_name, dic_value, table_name, dic_name, dic_mark, dic_state, create_no, create_date
+  </sql>
+  <select id="selectValues" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.SyNormalDicsKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_normal_dics
+    where column_name = #{columnName,jdbcType=VARCHAR}
+      and table_name = #{tableName,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.SyNormalDicsKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_normal_dics
+    where column_name = #{columnName,jdbcType=VARCHAR}
+      and dic_value = #{dicValue,jdbcType=INTEGER}
+      and table_name = #{tableName,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.product.dto.SyNormalDicsKey" >
+    delete from sy_normal_dics
+    where column_name = #{columnName,jdbcType=VARCHAR}
+      and dic_value = #{dicValue,jdbcType=INTEGER}
+      and table_name = #{tableName,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.SyNormalDics" >
+    insert into sy_normal_dics (column_name, dic_value, table_name, 
+      dic_name, dic_mark, dic_state, 
+      create_no, create_date)
+    values (#{columnName,jdbcType=VARCHAR}, #{dicValue,jdbcType=INTEGER}, #{tableName,jdbcType=VARCHAR}, 
+      #{dicName,jdbcType=VARCHAR}, #{dicMark,jdbcType=VARCHAR}, #{dicState,jdbcType=CHAR}, 
+      #{createNo,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.SyNormalDics" >
+    insert into sy_normal_dics
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="columnName != null" >
+        column_name,
+      </if>
+      <if test="dicValue != null" >
+        dic_value,
+      </if>
+      <if test="tableName != null" >
+        table_name,
+      </if>
+      <if test="dicName != null" >
+        dic_name,
+      </if>
+      <if test="dicMark != null" >
+        dic_mark,
+      </if>
+      <if test="dicState != null" >
+        dic_state,
+      </if>
+      <if test="createNo != null" >
+        create_no,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="columnName != null" >
+        #{columnName,jdbcType=VARCHAR},
+      </if>
+      <if test="dicValue != null" >
+        #{dicValue,jdbcType=INTEGER},
+      </if>
+      <if test="tableName != null" >
+        #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="dicName != null" >
+        #{dicName,jdbcType=VARCHAR},
+      </if>
+      <if test="dicMark != null" >
+        #{dicMark,jdbcType=VARCHAR},
+      </if>
+      <if test="dicState != null" >
+        #{dicState,jdbcType=CHAR},
+      </if>
+      <if test="createNo != null" >
+        #{createNo,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.SyNormalDics" >
+    update sy_normal_dics
+    <set >
+      <if test="dicName != null" >
+        dic_name = #{dicName,jdbcType=VARCHAR},
+      </if>
+      <if test="dicMark != null" >
+        dic_mark = #{dicMark,jdbcType=VARCHAR},
+      </if>
+      <if test="dicState != null" >
+        dic_state = #{dicState,jdbcType=CHAR},
+      </if>
+      <if test="createNo != null" >
+        create_no = #{createNo,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where column_name = #{columnName,jdbcType=VARCHAR}
+      and dic_value = #{dicValue,jdbcType=INTEGER}
+      and table_name = #{tableName,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.SyNormalDics" >
+    update sy_normal_dics
+    set dic_name = #{dicName,jdbcType=VARCHAR},
+      dic_mark = #{dicMark,jdbcType=VARCHAR},
+      dic_state = #{dicState,jdbcType=CHAR},
+      create_no = #{createNo,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where column_name = #{columnName,jdbcType=VARCHAR}
+      and dic_value = #{dicValue,jdbcType=INTEGER}
+      and table_name = #{tableName,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectItemsExpByPrimaryKey" resultMap="ExtendResultMap" parameterType="com.tmount.db.product.dto.SyNormalDicsKey">
+    select 
+    distinct(column_name)
+    from sy_normal_dics
+    where table_name = #{tableName,jdbcType=VARCHAR}
+  </select>
+  <select id="selectDicsByColumnName" resultMap="DicResultMap" parameterType="com.tmount.db.product.dto.SyNormalDicsKey">
+    select 
+    dic_value, dic_name
+    from sy_normal_dics
+    where table_name = #{tableName,jdbcType=VARCHAR} and column_name = #{columnName,jdbcType=VARCHAR}
+    order by dic_value asc
+  </select>
+</mapper>

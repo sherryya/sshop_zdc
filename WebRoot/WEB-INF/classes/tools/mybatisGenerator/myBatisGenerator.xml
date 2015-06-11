@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generator>
+	<context>
+		<jdbcConnection
+			url="jdbc:mysql://218.8.127.3:23307/zdc_cls?generateSimpleParameterMetadata=true"
+			user="zdc01"
+			password="zdc@123"/>
+		<!-- url="jdbc:mysql://125.211.221.231:10094/zdc?generateSimpleParameterMetadata=true" -->
+		<model targetProject="E:\workspace\CLSInterfacePlatform\src"
+			tableTargetPackage="com.db.dto"
+			jointableTargetPackage="com.db.dto"/>
+
+		<mapping targetProject="E:\workspace\CLSInterfacePlatform\src"
+			tableTargetPackage="com.db.sqlmap"
+			jointableTargetPackage="com.db.sqlmap"/>
+	
+		<dao targetProject="E:\workspace\CLSInterfacePlatform\src"
+			tableTargetPackage="com.db.dao"
+			jointableTargetPackage="com.db.dao"/>
+	</context>
+	<sqlMaps>
+		<!-- 为了以后规范管理，要求一个sqlMap XML文件中，只能有对一个表的处理 -->
+		<sqlMap resource="sy_resource_size_dic.xml"/>
+	</sqlMaps>
+</generator>

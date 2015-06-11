@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.car.dao.CarInfoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.tmount.db.car.dto.CarInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="qyid" property="qyid" jdbcType="INTEGER" />
+		<id column="DeviceUID" property="DeviceUID" jdbcType="VARCHAR" />
+		<id column="DeviceType" property="DeviceType"
+			jdbcType="VARCHAR" />
+		<id column="DeviceSN" property="DeviceSN" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="CarBrandResultMap"
+		type="com.tmount.db.util.dto.CommonBean">
+		<result column="car_brands" property="car_brands"
+			jdbcType="VARCHAR" />
+		<result column="car_model" property="car_model"
+			jdbcType="VARCHAR" />
+		<result column="car_style" property="car_style"
+			jdbcType="VARCHAR" />
+		<result column="is_valid" property="is_valid"
+			jdbcType="VARCHAR" />
+		<result column="picture_url" property="picture_url"
+			jdbcType="VARCHAR" />
+		<result column="id" property="id" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BaseResultMap_Car"
+		type="com.tmount.db.car.dto.CarDelete">
+		<id column="car_id" property="car_id" jdbcType="BIGINT" />
+		<id column="account_id" property="account_id" jdbcType="BIGINT" />
+		<id column="user_id" property="user_id" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="CarMapTerminal"
+		type="com.tmount.db.car.vo.TItovCarVo">
+		<result column="car_brands" property="carBrands" jdbcType="VARCHAR" />
+		<result column="car_color" property="carColor" jdbcType="VARCHAR" />
+		<result column="car_plate_number" property="carPlateNumber" jdbcType="VARCHAR" />
+		<result column="car_id" property="carId" jdbcType="BIGINT" />
+		<result column="car_name" property="carName" jdbcType="VARCHAR" />
+		<result column="car_style" property="carStyle" jdbcType="VARCHAR" />
+		<result column="user_id" property="user_id" jdbcType="BIGINT" />
+		<result column="terminal_name" property="terminal_name" jdbcType="VARCHAR" />
+		<result column="terminal_imei" property="terminal_imei" jdbcType="VARCHAR" />
+		<result column="account_id" property="accountId" jdbcType="BIGINT" />
+		<result column="city_code" property="city_code" jdbcType="VARCHAR" />
+		<result column="province_code" property="province_code" jdbcType="VARCHAR" />
+		<result column="car_carcase_num" property="car_carcase_num" jdbcType="VARCHAR" />
+		<result column="car_engine_num" property="car_engine_num" jdbcType="VARCHAR" />
+		<result column="url_itov" property="url_itov" jdbcType="VARCHAR" />
+		<result column="is_default" property="is_default" jdbcType="VARCHAR" />
+		<result column="strategy_type" property="strategyType" jdbcType="VARCHAR" />
+        <result column="strategy_value" property="strategyValue" jdbcType="VARCHAR" />
+        <result column="is_use" property="is_use" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BaseCarMap"
+		type="com.tmount.db.car.dto.TItovCar">
+		<id column="car_brands" property="carBrands" jdbcType="VARCHAR" />
+		<id column="car_color" property="carColor" jdbcType="VARCHAR" />
+		<id column="car_plate_number" property="carPlateNumber" jdbcType="VARCHAR" />
+		<id column="car_id" property="carId" jdbcType="BIGINT" />
+		<id column="car_name" property="carName" jdbcType="VARCHAR" />
+		<id column="car_style" property="carStyle" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">id,qyid</sql>
+	<select id="getCarListByDrivingFieldId" resultMap="BaseResultMap">
+		select car.id
+		id,car.qyid,terminal.DeviceUID,terminal.DeviceType,terminal.DeviceSN
+		<include refid="Base_Column_List" />
+		from tbl_carinfo car,tbl_terminal_user terminal where car.id =
+		terminal.carid and wlid = #{drivingFieldId,jdbcType=BIGINT}
+	</select>
+	<select id="getCarListByDrivingFieldIdInTrains"
+		resultMap="BaseResultMap">
+		select
+		car.id,car.qyid,,terminal.DeviceUID,terminal.DeviceType,terminal.DeviceSN
+		from tbl_trains trains , tbl_carinfo car,tbl_terminal_user
+		terminal where trains.id = car.groupId and car.id =
+		terminal.carid and trains.wlid=
+		#{drivingFieldId,jdbcType=BIGINT}
+	</select>
+	<insert id="carhotInsert" parameterType="com.tmount.db.car.dto.CarInfo">
+		INSERT INTO	t_itov_car(car_id,car_name,car_brands,car_model,car_style,car_plate_number,car_carcase_num,car_type,account_id,car_color,car_driving_license_date,city_code)
+		VALUES
+		(#{car_id,jdbcType=BIGINT},#{car_name,jdbcType=VARCHAR},#{car_brands,jdbcType=VARCHAR},
+		#{car_model,jdbcType=VARCHAR},#{car_style,jdbcType=VARCHAR},#{car_plate_number,jdbcType=VARCHAR},#{car_carcase_num,jdbcType=VARCHAR},#{car_type,jdbcType=INTEGER},#{account_id,jdbcType=BIGINT}
+		,#{car_color,jdbcType=VARCHAR},#{car_driving_license_date,jdbcType=VARCHAR},#{city_code,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insert" parameterType="com.tmount.db.car.dto.CarInfo">
+		INSERT INTO	t_itov_car(car_id,car_name,car_brands,car_model,car_style,car_plate_number,car_carcase_num,car_type,account_id,access_id,access_token)
+		VALUES
+		(#{car_id,jdbcType=BIGINT},#{car_name,jdbcType=VARCHAR},#{car_brands,jdbcType=VARCHAR},
+		#{car_model,jdbcType=VARCHAR},#{car_style,jdbcType=VARCHAR},#{car_plate_number,jdbcType=VARCHAR},#{car_carcase_num,jdbcType=VARCHAR},#{car_type,jdbcType=INTEGER},#{account_id,jdbcType=BIGINT}
+		,#{access_id,jdbcType=VARCHAR},#{access_token,jdbcType=VARCHAR})
+	</insert>
+	<select id="getCarId" resultType="java.lang.Integer"
+		parameterType="java.lang.String">
+		select nextval(#{car_id,jdbcType=VARCHAR})
+	</select>
+	<!--  查找当前id的序列值    改造由于 mysql  cluster 双机备份 20150407-->
+	<select id="querySequenceId" resultType="java.lang.Integer" parameterType="java.lang.String">
+	  SELECT t.`current_value` FROM `sequence` t WHERE t.`name` = #{name}
+	</select>
+	<!-- 更新数据库序列值为序列值加1   改造由于 mysql  cluster 双机备份 20150407- -->
+	<update id="updSequenceId"  parameterType="com.tmount.db.car.dto.SequenceTable">
+       update  sequence set
+        current_value = #{current_value,jdbcType=INTEGER} where name= #{name,jdbcType=VARCHAR}
+	</update>
+	<update id="updtestupd"   parameterType="com.tmount.db.car.dto.TestUpd">
+	  UPDATE testupd SET value=#{value} where NAME=#{name} 
+	</update>
+	<select id="queryId" resultType="java.lang.Integer" parameterType="java.lang.String">
+	  SELECT t.`value` FROM `testupd` t WHERE t.`name` = #{name}
+	</select>
+	<!-- 判断 account_id账号下是否有 car_id车信息 -->
+	<select id="getIsExistCarInfoByCarIDAndAccount"
+		resultMap="BaseResultMap_Car"
+		parameterType="com.tmount.db.car.dto.CarDelete">
+		select c.car_id,u.account_id,tv.user_id from t_itov_terminal_car
+		tv inner join t_itov_car c on c.car_id=tv.car_id inner join
+		t_itov_user u on u.user_id=tv.user_id where
+		tv.car_id=#{car_id,jdbcType=BIGINT} and
+		u.account_id=#{account_id,jdbcType=BIGINT}
+	</select>
+	<!-- 删除 account_id账号下的 car_id车信息 删除绑关系 -->
+	<delete id="deleteCarAccountByCarID"
+		parameterType="com.tmount.db.car.dto.CarDelete">
+		delete from t_itov_terminal_car where car_id =
+		#{car_id,jdbcType=BIGINT} and user_id =
+		#{user_id,jdbcType=BIGINT}
+	</delete>
+	<!--  -->
+	<delete id="deleteCarByCarID"
+		parameterType="java.lang.Integer">
+		delete from t_itov_terminal_car where car_id =
+		#{car_id,jdbcType=BIGINT} 
+	</delete>
+	<delete id="deleteCarInfoByCarID"
+		parameterType="com.tmount.db.car.dto.CarDelete">
+		delete from t_itov_car where car_id = #{car_id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteUserByUserIDAccountID"
+		parameterType="com.tmount.db.car.dto.CarDelete">
+		delete from t_itov_user where user_id =
+		#{user_id,jdbcType=BIGINT} and account_id =
+		#{account_id,jdbcType=BIGINT}
+	</delete>
+	<!-- 设置默认车辆信息 -->
+	<update id="updateDefaultCarAccountByCarID"
+		parameterType="com.tmount.db.car.dto.CarDelete">
+		update t_itov_terminal_car set is_default=1 where
+		car_id=#{car_id,jdbcType=BIGINT} and
+		user_id=#{user_id,jdbcType=BIGINT}
+	</update>
+	<!-- 通过user_id 取消默认车辆 -->
+	<update id="deleteDefaultCarByUserID"
+		parameterType="com.tmount.db.car.dto.CarDelete">
+
+		update t_itov_terminal_car set is_default=0 where user_id in (
+		select user_id from t_itov_user where
+		account_id=#{account_id,jdbcType=BIGINT} ) and is_default=1
+	</update>
+	<!-- 20150414删除车辆时调用 -->
+	<delete id="deleteBySubAccountId" parameterType="java.lang.Long">
+		delete from
+		t_itov_ptt_subaccount
+		where account_id = #{account_id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deletePersonByAccountId" parameterType="java.lang.Long">
+	  delete from t_itov_personal where account_id = #{account_id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteAccountByAccountName" parameterType="java.lang.String">
+	  delete from t_itov_account where account_name = #{account_name,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteOnlineByAccountId" parameterType="java.lang.String">
+	  delete from t_zdc_terminal_onlineflag where terminal_imei = #{account_name,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteBreakListBycarPlateNum" parameterType="java.lang.String">
+	  delete from t_zdc_breakruleqry_flag where car_plate_num = #{car_plate_num,jdbcType=BIGINT}
+	</delete>
+	
+	<select id="getMaxId" resultType="java.lang.Long">
+		SELECT MAX(id) FROM t_itov_car_brand
+	</select>
+	<select id="getCarBrands" resultMap="CarBrandResultMap"
+		parameterType="java.lang.Long">
+		SELECT DISTINCT car_brands,car_model,car_style,is_valid,id FROM
+		t_itov_car_brand WHERE id >#{id,jdbcType=BIGINT}
+	</select>
+	<select id="getCarMesssageByCarId"
+		resultType="com.tmount.db.car.dto.CarInfo"
+		parameterType="java.lang.Long">
+		SELECT cjh,carnum FROM tbl_carinfo WHERE id
+		=#{car_id,jdbcType=BIGINT}
+	</select>
+
+	<update id="updatecarmessage"
+		parameterType="com.tmount.db.car.dto.CarInfo">
+		update t_itov_car set access_id=#{access_id,jdbcType=VARCHAR},
+		access_token=#{access_token,jdbcType=VARCHAR} 
+		where  car_id=#{car_id,jdbcType=BIGINT}
+	</update>
+
+
+     <!-- 通过用户ID得到默认令牌信息 -->
+	<select id="getAccessByAccount"
+		resultType="com.tmount.db.car.dto.CarInfo"
+		parameterType="java.lang.Long">
+		SELECT  car.`access_id`,car.`access_token` FROM `t_itov_user` u  
+ 		INNER JOIN t_itov_terminal_car terminalcar  ON u.`user_id`=terminalcar.`user_id` 
+ 		INNER JOIN  t_itov_car car  ON car.`car_id`=terminalcar.`car_id` WHERE terminalcar.`is_default`=1
+ 		AND u.`account_id`=#{account_id,jdbcType=BIGINT}
+	</select>
+	
+		<select id="getItovCarMesssageByCarId"
+		resultType="com.tmount.db.car.dto.CarInfo"
+		parameterType="com.tmount.db.car.dto.CarInfo">
+		SELECT car_id,car_plate_number,car_engine_num,car_type,car_carcase_num,access_id,access_token FROM t_itov_car WHERE car_id
+		=#{car_id,jdbcType=BIGINT}
+	</select>
+	<select id="getuserRelationCarInfo"
+		resultType="com.tmount.db.car.dto.UserRelationCarInfo"
+		parameterType="com.tmount.db.car.dto.UserRelationCarInfo">
+		SELECT car_id,user_id,is_default FROM t_itov_terminal_car WHERE car_id
+		=#{car_id,jdbcType=BIGINT}
+	</select>
+	
+	
+	<select id="getCodeByCarID"	resultType="com.tmount.db.car.dto.TItov_car_brand_golo3"	parameterType="java.lang.Long">
+		SELECT b.`carSeriesId`  FROM `t_itov_car` c INNER JOIN `t_itov_car_brand_golo3` b ON c.`car_type`=b.`id`   
+		WHERE c.`car_id`=#{car_id,jdbcType=BIGINT}
+	</select>
+	
+	
+    <update id="updatecarname"
+		parameterType="com.tmount.db.car.dto.CarInfo">
+		update t_itov_car set
+		car_name=#{car_name,jdbcType=VARCHAR} 
+		where  car_id=#{car_id,jdbcType=BIGINT}
+	</update>
+	
+	<select id="getCarInfoByAccountId" parameterType="java.lang.String" resultMap="BaseCarMap">
+	   
+ <!--        SELECT car.`car_brands`,car.`car_color`,car.`car_id`,car.`car_name`,car.`car_plate_number`,car.`car_style` FROM `t_itov_car` car ,`t_itov_ptt_subaccount` account
+        WHERE car.`account_id` = account.`account_id` AND account.`voipAccount` = #{voipAccount} -->
+        
+           SELECT car.`car_brands`,car.`car_color`,car.`car_id`,car.`car_name`,
+        car.`car_plate_number`,car.`car_style` FROM `t_zdc_terminal_account` a  
+        INNER JOIN t_itov_ptt_subaccount b ON  a.account_id_ter=b.account_id 
+        INNER JOIN  t_itov_car car ON car.`account_id`=a. account_id_tel 
+        WHERE b.voipaccount=#{voipAccount}
+        
+	</select>
+	
+	<select id="selectTerminal" resultMap="CarMapTerminal"  parameterType="java.lang.String">
+	  SELECT s.`car_brands`,s.`car_color`,s.`car_id`,s.`car_name`,s.`car_plate_number`,s.`car_style`,t.user_id ,t.terminal_imei ,t.terminal_name,s.`account_id` FROM `t_itov_car` s  INNER JOIN `t_itov_user` u ON s.`account_id`=u.`account_id`
+
+      INNER JOIN `t_itov_terminal`   t ON t.`user_id`=u.`user_id` WHERE u.`account_id` = #{accountId}
+	</select>
+	<!-- 根据account_id查询是否存在车辆信息  20141105-->
+	<select id="getIsExsitCarInfoByAccountId" parameterType="java.lang.Long" resultMap="BaseCarMap">
+        SELECT car.`car_brands`,car.`car_color`,car.`car_id`,car.`car_name`,car.`car_plate_number`,car.`car_style` FROM `t_itov_car` car 
+        WHERE car.`account_id` = #{account_id} 
+	</select>
+	<!-- 查询全部车辆信息  20141128-->
+	<select id="qryCarInfoAll"  resultMap="CarMapTerminal">
+        SELECT car.`account_id`,car.`car_brands`,car.`car_color`,car.`car_id`,car.`car_name`,car.`car_plate_number`,car.`car_style`,car.`car_carcase_num`,car.`car_engine_num`
+       ,car.`city_code`,car.`province_code` FROM `t_itov_car` car 
+	</select>
+	<!-- 根据account_id违章查询需要  20150422-->
+	<select id="qryCarInfoByAccountID"  resultMap="CarMapTerminal" parameterType="java.lang.Long">
+<!--         SELECT car.`account_id`,car.`car_brands`,car.`car_color`,car.`car_id`,car.`car_name`,car.`car_plate_number`,car.`car_style`,car.`car_carcase_num`,car.`car_engine_num`
+       ,car.`city_code`,car.`province_code` ,(SELECT t.`terminal_imei` FROM `t_itov_account` a ,`t_itov_user` u ,`t_itov_terminal` t WHERE t.`user_id` = u.`user_id` AND a.`account_id` = u.`account_id` 
+       AND a.`account_id`=#{account_id}) terminal_imei FROM `t_itov_car` car WHERE car.`account_id`=#{account_id} -->
+ <!--     SELECT car.*,ter.`terminal_imei`,go.`url_itov` FROM 
+       `t_itov_car` car  INNER JOIN `t_itov_user` u ON u.`account_id`=car.`account_id` 
+       INNER JOIN t_itov_terminal_car tc ON tc.`car_id`=car.`car_id` AND tc.`is_default`=1
+       INNER JOIN t_itov_terminal ter ON ter.`user_id`=tc.`user_id`
+       INNER JOIN `t_itov_car_brand_golo3` go ON go.`id`=car.`car_type`
+       WHERE u.`account_id`=#{account_id} -->  
+       SELECT car.*,ter.`terminal_imei`,go.`url_itov`,stra.`is_use`,stra.`strategy_type`,stra.`strategy_value` FROM 
+       `t_itov_car` car  INNER JOIN `t_itov_user` u ON u.`account_id`=car.`account_id` 
+       INNER JOIN t_itov_terminal_car tc ON tc.`car_id`=car.`car_id` AND tc.`is_default`=1
+       INNER JOIN t_itov_terminal ter ON ter.`user_id`=tc.`user_id`
+       LEFT JOIN `t_zdc_carhot_strategy` stra ON stra.`device_id`=ter.`terminal_imei`
+       INNER JOIN `t_itov_car_brand_golo3` go ON go.`id`=car.`car_type`
+       WHERE u.`account_id`=#{account_id}
+	</select>
+	<!-- 根据account_id违章查询需要  20141222-->
+	<select id="qryCarInfoByPlateNum"  resultMap="CarMapTerminal" parameterType="java.lang.String">
+        SELECT car.`account_id`,car.`car_brands`,car.`car_color`,car.`car_id`,car.`car_name`,car.`car_plate_number`,car.`car_style`,car.`car_carcase_num`,car.`car_engine_num`
+       ,car.`city_code`,car.`province_code` FROM `t_itov_car` car WHERE car.`car_plate_number`=#{car_plate_number}
+	</select>
+	<!-- 根据车牌号和车架号查询车辆信息  20150421-->
+	<select id="getCarInfoByPlateNum"  resultMap="CarMapTerminal" parameterType="com.tmount.db.car.dto.CarInfo">
+        SELECT car.`account_id`,car.`car_brands`,car.`car_color`,car.`car_id`,car.`car_name`,car.`car_plate_number`,car.`car_style`,car.`car_carcase_num`,car.`car_engine_num`
+       ,car.`city_code`,car.`province_code` FROM `t_itov_car` car WHERE car.`car_plate_number`=#{car_plate_number} 
+	</select>
+	
+	<!-- 根据手机account_id查询所有车辆信息20150508-->
+	<select id="getCarByAccountId"  resultMap="CarMapTerminal" parameterType="java.lang.Long">
+          SELECT golo.`url_itov`,car.*,t.`is_default`,ter.`terminal_imei` ,stra.`is_use`,stra.`strategy_type`,stra.`strategy_value` FROM `t_itov_car_brand_golo3` golo
+         INNER JOIN `t_itov_car` car ON  golo.`id`=car.`car_type` INNER JOIN  `t_itov_terminal_car` t ON  t.`car_id`=car.`car_id`
+         INNER JOIN `t_itov_terminal` ter ON ter.`user_id`=t.`user_id` LEFT JOIN `t_zdc_carhot_strategy` stra ON stra.`device_id`=ter.`terminal_imei` 
+         WHERE car.`car_id` IN(SELECT tc.`car_id` FROM `t_itov_user` u ,`t_itov_terminal_car` tc WHERE u.`user_id`=tc.`user_id` AND  u.`account_id`=#{account_id})
+	</select>
+	
+</mapper>

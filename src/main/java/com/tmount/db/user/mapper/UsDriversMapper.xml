@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.user.dao.UsDriversMapper">
+	<resultMap id="BaseResultMap" type="com.tmount.db.user.dto.UsDriversSign">
+		<id column="ds_id" property="ds_id" jdbcType="INTEGER" />
+		<result column="ds_note" property="ds_note" jdbcType="VARCHAR" />
+		<result column="ds_time" property="ds_time" jdbcType="TIMESTAMP" />
+		<result column="ds_type" property="ds_type" jdbcType="INTEGER" />
+		<result column="ds_create_date" property="ds_create_date" jdbcType="TIMESTAMP" />
+		<result column="ds_car_id" property="ds_car_id" jdbcType="INTEGER" />
+		<result column="ds_drivers_id" property="ds_drivers_id" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BaseResultMap_DriversInfo" type="com.tmount.db.user.dto.UsDriversInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="car" property="car" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="BaseResultMap_DriversSignTime" type="com.tmount.db.user.dto.UsDriversSign">
+		<id column="ds_id" property="ds_id" jdbcType="INTEGER" />
+		<result column="ds_time" property="ds_time" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	
+	<sql id="Base_Column_List">
+		ds_id,ds_drivers_id,ds_car_id,ds_note,ds_time,ds_create_date,ds_type
+	</sql>
+	<!-- 驾驶员签到 签退 -->
+	<insert id="driversSign_Insert" parameterType="com.tmount.db.user.dto.UsDriversSign">
+		INSERT INTO
+		t_itov_drivers_sign (ds_id,ds_drivers_id,ds_car_id,	ds_type, ds_note)
+		VALUES
+		(#{ds_id,jdbcType=INTEGER},#{ds_drivers_id,jdbcType=INTEGER},#{ds_car_id,jdbcType=INTEGER},
+		 #{ds_type,jdbcType=INTEGER},#{ds_note,jdbcType=VARCHAR})
+	</insert>
+	<!-- 判断人车是否对应 -->
+	<select id="getDriversIsExists" resultMap="BaseResultMap_DriversInfo"
+		parameterType="com.tmount.db.user.dto.UsDriversSign">
+		select id,car from tbl_driverinfo where	id=#{ds_drivers_id,jdbcType=INTEGER}  
+		and car like CONCAT('%',#{ds_car_id,jdbcType=VARCHAR},'%')
+	</select> 
+	<select id="getCommonTableID" resultType="java.lang.Integer">
+		select nextval('driversign_id') 
+	</select> 
+	<!-- 得到签到时间 -->
+	<select id="getDriversSignTime" resultMap="BaseResultMap_DriversSignTime"
+		parameterType="com.tmount.db.user.dto.UsDriversSign">
+		select ds_id, ds_time from t_itov_drivers_sign where ds_id=#{ds_id,jdbcType=INTEGER}  
+	</select> 
+</mapper>

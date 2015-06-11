@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.RePayTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.RePayType" >
+    <id column="pay_type" property="payType" jdbcType="INTEGER" />
+    <result column="pay_name" property="payName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pay_type, pay_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_pay_type
+    where pay_type = #{payType,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from re_pay_type
+    where pay_type = #{payType,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.RePayType" >
+    insert into re_pay_type (pay_type, pay_name)
+    values (#{payType,jdbcType=INTEGER}, #{payName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.RePayType" >
+    insert into re_pay_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="payName != null" >
+        pay_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="payType != null" >
+        #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="payName != null" >
+        #{payName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.RePayType" >
+    update re_pay_type
+    <set >
+      <if test="payName != null" >
+        pay_name = #{payName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where pay_type = #{payType,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.RePayType" >
+    update re_pay_type
+    set pay_name = #{payName,jdbcType=VARCHAR}
+    where pay_type = #{payType,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.voice.dao.TItovMusicpushMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.voice.dto.TItovMusicpush" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="push_info" property="pushInfo" jdbcType="VARCHAR" />
+    <result column="terminal_imei" property="terminalImei" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,push_info,terminal_imei
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.voice.dto.TItovMusicpush">
+    insert into t_itov_musicpush (
+        push_info,terminal_imei)
+    values (
+        #{pushInfo,jdbcType=VARCHAR},#{terminalImei,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.voice.dto.TItovMusicpush">
+    update t_itov_musicpush
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="pushInfo != null">
+        push_info = #{pushInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalImei != null">
+        terminal_imei = #{terminalImei,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT},
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_itov_musicpush
+     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+      from t_itov_musicpush
+     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      t_itov_musicpush
+    </select>
+     <!-- 根据车机imei删除推送音乐 -->
+  <delete id="deleteByterImei" parameterType="java.lang.String">
+    delete from t_itov_musicpush
+     where terminal_imei = #{terminalImei,jdbcType=VARCHAR}
+  </delete>
+  <!-- 根据车机imei查询推送音乐 -->
+  <select id="selectByterImei" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+      from t_itov_musicpush
+     where terminal_imei = #{terminalImei,jdbcType=VARCHAR}
+  </select>
+</mapper>

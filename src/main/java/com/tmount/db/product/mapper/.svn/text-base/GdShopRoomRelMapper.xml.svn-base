@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdShopRoomRelMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdShopRoomRel" >
+    <id column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <result column="shop_floor_id" property="shopFloorId" jdbcType="INTEGER" />
+    <result column="position_x" property="positionX" jdbcType="INTEGER" />
+    <result column="position_y" property="positionY" jdbcType="INTEGER" />
+    <result column="i360_pic" property="i360Pic" jdbcType="BIGINT" />
+    <result column="men_count" property="menCount" jdbcType="INTEGER" />
+    <result column="can_check" property="canCheck" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    items_id, shop_floor_id, position_x, position_y, i360_pic, men_count, can_check
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_shop_room_rel
+    where items_id = #{itemsId,jdbcType=BIGINT}
+  </select>
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdDeliverDicMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdDeliverDic" >
+    <id column="deliver_type" property="deliverType" jdbcType="INTEGER" />
+    <result column="deliver_name" property="deliverName" jdbcType="VARCHAR" />
+    <result column="mark" property="mark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    deliver_type, deliver_name, mark
+  </sql>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gd_deliver_dic
+    order by deliver_type
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_deliver_dic
+    where deliver_type = #{deliverType,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from gd_deliver_dic
+    where deliver_type = #{deliverType,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.GdDeliverDic" >
+    insert into gd_deliver_dic (deliver_type, deliver_name, mark
+      )
+    values (#{deliverType,jdbcType=INTEGER}, #{deliverName,jdbcType=VARCHAR}, #{mark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.GdDeliverDic" >
+    insert into gd_deliver_dic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deliverType != null" >
+        deliver_type,
+      </if>
+      <if test="deliverName != null" >
+        deliver_name,
+      </if>
+      <if test="mark != null" >
+        mark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deliverType != null" >
+        #{deliverType,jdbcType=INTEGER},
+      </if>
+      <if test="deliverName != null" >
+        #{deliverName,jdbcType=VARCHAR},
+      </if>
+      <if test="mark != null" >
+        #{mark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.GdDeliverDic" >
+    update gd_deliver_dic
+    <set >
+      <if test="deliverName != null" >
+        deliver_name = #{deliverName,jdbcType=VARCHAR},
+      </if>
+      <if test="mark != null" >
+        mark = #{mark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where deliver_type = #{deliverType,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.GdDeliverDic" >
+    update gd_deliver_dic
+    set deliver_name = #{deliverName,jdbcType=VARCHAR},
+      mark = #{mark,jdbcType=VARCHAR}
+    where deliver_type = #{deliverType,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.ReOrderDeliverAddHisMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.ReOrderDeliverAddHis" >
+    <result column="order_no" property="orderNo" jdbcType="BIGINT" />
+    <result column="logistics_id" property="logisticsId" jdbcType="INTEGER" />
+    <result column="state_type" property="stateType" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <result column="state_code" property="stateCode" jdbcType="INTEGER" />
+    <result column="re_state_code" property="reStateCode" jdbcType="VARCHAR" />
+    <result column="re_state_desc" property="reStateDesc" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="staff_id" property="staffId" jdbcType="BIGINT" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="send_command" jdbcType="INTEGER" property="sendCommand" />
+    <result column="send_online" jdbcType="CHAR" property="sendOnline" />
+  </resultMap>
+  <select id="getOrderDeliverAddHis" parameterType="long" resultMap="BaseResultMap">
+  	select order_no, logistics_id, state_type, 
+      shop_id, state_code, re_state_code, 
+      re_state_desc, create_time, staff_id, 
+      send_time from re_order_deliver_add_his 
+      where order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReOrderDeliverAddHis" >
+    insert into re_order_deliver_add_his (order_no, logistics_id, state_type, 
+      shop_id, state_code, re_state_code, 
+      re_state_desc, create_time, staff_id, 
+      send_time)
+    values (#{orderNo,jdbcType=BIGINT}, #{logisticsId,jdbcType=INTEGER}, #{stateType,jdbcType=INTEGER}, 
+      #{shopId,jdbcType=BIGINT}, #{stateCode,jdbcType=INTEGER}, #{reStateCode,jdbcType=VARCHAR}, 
+      #{reStateDesc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{staffId,jdbcType=BIGINT}, 
+      #{sendTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReOrderDeliverAddHis" >
+    insert into re_order_deliver_add_his
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="logisticsId != null" >
+        logistics_id,
+      </if>
+      <if test="stateType != null" >
+        state_type,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="stateCode != null" >
+        state_code,
+      </if>
+      <if test="reStateCode != null" >
+        re_state_code,
+      </if>
+      <if test="reStateDesc != null" >
+        re_state_desc,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="staffId != null" >
+        staff_id,
+      </if>
+      <choose>
+        <when test="sendTime == null">
+            send_time,
+        </when>
+        <otherwise>
+            send_time,
+        </otherwise>
+	  </choose>
+      <if test="sendCommand != null" >
+        send_command,
+      </if>
+      <if test="sendOnline != null" >
+        send_online,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="logisticsId != null" >
+        #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="stateType != null" >
+        #{stateType,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="stateCode != null" >
+        #{stateCode,jdbcType=INTEGER},
+      </if>
+      <if test="reStateCode != null" >
+        #{reStateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reStateDesc != null" >
+        #{reStateDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffId != null" >
+        #{staffId,jdbcType=BIGINT},
+      </if>
+      <choose>
+        <when test="sendTime != null">
+            #{sendTime,jdbcType=TIMESTAMP},
+        </when>
+        <otherwise>
+            now(),
+        </otherwise>
+	  </choose>
+      <if test="sendCommand != null" >
+        #{sendCommand,jdbcType=INTEGER},
+      </if>
+      <if test="sendOnline != null" >
+        #{sendOnline,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

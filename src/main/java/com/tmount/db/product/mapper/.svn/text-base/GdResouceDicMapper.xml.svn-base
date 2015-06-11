@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdResouceDicMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdResouceDic" >
+    <id column="res_id" property="resId" jdbcType="BIGINT" />
+    <result column="res_type" property="resType" jdbcType="INTEGER" />
+    <result column="resource_name" property="resourceName" jdbcType="VARCHAR" />
+    <result column="res_size" property="resSize" jdbcType="BIGINT" />
+    <result column="res_format" property="resFormat" jdbcType="VARCHAR" />
+    <result column="resource_path" property="resourcePath" jdbcType="VARCHAR" />
+    <result column="origen_uri" property="origenUri" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="res_desc" property="resDesc" jdbcType="VARCHAR" />
+    <result column="res_uri" property="resUri" jdbcType="VARCHAR" />
+    <result column="store_type" property="storeType" jdbcType="INTEGER" />
+    <result column="origen_type" property="origenType" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    res_id, res_type, resource_name, res_size, res_format, resource_path, origen_uri, 
+    state, res_desc, res_uri, store_type, origen_type, update_time, create_time
+  </sql>
+  <select id="generateResId" resultType="long">
+    SELECT nextval('res_id')
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_resouce_dic
+    where res_id = #{resId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from gd_resouce_dic
+    where res_id = #{resId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByPicResRel" parameterType="com.tmount.db.product.dto.GdPicResRel" >
+  	DELETE FROM gd_resouce_dic
+	 WHERE res_id IN(SELECT
+                  res_id
+                FROM gd_pic_res_rel
+                WHERE table_name = #{tableName,jdbcType=VARCHAR}
+                    AND record_id = #{recordId,jdbcType=BIGINT}
+                    AND store_type = #{storeType,jdbcType=INTEGER})
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.GdResouceDic" >
+    insert into gd_resouce_dic (res_id, res_type, resource_name, 
+      res_size, res_format, resource_path, 
+      origen_uri, state, res_desc, 
+      res_uri, store_type, origen_type, 
+      update_time, create_time)
+    values (#{resId,jdbcType=BIGINT}, #{resType,jdbcType=INTEGER}, #{resourceName,jdbcType=VARCHAR}, 
+      #{resSize,jdbcType=BIGINT}, #{resFormat,jdbcType=VARCHAR}, #{resourcePath,jdbcType=VARCHAR}, 
+      #{origenUri,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{resDesc,jdbcType=VARCHAR}, 
+      #{resUri,jdbcType=VARCHAR}, #{storeType,jdbcType=INTEGER}, #{origenType,jdbcType=INTEGER}, 
+      now(), now())
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.GdResouceDic" >
+    insert into gd_resouce_dic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="resId != null" >
+        res_id,
+      </if>
+      <if test="resType != null" >
+        res_type,
+      </if>
+      <if test="resourceName != null" >
+        resource_name,
+      </if>
+      <if test="resSize != null" >
+        res_size,
+      </if>
+      <if test="resFormat != null" >
+        res_format,
+      </if>
+      <if test="resourcePath != null" >
+        resource_path,
+      </if>
+      <if test="origenUri != null" >
+        origen_uri,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="resDesc != null" >
+        res_desc,
+      </if>
+      <if test="resUri != null" >
+        res_uri,
+      </if>
+      <if test="storeType != null" >
+        store_type,
+      </if>
+      <if test="origenType != null" >
+        origen_type,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="resId != null" >
+        #{resId,jdbcType=BIGINT},
+      </if>
+      <if test="resType != null" >
+        #{resType,jdbcType=INTEGER},
+      </if>
+      <if test="resourceName != null" >
+        #{resourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="resSize != null" >
+        #{resSize,jdbcType=BIGINT},
+      </if>
+      <if test="resFormat != null" >
+        #{resFormat,jdbcType=VARCHAR},
+      </if>
+      <if test="resourcePath != null" >
+        #{resourcePath,jdbcType=VARCHAR},
+      </if>
+      <if test="origenUri != null" >
+        #{origenUri,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="resDesc != null" >
+        #{resDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="resUri != null" >
+        #{resUri,jdbcType=VARCHAR},
+      </if>
+      <if test="storeType != null" >
+        #{storeType,jdbcType=INTEGER},
+      </if>
+      <if test="origenType != null" >
+        #{origenType,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.GdResouceDic" >
+    update gd_resouce_dic
+    <set >
+      <if test="resType != null" >
+        res_type = #{resType,jdbcType=INTEGER},
+      </if>
+      <if test="resourceName != null" >
+        resource_name = #{resourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="resSize != null" >
+        res_size = #{resSize,jdbcType=BIGINT},
+      </if>
+      <if test="resFormat != null" >
+        res_format = #{resFormat,jdbcType=VARCHAR},
+      </if>
+      <if test="resourcePath != null" >
+        resource_path = #{resourcePath,jdbcType=VARCHAR},
+      </if>
+      <if test="origenUri != null" >
+        origen_uri = #{origenUri,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="resDesc != null" >
+        res_desc = #{resDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="resUri != null" >
+        res_uri = #{resUri,jdbcType=VARCHAR},
+      </if>
+      <if test="storeType != null" >
+        store_type = #{storeType,jdbcType=INTEGER},
+      </if>
+      <if test="origenType != null" >
+        origen_type = #{origenType,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where res_id = #{resId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.GdResouceDic" >
+    update gd_resouce_dic
+    set res_type = #{resType,jdbcType=INTEGER},
+      resource_name = #{resourceName,jdbcType=VARCHAR},
+      res_size = #{resSize,jdbcType=BIGINT},
+      res_format = #{resFormat,jdbcType=VARCHAR},
+      resource_path = #{resourcePath,jdbcType=VARCHAR},
+      origen_uri = #{origenUri,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      res_desc = #{resDesc,jdbcType=VARCHAR},
+      res_uri = #{resUri,jdbcType=VARCHAR},
+      store_type = #{storeType,jdbcType=INTEGER},
+      origen_type = #{origenType,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where res_id = #{resId,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getResourceUrlByType" resultType="String" parameterType="com.tmount.db.product.dto.GdPicResRel">
+  	  SELECT a.res_uri
+		FROM gd_resouce_dic a,
+		  gd_pic_res_rel b,
+		  sy_resource_size_dic c
+		WHERE b.table_name = #{tableName,jdbcType=VARCHAR}
+		    AND b.record_id = #{recordId,jdbcType=INTEGER}
+		    AND b.res_id = a.res_id
+		    AND b.store_type = c.store_type
+		    AND b.pic_size_type = c.pic_size_type
+		    AND b.store_type = #{storeType,jdbcType=INTEGER}
+  </select>
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.function.dao.AActionFilterMapper">
+	<resultMap id="BaseResultMap" type="com.tmount.db.function.dto.AActionFilter">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="action_id" property="actionId" jdbcType="INTEGER" />
+		<result column="role_code" property="roleCode" jdbcType="INTEGER" />
+		<result column="function_code" property="functionCode"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, action_id, role_code, function_code
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from a_action_filter
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		a_action_filter
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.tmount.db.function.dto.AActionFilter">
+		insert into a_action_filter
+		(id, action_id, role_code,
+		function_code)
+		values
+		(#{id,jdbcType=INTEGER}, #{actionId,jdbcType=INTEGER},
+		#{roleCode,jdbcType=INTEGER},
+		#{functionCode,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.tmount.db.function.dto.AActionFilter">
+		insert into a_action_filter
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="actionId != null">
+				action_id,
+			</if>
+			<if test="roleCode != null">
+				role_code,
+			</if>
+			<if test="functionCode != null">
+				function_code,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="actionId != null">
+				#{actionId,jdbcType=INTEGER},
+			</if>
+			<if test="roleCode != null">
+				#{roleCode,jdbcType=INTEGER},
+			</if>
+			<if test="functionCode != null">
+				#{functionCode,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.function.dto.AActionFilter">
+		update a_action_filter
+		<set>
+			<if test="actionId != null">
+				action_id = #{actionId,jdbcType=INTEGER},
+			</if>
+			<if test="roleCode != null">
+				role_code = #{roleCode,jdbcType=INTEGER},
+			</if>
+			<if test="functionCode != null">
+				function_code = #{functionCode,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.tmount.db.function.dto.AActionFilter">
+		update
+		a_action_filter
+		set action_id = #{actionId,jdbcType=INTEGER},
+		role_code
+		= #{roleCode,jdbcType=INTEGER},
+		function_code =
+		#{functionCode,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="selectActionFilterList" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT id,role_code,action_id FROM a_action_filter
+		WHERE
+		role_code = #{roleCode,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteAActionFilterByRoleCodeAndFunctionCode"
+		parameterType="java.util.Map">
+		delete from a_action_filter where role_code
+		=#{roleCode,jdbcType=INTEGER} and function_code =
+		#{functionCode,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteAActionFilterByRoleCode" parameterType="java.lang.Integer">
+		delete from
+		a_action_filter
+		where role_code = #{roleCode,jdbcType=INTEGER}
+	</delete>	
+		<delete id="deleteAActionFilterByFunctionCode" parameterType="java.lang.String">
+		delete from
+		a_action_filter
+		where function_code = #{function_code,jdbcType=VARCHAR}
+	</delete>	
+</mapper>

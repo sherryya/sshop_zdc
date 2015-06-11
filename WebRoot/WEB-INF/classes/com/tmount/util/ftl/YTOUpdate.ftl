@@ -1,0 +1,9 @@
+<UpdateInfo>
+	<txLogisticID>${txLogisticID}</txLogisticID>
+	<mailNo>${mailNo}</mailNo>
+	<clientID>${clientID}</clientID>
+	<logisticProviderID>${logisticProviderID}</logisticProviderID> 
+	<infoType>INSTRUCTION</infoType>
+	<infoContent>UPDATE</infoContent>
+	<remark>${remark}</remark> 
+</UpdateInfo>

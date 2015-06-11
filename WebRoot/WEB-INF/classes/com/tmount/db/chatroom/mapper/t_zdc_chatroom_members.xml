@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.chatroom.dao.ChatroomMapper" >
+  <resultMap id="BaseResultMap_members" type="com.tmount.db.chatroom.dto.TZdcChatroomMembers" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="chatroom_id" property="chatroomId" jdbcType="BIGINT" />
+    <result column="account_id" property="accountId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,chatroom_id,account_id
+  </sql>
+  <insert id="insert_chatroom_members" parameterType="com.tmount.db.chatroom.dto.TZdcChatroomMembers">
+    insert into t_zdc_chatroom_members (
+        chatroom_id,account_id)
+    values (
+        #{chatroomId,jdbcType=BIGINT},#{accountId,jdbcType=BIGINT}
+    )
+  </insert>
+
+<!-- 退出聊天室 -->
+  <delete id="delete_chatroom_members" parameterType="com.tmount.db.chatroom.dto.TZdcChatroomMembers">
+		delete from
+		t_zdc_chatroom_members
+		where
+		chatroom_id=#{chatroomId,jdbcType=BIGINT} and account_id=#{accountId,jdbcType=BIGINT}
+	</delete>
+	
+	<!-- 删除聊天室成员 -->
+	  <delete id="delete_chatroom_membersALL" parameterType="java.lang.Long">
+		delete from
+		t_zdc_chatroom_members
+		where
+		chatroom_id=#{chatroom_id,jdbcType=BIGINT}
+	</delete>
+</mapper>

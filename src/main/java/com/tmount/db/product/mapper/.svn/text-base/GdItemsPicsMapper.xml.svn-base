@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdItemsPicsMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdItemsPics" >
+    <id column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <id column="orders" property="orders" jdbcType="INTEGER" />
+    <result column="pic_id" property="picId" jdbcType="BIGINT" />
+    <result column="mark" property="mark" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="update_no" property="updateNo" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    items_id, orders, pic_id, mark, update_time, state, update_no
+  </sql>
+  <select id="selectByItemsId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_items_pics
+    where items_id = #{itemsId,jdbcType=BIGINT}
+  </select>
+</mapper>

@@ -1,0 +1,18 @@
+#Fri Sep 12 09:55:15 CST 2014
+eclipse.preferences.version=1
+encoding//WebRoot/index.jsp=UTF-8
+encoding//src/main/java/com/tmount/business/cloopen/restAPI/RestAPI.java=UTF-8
+encoding//src/main/java/com/tmount/business/cloopen/restAPI/RestExamples.java=UTF-8
+encoding//src/main/java/com/tmount/business/cloopen/util/CcopHttpClient.java=UTF-8
+encoding//src/main/java/com/tmount/business/cloopen/util/DateUtil.java=UTF-8
+encoding//src/main/java/com/tmount/business/cloopen/util/EncryptUtil.java=UTF-8
+encoding//src/main/java/com/tmount/business/cloopen/util/PropertiesUtil.java=UTF-8
+encoding//src/main/java/com/tmount/business/ptt/service/StringUtil.java=UTF-8
+encoding//src/main/java/com/tmount/business/util/image/ImageScalee.java=UTF-8
+encoding//src/main/java/com/tmount/config/SyDataTypeDicStatic.java=UTF-8
+encoding//src/main/java/com/tmount/db/order/dao/ReUserOrderMapper.java=UTF-8
+encoding//src/main/java/com/tmount/db/product/dao/GdPicResRelMapper.java=UTF-8
+encoding//src/main/java/com/tmount/system/DESUtils.java=UTF-8
+encoding//src/main/resource/appConfig.properties=UTF-8
+encoding//src/main/resource/merchantInfo.properties=utf-8
+encoding/<project>=UTF-8

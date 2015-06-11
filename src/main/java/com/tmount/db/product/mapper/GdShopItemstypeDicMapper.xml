@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmount.db.product.dao.GdShopItemstypeDicMapper">
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdShopItemstypeDic">
+    <id column="sitems_type" jdbcType="INTEGER" property="sitemsType" />
+    <result column="orders" jdbcType="INTEGER" property="orders" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="show_type" jdbcType="INTEGER" property="showType" />
+    <result column="data_type" jdbcType="INTEGER" property="dataType" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="has_child" jdbcType="CHAR" property="hasChild" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="type_desc" jdbcType="VARCHAR" property="typeDesc" />
+    <result column="type_descexp" jdbcType="VARCHAR" property="typeDescexp" />
+    <result column="small_pic" jdbcType="BIGINT" property="smallPic" />
+    <result column="big_pic" jdbcType="BIGINT" property="bigPic" />
+    <result column="state" jdbcType="CHAR" property="state" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_no" jdbcType="INTEGER" property="updateNo" />
+  </resultMap>
+  <resultMap type="com.tmount.db.product.vo.GdShopItemstypeDicExpl" id="gdShopItemstypeDicExplMap" extends="BaseResultMap">
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="gdShopItemstypeTreeMap" type="com.tmount.db.product.vo.GdItemstypeDicInfo">
+    <id column="sitems_type" jdbcType="INTEGER" property="itemsType" />
+    <result column="orders" jdbcType="INTEGER" property="orders" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="show_type" jdbcType="INTEGER" property="showType" />
+    <result column="data_type" jdbcType="INTEGER" property="dataType" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="has_child" jdbcType="CHAR" property="hasChild" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="type_desc" jdbcType="VARCHAR" property="typeDesc" />
+    <result column="type_descexp" jdbcType="VARCHAR" property="typeDescexp" />
+    <result column="small_pic" jdbcType="BIGINT" property="smallPic" />
+    <result column="big_pic" jdbcType="BIGINT" property="bigPic" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    sitems_type, orders, parent_id, company_id, show_type, data_type, shop_id, has_child, 
+    type_name, type_desc, type_descexp, small_pic, big_pic, state, update_time, update_no
+  </sql>
+  <select id="selectSelective" parameterType="com.tmount.db.product.dto.GdShopItemstypeDic" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gd_shop_itemstype_dic
+    <where>
+       <if test="shopId != null">
+         shop_id = #{shopId}
+       </if>
+       <if test="parentId != null">
+         parent_id = #{parentId}
+       </if>
+       <if test="dataType != null">
+         and data_type = #{dataType}
+       </if>
+    </where>
+  </select>
+
+  <!-- 选择商店的一级商品分类 -->
+  <select id="selectTopItemsTypeByShopId" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.GdShopItemstypeDic" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_shop_itemstype_dic
+    where parent_id = -1
+      and shop_id = #{shopId,jdbcType=INTEGER}
+      and data_type = #{dataType}
+  </select>
+
+  <!-- 选择商店下某一个商品分类 -->
+  <select id="selectByPKExpl" resultMap="gdShopItemstypeDicExplMap" parameterType="java.lang.Integer">
+    select 
+      a.sitems_type, a.orders, a.parent_id, a.company_id, a.show_type, a.data_type, a.shop_id, a.has_child, 
+      a.type_name, a.type_desc, a.type_descexp, a.small_pic, a.big_pic, a.state, a.update_time, a.update_no,
+      b.company_name, c.shop_name
+    from gd_shop_itemstype_dic a left join gd_company_dic b on a.company_id = b.company_id
+      left join gd_shop_info c on a.shop_id = c.shop_id
+    where a.sitems_type =#{sitemsType}
+    order by a.parent_id, a.orders
+  </select>
+
+  <!-- 选择某商店下的商品分类列表 -->
+  <select id="selectTypeList" resultMap="gdShopItemstypeDicExplMap" parameterType="com.tmount.db.product.dto.GdShopItemstypeDic">
+    select 
+      a.sitems_type, a.orders, a.parent_id, a.company_id, a.show_type, a.data_type, a.shop_id, a.has_child, 
+      a.type_name, a.type_desc, a.type_descexp, a.small_pic, a.big_pic, a.state, a.update_time, a.update_no,
+      b.company_name, c.shop_name
+    from gd_shop_itemstype_dic a left join gd_company_dic b on a.company_id = b.company_id
+      left join gd_shop_info c on a.shop_id = c.shop_id
+    <where>
+       a.company_id = #{companyId}
+       and a.data_type = #{dataType}
+       <if test="shopId != null and shopId != 0">
+         and a.shop_id = #{shopId}
+       </if>
+    </where>
+    order by a.parent_id, a.orders
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_shop_itemstype_dic
+    where sitems_type = #{sitemsType,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByshopId" parameterType="java.lang.Integer" >
+    delete from gd_shop_itemstype_dic
+    where shop_id = #{shopId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from gd_shop_itemstype_dic
+    where sitems_type = #{sitemsType,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.GdShopItemstypeDic" >
+    insert into gd_shop_itemstype_dic (sitems_type, orders, parent_id, 
+      company_id, show_type, data_type, 
+      shop_id, has_child, type_name, 
+      type_desc, type_descexp, small_pic, 
+      big_pic, state, update_time, 
+      update_no)
+    values (#{sitemsType,jdbcType=INTEGER}, #{orders,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, 
+      #{companyId,jdbcType=INTEGER}, #{showType,jdbcType=INTEGER}, #{dataType,jdbcType=INTEGER}, 
+      #{shopId,jdbcType=BIGINT}, #{hasChild,jdbcType=CHAR}, #{typeName,jdbcType=VARCHAR}, 
+      #{typeDesc,jdbcType=VARCHAR}, #{typeDescexp,jdbcType=VARCHAR}, #{smallPic,jdbcType=BIGINT}, 
+      #{bigPic,jdbcType=BIGINT}, #{state,jdbcType=CHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateNo,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.GdShopItemstypeDic" >
+    insert into gd_shop_itemstype_dic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sitemsType != null" >
+        sitems_type,
+      </if>
+      <if test="orders != null" >
+        orders,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="showType != null" >
+        show_type,
+      </if>
+      <if test="dataType != null" >
+        data_type,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="hasChild != null" >
+        has_child,
+      </if>
+      <if test="typeName != null" >
+        type_name,
+      </if>
+      <if test="typeDesc != null" >
+        type_desc,
+      </if>
+      <if test="typeDescexp != null" >
+        type_descexp,
+      </if>
+      <if test="smallPic != null" >
+        small_pic,
+      </if>
+      <if test="bigPic != null" >
+        big_pic,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateNo != null" >
+        update_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sitemsType != null" >
+        #{sitemsType,jdbcType=INTEGER},
+      </if>
+      <if test="orders != null" >
+        #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="showType != null" >
+        #{showType,jdbcType=INTEGER},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="hasChild != null" >
+        #{hasChild,jdbcType=CHAR},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeDesc != null" >
+        #{typeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="typeDescexp != null" >
+        #{typeDescexp,jdbcType=VARCHAR},
+      </if>
+      <if test="smallPic != null" >
+        #{smallPic,jdbcType=BIGINT},
+      </if>
+      <if test="bigPic != null" >
+        #{bigPic,jdbcType=BIGINT},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateNo != null" >
+        #{updateNo,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.GdShopItemstypeDic" >
+    update gd_shop_itemstype_dic
+    <set >
+      <if test="orders != null" >
+        orders = #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=INTEGER},
+      </if>
+      <if test="showType != null" >
+        show_type = #{showType,jdbcType=INTEGER},
+      </if>
+      <if test="dataType != null" >
+        data_type = #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="hasChild != null" >
+        has_child = #{hasChild,jdbcType=CHAR},
+      </if>
+      <if test="typeName != null" >
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeDesc != null" >
+        type_desc = #{typeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="typeDescexp != null" >
+        type_descexp = #{typeDescexp,jdbcType=VARCHAR},
+      </if>
+      <if test="smallPic != null" >
+        small_pic = #{smallPic,jdbcType=BIGINT},
+      </if>
+      <if test="bigPic != null" >
+        big_pic = #{bigPic,jdbcType=BIGINT},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateNo != null" >
+        update_no = #{updateNo,jdbcType=INTEGER},
+      </if>
+    </set>
+    where sitems_type = #{sitemsType,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.GdShopItemstypeDic" >
+    update gd_shop_itemstype_dic
+    set orders = #{orders,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      company_id = #{companyId,jdbcType=INTEGER},
+      show_type = #{showType,jdbcType=INTEGER},
+      data_type = #{dataType,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      has_child = #{hasChild,jdbcType=CHAR},
+      type_name = #{typeName,jdbcType=VARCHAR},
+      type_desc = #{typeDesc,jdbcType=VARCHAR},
+      type_descexp = #{typeDescexp,jdbcType=VARCHAR},
+      small_pic = #{smallPic,jdbcType=BIGINT},
+      big_pic = #{bigPic,jdbcType=BIGINT},
+      state = #{state,jdbcType=CHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_no = #{updateNo,jdbcType=INTEGER}
+    where sitems_type = #{sitemsType,jdbcType=INTEGER}
+  </update>
+  <!-- 选择某商店下的商品分类列表 -->
+  <select id="selectItemTypeListByShopId" resultMap="gdShopItemstypeTreeMap" parameterType="java.lang.Long">
+    select 
+      a.sitems_type, a.orders, a.parent_id, a.show_type, a.data_type, a.has_child, 
+      a.type_name, a.type_desc, a.small_pic, a.big_pic
+    from gd_shop_itemstype_dic a
+    where data_type=10 and 
+    a.shop_id = #{shopId,jdbcType=BIGINT}
+    order by a.parent_id, a.orders
+  </select>
+  <!-- 选择某商店下的商品归属分类单条商品 -->
+  <select id="selectItemTypeListByShopItemId" resultMap="gdShopItemstypeTreeMap" parameterType="com.tmount.db.product.dto.GdItemsInfo">
+    select 
+      a.sitems_type, a.orders, a.parent_id, a.show_type, a.data_type, a.has_child, 
+      a.type_name, a.type_desc, a.small_pic, a.big_pic
+    from gd_shop_itemstype_dic a,gd_shop_items_rel b
+    where a.shop_id=b.shop_id and a.sitems_type = b.sitems_type  and b.data_type=10 and 
+    a.shop_id = #{shopId,jdbcType=BIGINT}
+    and b.items_id = #{itemsId,jdbcType=BIGINT}
+    order by a.parent_id, a.orders
+  </select>
+  <!-- 选择某商店下的商品归属分类商品列表 -->
+  <select id="selectItemTypeListByShopItemIdList" resultMap="gdShopItemstypeTreeMap" parameterType="java.util.Map">
+    select a.sitems_type, a.orders,a.parent_id,a.show_type,a.data_type,a.has_child,a.type_name,
+    a.type_desc,a.small_pic,a.big_pic
+    from gd_shop_itemstype_dic a
+	where a.sitems_type in
+    (
+	    select c.sitems_type
+	    from gd_shop_itemstype_dic c,gd_shop_items_rel b
+	    where c.shop_id=b.shop_id and b.data_type=10 and 
+	    c.shop_id = #{shopId,jdbcType=BIGINT} and c.sitems_type = b.sitems_type
+	    and b.items_id in
+	    <foreach item="gdItemListInfoList" index="index" collection="gdItemListInfoList" open="("
+			separator="," close=")">
+			#{gdItemListInfoList.itemsId,jdbcType=BIGINT}
+		</foreach>
+		union
+		select d.parent_id
+	    from gd_shop_itemstype_dic d,gd_shop_items_rel e
+	    where d.shop_id=e.shop_id and e.data_type=10 and 
+	    d.shop_id = #{shopId,jdbcType=BIGINT} and d.sitems_type = e.sitems_type
+	    and e.items_id in
+	    <foreach item="gdItemListInfoListP" index="index" collection="gdItemListInfoListP" open="("
+			separator="," close=")">
+			#{gdItemListInfoListP.itemsId,jdbcType=BIGINT}
+		</foreach>
+    )
+    order by a.parent_id, a.orders
+  </select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.chatroom.dao.ChatroomMapper" >
+  <resultMap id="BaseResultMap_chatroom" type="com.tmount.db.chatroom.dto.TZdcChatroom" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="chatroom_name" property="chatroomName" jdbcType="VARCHAR" />
+    <result column="chatroom_pwd" property="chatroomPwd" jdbcType="VARCHAR" />
+    <result column="auto_dissolution" property="autoDissolution" jdbcType="INTEGER" />
+    <result column="auto_enter" property="autoEnter" jdbcType="INTEGER" />
+    <result column="chatroom_type" property="chatroomType" jdbcType="INTEGER" />
+    <result column="sound_pattern" property="soundPattern" jdbcType="INTEGER" />
+    <result column="chatroom_id" property="chatroomId" jdbcType="BIGINT" />
+    <result column="crt_owner" property="crtOwner" jdbcType="BIGINT" />
+    <result column="crt_date" property="crtDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List_chatroom" >
+    id,chatroom_name,chatroom_pwd,auto_dissolution,auto_enter,chatroom_type,sound_pattern,chatroom_id,crt_owner,crt_date
+  </sql>
+  <insert id="insert_chatroom" parameterType="com.tmount.db.chatroom.dto.TZdcChatroom">
+    insert into t_zdc_chatroom (
+        id,chatroom_name,chatroom_pwd,auto_dissolution,auto_enter,chatroom_type,sound_pattern,chatroom_id,crt_owner
+    ) values (
+        #{id,jdbcType=BIGINT},#{chatroomName,jdbcType=VARCHAR},#{chatroomPwd,jdbcType=VARCHAR},
+        #{autoDissolution,jdbcType=INTEGER},#{autoEnter,jdbcType=INTEGER},#{chatroomType,jdbcType=INTEGER},
+        #{soundPattern,jdbcType=INTEGER},#{chatroomId,jdbcType=BIGINT},#{crtOwner,jdbcType=BIGINT}
+    )
+  </insert>
+  <!-- 查询自己创建的聊天室 -->
+  <select id="select_chatroomByAccountID" resultMap="BaseResultMap_chatroom" parameterType="java.lang.Long">
+  SELECT 
+   a.*,(SELECT COUNT(1) FROM t_zdc_chatroom_members  WHERE 
+    a.`id`=t_zdc_chatroom_members.`chatroom_id`) icount,b.`account_name`,b.`nickname`
+      FROM t_zdc_chatroom a INNER JOIN `t_itov_account` b ON a.`crt_owner`=b.`account_id` WHERE a.`crt_owner`=#{AccountID,jdbcType=BIGINT}
+
+  </select>
+  
+    <!-- 查询好友创建的聊天室 -->
+  <select id="select_chatroomByAccountID1" resultMap="BaseResultMap_chatroom" parameterType="java.lang.Long">
+ SELECT 
+   a.*,(SELECT COUNT(1) FROM t_zdc_chatroom_members  WHERE 
+    a.`id`=t_zdc_chatroom_members.`chatroom_id`) icount,b.`account_name`,b.`nickname`
+      FROM t_zdc_chatroom a INNER JOIN `t_itov_account` b ON a.`crt_owner`=b.`account_id` WHERE a.`crt_owner` IN (
+ SELECT DISTINCT account_id FROM t_itov_friend WHERE friend_account_id=#{AccountID,jdbcType=BIGINT}    
+      )
+  </select>
+   <!-- 删除聊天室 -->
+  	<delete id="delete_chatroomALL" parameterType="java.lang.Long">
+		delete from
+		t_zdc_chatroom
+		where
+		id=#{id,jdbcType=BIGINT}
+	</delete>
+</mapper>

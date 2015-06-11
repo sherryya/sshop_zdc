@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.integral.dao.TItovIntegralIdsMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.integral.dto.TItovIntegralIds" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="newuser" property="newuser" jdbcType="TIMESTAMP" />
+    <result column="voip" property="voip" jdbcType="TIMESTAMP" />
+    <result column="ivr" property="ivr" jdbcType="TIMESTAMP" />
+    <result column="login" property="login" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,newuser,voip,ivr,login
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.integral.dto.TItovIntegralIds">
+    insert into t_itov_integral_ids (
+        newuser,voip,ivr,login)
+    values (
+        #{newuser,jdbcType=TIMESTAMP},#{voip,jdbcType=TIMESTAMP},
+        #{ivr,jdbcType=TIMESTAMP},#{login,jdbcType=TIMESTAMP}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.integral.dto.TItovIntegralIds">
+    update t_itov_integral_ids
+    <set>
+      <if test="newuser != null">
+        newuser = #{newuser,jdbcType=TIMESTAMP},
+      </if>
+      <if test="voip != null">
+        voip = #{voip,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ivr != null">
+        ivr = #{ivr,jdbcType=TIMESTAMP},
+      </if>
+      <if test="login != null">
+        login = #{login,jdbcType=TIMESTAMP}
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_itov_integral_ids
+  </select>
+</mapper>

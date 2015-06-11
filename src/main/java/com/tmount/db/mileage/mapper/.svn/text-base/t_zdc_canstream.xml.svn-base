@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.mileage.dao.ZdcCanstreamMapper">
+
+	<resultMap id="BaseResultMap" type="com.tmount.db.mileage.dto.ZdcCanstream">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="deviceuid" property="deviceuid" jdbcType="VARCHAR" />
+		<result column="ignition" property="ignition" jdbcType="INTEGER" />
+		<result column="reversing" property="reversing" jdbcType="INTEGER" />
+		<result column="brake" property="brake" jdbcType="INTEGER" />
+		<result column="light" property="light" jdbcType="INTEGER" />
+		<result column="tail_box_door" property="tailBoxDoor"
+			jdbcType="INTEGER" />
+		<result column="befort_cover" property="befortCover" jdbcType="INTEGER" />
+		<result column="steering_wheel_angle" property="steeringWheelAngle"
+			jdbcType="DECIMAL" />
+		<result column="cleaning_liquid" property="cleaningLiquid"
+			jdbcType="INTEGER" />
+		<result column="safety_belt" property="safetyBelt" jdbcType="INTEGER" />
+		<result column="engine_speed" property="engineSpeed" jdbcType="DECIMAL" />
+		<result column="instantaneous_velocity" property="instantaneousVelocity"
+			jdbcType="DECIMAL" />
+		<result column="speed" property="speed" jdbcType="DECIMAL" />
+		<result column="battery_voltage" property="batteryVoltage"
+			jdbcType="DECIMAL" />
+		<result column="outside_temperature" property="outsideTemperature"
+			jdbcType="DECIMAL" />
+		<result column="mileage" property="mileage" jdbcType="DECIMAL" />
+		<result column="residual_oil_consumption" property="residualOilConsumption"
+			jdbcType="DECIMAL" />
+		<result column="residual_oil_consumption_state" property="residualOilConsumptionState"
+			jdbcType="INTEGER" />
+		<result column="battery_voltage_state" property="batteryVoltageState"
+			jdbcType="INTEGER" />
+
+
+
+
+
+		<result column="left_Before_Door" property="left_Before_Door"
+			jdbcType="INTEGER" />
+		<result column="rigth_Before_Door" property="rigth_Before_Door"
+			jdbcType="INTEGER" />
+		<result column="left_After_Door" property="left_After_Door"
+			jdbcType="INTEGER" />
+		<result column="right_After_Door" property="right_After_Door"
+			jdbcType="INTEGER" />
+
+		<result column="left_before_window" property="left_before_window"
+			jdbcType="VARCHAR" />
+		<result column="rigth_before_window" property="rigth_before_window"
+			jdbcType="VARCHAR" />
+		<result column="left_after_window" property="left_after_window"
+			jdbcType="VARCHAR" />
+		<result column="right_after_window" property="right_after_window"
+			jdbcType="VARCHAR" />
+
+		<result column="left_before_PSI" property="left_before_PSI"
+			jdbcType="VARCHAR" />
+		<result column="rigth_before_PSI" property="rigth_before_PSI"
+			jdbcType="VARCHAR" />
+		<result column="left_after_PSI" property="left_after_PSI"
+			jdbcType="VARCHAR" />
+		<result column="right_after_PSI" property="right_after_PSI"
+			jdbcType="VARCHAR" />
+
+		<result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap id="BaseResultMap1" type="com.tmount.db.mileage.dto.ZdcCanstream">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="deviceuid" property="deviceuid" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+
+	<resultMap id="DoorResultMap" type="com.tmount.db.mileage.dto.ZdcCanstream">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="deviceuid" property="deviceuid" jdbcType="VARCHAR" />
+		<result column="leftBeforeDoor" property="Left_Before_Door"
+			jdbcType="INTEGER" />
+		<result column="rigthBeforeDoor" property="Rigth_Before_Door"
+			jdbcType="INTEGER" />
+		<result column="leftAfterDoor" property="Left_After_Door"
+			jdbcType="INTEGER" />
+		<result column="rightAfterDoor" property="Right_After_Door"
+			jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="WindowResultMap" type="com.tmount.db.mileage.dto.ZdcCanstream">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="deviceuid" property="deviceuid" jdbcType="VARCHAR" />
+		<result column="leftbeforewindow" property="Left_Before_Window"
+			jdbcType="VARCHAR" />
+		<result column="rigthbeforewindow" property="Rigth_Before_Window"
+			jdbcType="VARCHAR" />
+		<result column="leftafterwindow" property="Left_After_Window"
+			jdbcType="VARCHAR" />
+		<result column="rightafterwindow" property="Right_After_Window"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="PressureResultMap" type="com.tmount.db.mileage.dto.ZdcCanstream">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="deviceuid" property="deviceuid" jdbcType="VARCHAR" />
+		<result column="leftbeforePSI" property="Left_Before_PSI"
+			jdbcType="VARCHAR" />
+		<result column="rigthbeforePSI" property="Rigth_Before_PSI"
+			jdbcType="VARCHAR" />
+		<result column="leftafterPSI" property="Left_After_PSI"
+			jdbcType="VARCHAR" />
+		<result column="rightafterPSI" property="Right_After_PSI"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,deviceuid,ignition,reversing,brake,light,Left_Before_Door,Rigth_Before_Door,Left_After_Door,Right_After_Door,tail_box_door,befort_cover,steering_wheel_angle,cleaning_liquid,safety_belt,engine_speed,instantaneous_velocity,speed,battery_voltage,outside_temperature,mileage,residual_oil_consumption,residual_oil_consumption_state,battery_voltage_state,upload_time
+	</sql>
+	<!-- 车门,车窗,车胎压固定查询条件 -->
+	<sql id="Door_Column_List">id,deviceuid,Left_Before_Door,Rigth_Before_Door,Left_After_Door,Right_After_Door,upload_time
+	</sql>
+	<sql id="Window_Column_List">
+		id,deviceuid,Left_Before_Window,Rigth_Before_Window,Left_After_Window,Right_After_Window,upload_time
+	</sql>
+	<sql id="Pressure_Column_List">id,deviceuid,Left_Before_PSI,Rigth_Before_PSI,Left_After_PSI,Right_After_PSI,upload_time
+	</sql>
+
+	<!-- 车门(4) 车窗(4) 车胎压(4) -->
+	<select id="selectCarDoorState" resultMap="DoorResultMap"
+		parameterType="com.tmount.db.mileage.dto.ZdcCanstream">
+		select
+		<include refid="Door_Column_List" />
+		from t_zdc_canstream where
+		DeviceUID=#{deviceuid,jdbcType=VARCHAR}
+		order by Upload_Time asc
+	</select>
+	<select id="selectCarWindowState" resultMap="WindowResultMap"
+		parameterType="com.tmount.db.mileage.dto.ZdcCanstream">
+		select
+		<include refid="Window_Column_List" />
+		from t_zdc_canstream where DeviceUID=#{deviceuid,jdbcType=VARCHAR}
+		order by Upload_Time asc
+	</select>
+	<select id="selectCarPressureState" resultMap="PressureResultMap"
+		parameterType="com.tmount.db.mileage.dto.ZdcCanstream">
+		select
+		<include refid="Pressure_Column_List" />
+		from t_zdc_canstream where
+		DeviceUID=#{deviceuid,jdbcType=VARCHAR}
+		order by Upload_Time asc
+	</select>
+
+	<insert id="insert" parameterType="com.tmount.db.mileage.dto.ZdcCanstream">
+		insert into t_zdc_canstream (
+		deviceuid,ignition,reversing,brake,light,left_before_door,rigth_before_door,left_after_door,right_after_door,tail_box_door,befort_cover,steering_wheel_angle,cleaning_liquid,safety_belt,engine_speed,instantaneous_velocity,speed,battery_voltage,outside_temperature,mileage,residual_oil_consumption,residual_oil_consumption_state,battery_voltage_state,upload_time
+		)
+		values (
+		#{deviceuid,jdbcType=VARCHAR},#{ignition,jdbcType=INTEGER},
+		#{reversing,jdbcType=INTEGER},#{brake,jdbcType=INTEGER},#{light,jdbcType=INTEGER},
+		#{leftBeforeDoor,jdbcType=INTEGER},#{rigthBeforeDoor,jdbcType=INTEGER},#{leftAfterDoor,jdbcType=INTEGER},
+		#{rightAfterDoor,jdbcType=INTEGER},#{tailBoxDoor,jdbcType=INTEGER},#{befortCover,jdbcType=INTEGER},
+		#{steeringWheelAngle,jdbcType=DECIMAL},#{cleaningLiquid,jdbcType=INTEGER},#{safetyBelt,jdbcType=INTEGER},
+		#{engineSpeed,jdbcType=DECIMAL},#{instantaneousVelocity,jdbcType=DECIMAL},#{speed,jdbcType=DECIMAL},
+		#{batteryVoltage,jdbcType=DECIMAL},#{outsideTemperature,jdbcType=DECIMAL},#{mileage,jdbcType=DECIMAL},
+		#{residualOilConsumption,jdbcType=DECIMAL},#{residualOilConsumptionState,jdbcType=INTEGER},#{batteryVoltageState,jdbcType=INTEGER},
+		#{uploadTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from t_zdc_canstream
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_zdc_canstream
+	</select>
+
+
+	<select id="selectForID1" resultMap="BaseResultMap1"
+		parameterType="com.tmount.db.mileage.dto.ZdcCanstream">
+		select id,deviceuid from t_zdc_canstream where
+		DeviceUID=#{deviceuid,jdbcType=VARCHAR} and Engine_Speed=0 and
+		Mileage_Finish=0 order by Upload_Time asc limit 1
+	</select>
+
+	<select id="selectForID2" resultMap="BaseResultMap1"
+		parameterType="com.tmount.db.mileage.dto.ZdcCanstream">
+		select id,deviceuid from t_zdc_canstream where
+		DeviceUID=#{deviceuid,jdbcType=VARCHAR} and Engine_Speed=0 and
+		Mileage_Finish=0 and id>#{id,jdbcType=BIGINT} order by Upload_Time asc
+		limit 1
+	</select>
+
+	<select id="selectForID3" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.mileage.dto.ZdcCanstream">
+		select * from t_zdc_canstream where 
+   <![CDATA[ id>=#{id,jdbcType=BIGINT} and id<#{id1,jdbcType=BIGINT} ]]>
+		and deviceuid=#{deviceuid,jdbcType=VARCHAR} order by Upload_Time asc
+	</select>
+
+	<update id="updateMileFlag" parameterType="java.lang.Long">
+		update t_zdc_canstream
+		set Mileage_Finish = 1 where id = #{id}
+	</update>
+	<!-- 查询最新的can盒的数据 -->
+	<select id="selectCanNew" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_zdc_canstream where deviceuid = #{deviceuid} AND  IFNULL(Mileage,0) >0 AND IFNULL(Residual_Oil_Consumption,0)>0 order by
+		Upload_Time desc limit 1
+	</select>
+</mapper>

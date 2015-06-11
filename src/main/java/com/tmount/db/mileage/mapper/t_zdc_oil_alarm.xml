@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.mileage.dao.TZdcOilAlarmMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.mileage.dto.TZdcOilAlarm" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="terminal_imei" property="terminalImei" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP" />
+    <result column="oil_value" property="oilValue" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,terminal_imei,status,upload_time,oil_value
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.mileage.dto.TZdcOilAlarm">
+    insert into t_zdc_oil_alarm (
+        terminal_imei,status,oil_value)
+    values (
+       #{terminalImei,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},
+       #{oilValue,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.mileage.dto.TZdcOilAlarm">
+    update t_zdc_oil_alarm
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="terminalImei != null">
+        terminal_imei = #{terminalImei,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadTime != null">
+        upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="oilValue != null">
+        oil_value = #{oilValue,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_zdc_oil_alarm
+     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select 
+    <include refid="Base_Column_List" />
+      from t_zdc_oil_alarm
+     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <!-- 根据 -->
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.tmount.db.mileage.dto.TZdcOilAlarm">
+    select <include refid="Base_Column_List" />
+    from  t_zdc_oil_alarm t where t.`terminal_imei`=#{terminalImei,jdbcType=VARCHAR} and t.oil_value=#{status,jdbcType=VARCHAR}
+     ORDER BY t.`upload_time` DESC LIMIT 1
+  </select>
+</mapper>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.advertise.dao.AdShowsiteTemplateMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.advertise.dto.AdShowsiteTemplate" >
+    <id column="showsite_code" property="showsiteCode" jdbcType="INTEGER" />
+    <result column="show_template_id" property="showTemplateId" jdbcType="INTEGER" />
+    <result column="show_line_axis" property="showLineAxis" jdbcType="DOUBLE" />
+    <result column="show_row_axis" property="showRowAxis" jdbcType="DOUBLE" />
+    <result column="showsite_width" property="showsiteWidth" jdbcType="DOUBLE" />
+    <result column="showsite_high" property="showsiteHigh" jdbcType="DOUBLE" />
+    <result column="showsite_pic_width" property="showsitePicWidth" jdbcType="DOUBLE" />
+    <result column="showsite_pic_high" property="showsitePicHigh" jdbcType="DOUBLE" />
+    <result column="showsite_combine_def" property="showsiteCombineDef" jdbcType="VARCHAR" />
+    <result column="showsite_show_type" property="showsiteShowType" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    showsite_code, show_template_id, show_line_axis, show_row_axis, showsite_width, showsite_high, 
+    showsite_pic_width, showsite_pic_high, showsite_combine_def, showsite_show_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ad_showsite_template
+    where showsite_code = #{showsiteCode,jdbcType=INTEGER}
+  </select>
+  <select id="selectByShowTemplateId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ad_showsite_template
+    where show_template_id = #{showTemplateId,jdbcType=INTEGER}
+  </select>  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ad_showsite_template
+    where showsite_code = #{showsiteCode,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.advertise.dto.AdShowsiteTemplate" >
+    insert into ad_showsite_template (showsite_code, show_template_id, show_line_axis, 
+      show_row_axis, showsite_width, showsite_high, 
+      showsite_pic_width, showsite_pic_high, showsite_combine_def, 
+      showsite_show_type)
+    values (#{showsiteCode,jdbcType=INTEGER}, #{showTemplateId,jdbcType=INTEGER}, #{showLineAxis,jdbcType=DOUBLE}, 
+      #{showRowAxis,jdbcType=DOUBLE}, #{showsiteWidth,jdbcType=DOUBLE}, #{showsiteHigh,jdbcType=DOUBLE}, 
+      #{showsitePicWidth,jdbcType=DOUBLE}, #{showsitePicHigh,jdbcType=DOUBLE}, #{showsiteCombineDef,jdbcType=VARCHAR}, 
+      #{showsiteShowType,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.advertise.dto.AdShowsiteTemplate" >
+    insert into ad_showsite_template
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="showsiteCode != null" >
+        showsite_code,
+      </if>
+      <if test="showTemplateId != null" >
+        show_template_id,
+      </if>
+      <if test="showLineAxis != null" >
+        show_line_axis,
+      </if>
+      <if test="showRowAxis != null" >
+        show_row_axis,
+      </if>
+      <if test="showsiteWidth != null" >
+        showsite_width,
+      </if>
+      <if test="showsiteHigh != null" >
+        showsite_high,
+      </if>
+      <if test="showsitePicWidth != null" >
+        showsite_pic_width,
+      </if>
+      <if test="showsitePicHigh != null" >
+        showsite_pic_high,
+      </if>
+      <if test="showsiteCombineDef != null" >
+        showsite_combine_def,
+      </if>
+      <if test="showsiteShowType != null" >
+        showsite_show_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="showsiteCode != null" >
+        #{showsiteCode,jdbcType=INTEGER},
+      </if>
+      <if test="showTemplateId != null" >
+        #{showTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="showLineAxis != null" >
+        #{showLineAxis,jdbcType=DOUBLE},
+      </if>
+      <if test="showRowAxis != null" >
+        #{showRowAxis,jdbcType=DOUBLE},
+      </if>
+      <if test="showsiteWidth != null" >
+        #{showsiteWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="showsiteHigh != null" >
+        #{showsiteHigh,jdbcType=DOUBLE},
+      </if>
+      <if test="showsitePicWidth != null" >
+        #{showsitePicWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="showsitePicHigh != null" >
+        #{showsitePicHigh,jdbcType=DOUBLE},
+      </if>
+      <if test="showsiteCombineDef != null" >
+        #{showsiteCombineDef,jdbcType=VARCHAR},
+      </if>
+      <if test="showsiteShowType != null" >
+        #{showsiteShowType,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.advertise.dto.AdShowsiteTemplate" >
+    update ad_showsite_template
+    <set >
+      <if test="showTemplateId != null" >
+        show_template_id = #{showTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="showLineAxis != null" >
+        show_line_axis = #{showLineAxis,jdbcType=DOUBLE},
+      </if>
+      <if test="showRowAxis != null" >
+        show_row_axis = #{showRowAxis,jdbcType=DOUBLE},
+      </if>
+      <if test="showsiteWidth != null" >
+        showsite_width = #{showsiteWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="showsiteHigh != null" >
+        showsite_high = #{showsiteHigh,jdbcType=DOUBLE},
+      </if>
+      <if test="showsitePicWidth != null" >
+        showsite_pic_width = #{showsitePicWidth,jdbcType=DOUBLE},
+      </if>
+      <if test="showsitePicHigh != null" >
+        showsite_pic_high = #{showsitePicHigh,jdbcType=DOUBLE},
+      </if>
+      <if test="showsiteCombineDef != null" >
+        showsite_combine_def = #{showsiteCombineDef,jdbcType=VARCHAR},
+      </if>
+      <if test="showsiteShowType != null" >
+        showsite_show_type = #{showsiteShowType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where showsite_code = #{showsiteCode,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.advertise.dto.AdShowsiteTemplate" >
+    update ad_showsite_template
+    set show_template_id = #{showTemplateId,jdbcType=INTEGER},
+      show_line_axis = #{showLineAxis,jdbcType=DOUBLE},
+      show_row_axis = #{showRowAxis,jdbcType=DOUBLE},
+      showsite_width = #{showsiteWidth,jdbcType=DOUBLE},
+      showsite_high = #{showsiteHigh,jdbcType=DOUBLE},
+      showsite_pic_width = #{showsitePicWidth,jdbcType=DOUBLE},
+      showsite_pic_high = #{showsitePicHigh,jdbcType=DOUBLE},
+      showsite_combine_def = #{showsiteCombineDef,jdbcType=VARCHAR},
+      showsite_show_type = #{showsiteShowType,jdbcType=INTEGER}
+    where showsite_code = #{showsiteCode,jdbcType=INTEGER}
+  </update>
+</mapper>

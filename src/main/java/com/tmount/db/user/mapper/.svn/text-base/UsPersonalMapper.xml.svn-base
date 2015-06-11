@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.user.dao.UsPersonalMapper">	
+
+<!--   <resultMap id="BaseResultMap" type="com.tmount.db.user.dto.UsPersonal" >
+
+    <id column="personal_id" property="personal_id" jdbcType="BIGINT" />
+    <result column="account_id" property="account_id" jdbcType="BIGINT" />
+    <result column="personal_real_name" property="personal_real_name" jdbcType="VARCHAR" />
+   <result column="personal_tel" property="personal_tel" jdbcType="VARCHAR" />
+  </resultMap> -->
+    	
+	<insert id="insert_person" parameterType="com.tmount.db.user.dto.UsPersonal">
+		INSERT INTO t_itov_personal(account_id,personal_real_name,personal_tel,personal_sex,personal_email)
+		VALUES (#{account_id,jdbcType=BIGINT},#{personal_real_name,jdbcType=VARCHAR},#{personal_tel,jdbcType=VARCHAR},#{personal_sex,jdbcType=VARCHAR},#{personal_email,jdbcType=VARCHAR})
+	</insert>
+</mapper>

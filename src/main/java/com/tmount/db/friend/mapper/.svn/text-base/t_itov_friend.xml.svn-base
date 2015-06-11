@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.friend.dao.TItovFriendMapper">
+	<resultMap id="BaseResultMap"
+		type="com.tmount.db.friend.dto.TItovFriend">
+		<result column="account_id" property="accountId"
+			jdbcType="BIGINT" />
+		<result column="friend_account_id" property="friendAccountId"
+			jdbcType="BIGINT" />
+		<result column="op_time" property="opTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		account_id,friend_account_id,op_time
+	</sql>
+	<insert id="insert"
+		parameterType="com.tmount.db.friend.dto.TItovFriend">
+		insert into t_itov_friend (
+		account_id,friend_account_id,op_time) values (
+		#{accountId,jdbcType=BIGINT},#{friendAccountId,jdbcType=BIGINT},now()
+		)
+	</insert>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_itov_friend
+	</select>
+
+
+	<select id="getFriendMessageByImei" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+<!-- 		SELECT friendmessage.friend_account_id accountId,
+		accountmessage.nickname nickname, subaccount.voipAccount
+		voipAccount, accountmessage.account_name phone,
+		personal.personal_sex FROM t_itov_friend friendmessage,
+		t_itov_account accountmessage, t_itov_ptt_subaccount subaccount,
+		t_itov_personal personal WHERE friendmessage.friend_account_id =
+		accountmessage.account_id AND subaccount.account_id =
+		friendmessage.friend_account_id AND personal.account_id
+		=accountmessage.account_id AND friendmessage.account_id =#{accountId,jdbcType=BIGINT} -->
+      <!--   SELECT  friendmessage.friend_account_id accountId,
+		IFNULL(accountmessage.nickname,'未设置昵称') AS nickname, subaccount.voipAccount
+		voipAccount, accountmessage.account_name phone,
+		personal.personal_sex, subaccount.`voip_status`  FROM t_itov_friend friendmessage,
+		t_itov_account accountmessage, t_itov_ptt_subaccount subaccount,
+		t_itov_personal personal WHERE friendmessage.friend_account_id =
+		accountmessage.account_id AND subaccount.account_id =
+		friendmessage.friend_account_id AND personal.account_id
+		=accountmessage.account_id AND friendmessage.account_id =#{accountId,jdbcType=BIGINT}
+		ORDER BY subaccount.`voip_status` DESC		-->
+		
+		
+		
+		
+<!-- 		 SELECT  friendmessage.friend_account_id accountId,
+		IFNULL(accountmessage.nickname,'未设置昵称') AS nickname, subaccount.voipAccount
+		voipAccount, accountmessage.account_name phone,
+		personal.personal_sex, subaccount.`voip_status` ,IFNULL(accountmessage.pic_name,'') AS pic_name  FROM t_itov_friend friendmessage,
+		t_itov_account accountmessage, t_itov_ptt_subaccount subaccount,
+		t_itov_personal personal,`t_itov_user` us,`t_itov_terminal` terminal WHERE friendmessage.friend_account_id =
+		accountmessage.account_id AND subaccount.account_id =
+		friendmessage.friend_account_id AND personal.account_id
+		=accountmessage.account_id AND terminal.`user_id` = us.`user_id` AND us.`account_id`=friendmessage.`account_id` AND terminal.`terminal_imei` = #{terminal_imei}
+		ORDER BY subaccount.`voip_status` DESC	 -->
+		
+	
+	
+SELECT accountmessage.`account_id` accountId,
+IFNULL(accountmessage.nickname,'未设置昵称') AS nickname, subaccount.voipAccount
+		voipAccount, accountmessage.account_name phone,
+		personal.personal_sex, subaccount.`voip_status` ,IFNULL(accountmessage.pic_name,'') AS pic_name  	
+FROM  t_itov_ptt_subaccount subaccount
+INNER JOIN  t_itov_account  accountmessage ON subaccount.`account_id`=accountmessage.`account_id`
+		INNER JOIN t_itov_personal personal ON personal.`account_id`=accountmessage.`account_id`
+		WHERE accountmessage.`account_id` IN (
+SELECT t_itov_friend.`friend_account_id`
+FROM t_itov_friend   INNER JOIN t_itov_account 
+ON t_itov_friend.`account_id`=t_itov_account.`account_id`
+WHERE   t_itov_account.`account_name`= #{terminal_imei})
+ORDER BY subaccount.`voip_status` DESC
+	</select>
+	<select id="getFriendMessage" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+<!-- 		SELECT friendmessage.friend_account_id accountId,
+		accountmessage.nickname nickname, subaccount.voipAccount
+		voipAccount, accountmessage.account_name phone,
+		personal.personal_sex FROM t_itov_friend friendmessage,
+		t_itov_account accountmessage, t_itov_ptt_subaccount subaccount,
+		t_itov_personal personal WHERE friendmessage.friend_account_id =
+		accountmessage.account_id AND subaccount.account_id =
+		friendmessage.friend_account_id AND personal.account_id
+		=accountmessage.account_id AND friendmessage.account_id =#{accountId,jdbcType=BIGINT} -->
+        SELECT  friendmessage.friend_account_id accountId,
+		IFNULL(accountmessage.nickname,'未设置昵称') AS nickname, subaccount.voipAccount
+		voipAccount, accountmessage.account_name phone,
+		personal.personal_sex, subaccount.`voip_status`,IFNULL(accountmessage.pic_name,'') AS pic_name   FROM t_itov_friend friendmessage,
+		t_itov_account accountmessage, t_itov_ptt_subaccount subaccount,
+		t_itov_personal personal WHERE friendmessage.friend_account_id =
+		accountmessage.account_id AND subaccount.account_id =
+		friendmessage.friend_account_id AND personal.account_id
+		=accountmessage.account_id AND friendmessage.account_id =#{accountId,jdbcType=BIGINT}
+		ORDER BY subaccount.`voip_status` DESC	
+		
+	</select>
+
+	<select id="getFriendMessageByAll" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.friend.dto.TItovFriend">
+		select
+		<include refid="Base_Column_List" />
+		from t_itov_friend where account_id =
+		#{accountId,jdbcType=BIGINT} and friend_account_id =
+		#{friendAccountId,jdbcType=BIGINT}
+	</select>
+
+	<delete id="delete"
+		parameterType="com.tmount.db.friend.dto.TItovFriend">
+		delete from t_itov_friend where account_id =
+		#{accountId,jdbcType=BIGINT} and friend_account_id =
+		#{friendAccountId,jdbcType=BIGINT}
+	</delete>
+
+
+</mapper>

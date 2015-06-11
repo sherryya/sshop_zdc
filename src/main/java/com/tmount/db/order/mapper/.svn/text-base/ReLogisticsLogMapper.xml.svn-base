@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.ReLogisticsLogMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.ReLogisticsLog" >
+    <id column="logistics_login_id" property="logisticsLoginId" jdbcType="BIGINT" />
+    <result column="tx_logistics_id" property="txLogisticsId" jdbcType="VARCHAR" />
+    <result column="logistics_no" property="logisticsNo" jdbcType="VARCHAR" />
+    <result column="info_type" property="infoType" jdbcType="VARCHAR" />
+    <result column="info_name" property="infoName" jdbcType="VARCHAR" />
+    <result column="info_content" property="infoContent" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="op_name" property="opName" jdbcType="VARCHAR" />
+    <result column="accept_time" property="acceptTime" jdbcType="TIMESTAMP" />
+    <result column="current_city" property="currentCity" jdbcType="VARCHAR" />
+    <result column="next_city" property="nextCity" jdbcType="VARCHAR" />
+    <result column="facility" property="facility" jdbcType="VARCHAR" />
+    <result column="contact_info" property="contactInfo" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="tracking_info" property="trackingInfo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    logistics_login_id, tx_logistics_id, logistics_no, info_type, info_name, info_content, 
+    remark, op_name, accept_time, current_city, next_city, facility, contact_info, weight, 
+    tracking_info
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from re_logistics_log
+    where logistics_login_id = #{logisticsLoginId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from re_logistics_log
+    where logistics_login_id = #{logisticsLoginId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReLogisticsLog" >
+    insert into re_logistics_log (logistics_login_id, tx_logistics_id, logistics_no, 
+      info_type, info_name, info_content, 
+      remark, op_name, accept_time, 
+      current_city, next_city, facility, 
+      contact_info, weight, tracking_info
+      )
+    values (#{logisticsLoginId,jdbcType=BIGINT}, #{txLogisticsId,jdbcType=VARCHAR}, #{logisticsNo,jdbcType=VARCHAR}, 
+      #{infoType,jdbcType=VARCHAR}, #{infoName,jdbcType=VARCHAR}, #{infoContent,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{opName,jdbcType=VARCHAR}, #{acceptTime,jdbcType=TIMESTAMP}, 
+      #{currentCity,jdbcType=VARCHAR}, #{nextCity,jdbcType=VARCHAR}, #{facility,jdbcType=VARCHAR}, 
+      #{contactInfo,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, #{trackingInfo,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReLogisticsLog" >
+    insert into re_logistics_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="logisticsLoginId != null" >
+        logistics_login_id,
+      </if>
+      <if test="txLogisticsId != null" >
+        tx_logistics_id,
+      </if>
+      <if test="logisticsNo != null" >
+        logistics_no,
+      </if>
+      <if test="infoType != null" >
+        info_type,
+      </if>
+      <if test="infoName != null" >
+        info_name,
+      </if>
+      <if test="infoContent != null" >
+        info_content,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="opName != null" >
+        op_name,
+      </if>
+      <if test="acceptTime != null" >
+        accept_time,
+      </if>
+      <if test="currentCity != null" >
+        current_city,
+      </if>
+      <if test="nextCity != null" >
+        next_city,
+      </if>
+      <if test="facility != null" >
+        facility,
+      </if>
+      <if test="contactInfo != null" >
+        contact_info,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="trackingInfo != null" >
+        tracking_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="logisticsLoginId != null" >
+        #{logisticsLoginId,jdbcType=BIGINT},
+      </if>
+      <if test="txLogisticsId != null" >
+        #{txLogisticsId,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsNo != null" >
+        #{logisticsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="infoType != null" >
+        #{infoType,jdbcType=VARCHAR},
+      </if>
+      <if test="infoName != null" >
+        #{infoName,jdbcType=VARCHAR},
+      </if>
+      <if test="infoContent != null" >
+        #{infoContent,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="opName != null" >
+        #{opName,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptTime != null" >
+        #{acceptTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="currentCity != null" >
+        #{currentCity,jdbcType=VARCHAR},
+      </if>
+      <if test="nextCity != null" >
+        #{nextCity,jdbcType=VARCHAR},
+      </if>
+      <if test="facility != null" >
+        #{facility,jdbcType=VARCHAR},
+      </if>
+      <if test="contactInfo != null" >
+        #{contactInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="trackingInfo != null" >
+        #{trackingInfo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.ReLogisticsLog" >
+    update re_logistics_log
+    <set >
+      <if test="txLogisticsId != null" >
+        tx_logistics_id = #{txLogisticsId,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsNo != null" >
+        logistics_no = #{logisticsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="infoType != null" >
+        info_type = #{infoType,jdbcType=VARCHAR},
+      </if>
+      <if test="infoName != null" >
+        info_name = #{infoName,jdbcType=VARCHAR},
+      </if>
+      <if test="infoContent != null" >
+        info_content = #{infoContent,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="opName != null" >
+        op_name = #{opName,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptTime != null" >
+        accept_time = #{acceptTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="currentCity != null" >
+        current_city = #{currentCity,jdbcType=VARCHAR},
+      </if>
+      <if test="nextCity != null" >
+        next_city = #{nextCity,jdbcType=VARCHAR},
+      </if>
+      <if test="facility != null" >
+        facility = #{facility,jdbcType=VARCHAR},
+      </if>
+      <if test="contactInfo != null" >
+        contact_info = #{contactInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="trackingInfo != null" >
+        tracking_info = #{trackingInfo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where logistics_login_id = #{logisticsLoginId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.ReLogisticsLog" >
+    update re_logistics_log
+    set tx_logistics_id = #{txLogisticsId,jdbcType=VARCHAR},
+      logistics_no = #{logisticsNo,jdbcType=VARCHAR},
+      info_type = #{infoType,jdbcType=VARCHAR},
+      info_name = #{infoName,jdbcType=VARCHAR},
+      info_content = #{infoContent,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      op_name = #{opName,jdbcType=VARCHAR},
+      accept_time = #{acceptTime,jdbcType=TIMESTAMP},
+      current_city = #{currentCity,jdbcType=VARCHAR},
+      next_city = #{nextCity,jdbcType=VARCHAR},
+      facility = #{facility,jdbcType=VARCHAR},
+      contact_info = #{contactInfo,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DOUBLE},
+      tracking_info = #{trackingInfo,jdbcType=VARCHAR}
+    where logistics_login_id = #{logisticsLoginId,jdbcType=BIGINT}
+  </update>
+</mapper>

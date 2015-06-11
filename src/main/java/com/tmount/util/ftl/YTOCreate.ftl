@@ -1,0 +1,47 @@
+<RequestOrder>	
+	<clientID>${clientID}</clientID>
+	<logisticProviderID>${logisticProviderID}</logisticProviderID>
+	<customerId>${customerId}</customerId>
+	<txLogisticID>${txLogisticID}</txLogisticID>
+	<tradeNo>${tradeNo}</tradeNo>
+	<mailNo>${mailNo}</mailNo>
+	<totalServiceFee>${totalServiceFee?c}</totalServiceFee>
+	<codSplitFee>${codSplitFee?c}</codSplitFee>
+	<orderType>${orderType}</orderType>
+	<serviceType>${serviceType}</serviceType>
+	<flag>${flag}</flag>
+	<sender>
+		<name>${senderUserName}</name>
+		<postCode>${senderPostCode}</postCode>
+		<phone>${senderPhone}</phone>
+		<mobile>${senderMobile}</mobile>
+		<prov>${senderPostProv}</prov>
+		<city>${senderPostCity},${senderPostArea}</city>
+		<address>${senderAddress}</address>
+	</sender>
+	<receiver>
+		<name>${receiverUserName}</name>
+		<postCode>${receiverPostCode}</postCode>
+		<phone>${receiverPhone}</phone>
+		<mobile>${receiverMobile}</mobile>
+		<prov>${receiverPostProv}</prov>
+		<city>${receiverPostCity},${receiverPostArea}</city>
+		<address>${receiverAddress}</address>
+	</receiver>
+	<sendStartTime>${sendStartTime}</sendStartTime>
+	<sendEndTime>${sendEndTime}</sendEndTime>
+	<goodsValue>${goodsValue?c}</goodsValue>
+	<itemsValue>${itemsValue}</itemsValue>
+	<items>
+		<#list itemsList as item>
+		<item>
+			<itemName>${item.itemsName}</itemName>
+			<number>${item.acount}</number>
+			<itemValue>${item.price}</itemValue>
+		</item>
+		</#list>
+	</items>
+	<insuranceValue>${insuranceValue?c}</insuranceValue>
+	<special>${special}</special>
+	<remark>${remark}</remark>
+</RequestOrder>

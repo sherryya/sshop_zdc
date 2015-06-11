@@ -1,0 +1,31 @@
+<orderFilterService>
+	<orderid>${orderId}</orderid>
+	<j_custid>${custId}</j_custid>
+	<j_custtag>${custTag}</j_custtag>
+	<j_company>${companyName}</j_company>
+	<j_contact>${senderUserName}</j_contact>
+	<j_postcode>${senderPostCode}</j_postcode>
+	<j_tel>${senderPhone}</j_tel>
+	<j_mobile>${senderMobile}</j_mobile>
+	<j_province>${senderPostProv}</j_province>
+	<j_city>${senderPostCity}</j_city>
+	<j_county>${senderPostArea}</j_county>
+	<j_address>${senderAddress}</j_address>
+	<d_company></d_company>
+	<d_contact>${receiverUserName}</d_contact>
+	<d_postcode>${receiverPostCode}</d_postcode>
+	<d_tel>${receiverPhone}</d_tel>
+	<d_mobile>${receiverMobile}</d_mobile>
+	<d_province>${receiverPostProv}</d_province>
+	<d_city>${receiverPostCity}</d_cityid>
+	<d_county>${receiverPostArea}</d_county>
+	<d_address>${receiverAddress}</d_address>
+	<cargo>${cargo}</cargo>
+	<parcel_quantity>${parcelQuantity}</parcel_quantity>
+	<cargo_total_weight>${cargoTotalWeight}</cargo_total_weight>
+	<is_cod>${isCod}</is_cod>
+	<cod_amount>${codAmount}</cod_amount>
+	<is_insurance>${isInsurance}</is_insurance>
+	<insurance_amount>${insuranceAmount}</insurance_amount>
+	<checkword>${checkWord}</checkword>
+</orderFilterService>

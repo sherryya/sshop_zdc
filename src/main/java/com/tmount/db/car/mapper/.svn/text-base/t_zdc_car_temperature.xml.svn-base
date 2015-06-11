@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.car.dao.TZdcCarTemperatureMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.car.dto.TZdcCarTemperature" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="deviceid" property="deviceid" jdbcType="VARCHAR" />
+    <result column="temperature" property="temperature" jdbcType="DOUBLE" />
+    <result column="last_time" property="lastTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,deviceid,temperature,last_time
+  </sql>
+  
+  <insert id="insert" parameterType="com.tmount.db.car.dto.TZdcCarTemperature">
+    insert into t_zdc_car_temperature (
+        deviceid,temperature,last_time)
+    values (
+        #{deviceid,jdbcType=VARCHAR},#{temperature,jdbcType=DOUBLE},
+        #{lastTime,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.car.dto.TZdcCarTemperature">
+    update t_zdc_car_temperature
+    <set>
+      <if test="temperature != null">
+        temperature = #{temperature,jdbcType=DOUBLE},
+      </if>
+      <if test="lastTime != null">
+        last_time = #{lastTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where  deviceid = #{deviceid,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.car.dto.TZdcCarTemperature">
+     SELECT 
+      <include refid="Base_Column_List" />
+      FROM t_zdc_car_temperature
+     WHERE deviceid = #{deviceid,jdbcType=VARCHAR}  ORDER BY id DESC LIMIT 1
+  </select>
+  
+</mapper>

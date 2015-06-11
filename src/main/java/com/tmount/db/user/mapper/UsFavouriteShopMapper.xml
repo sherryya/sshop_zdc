@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.user.dao.UsFavouriteShopMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.user.dto.UsFavouriteShop" >
+    <id column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_tag_id" property="userTagId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="usFavouriteShopDetailMap" type="com.tmount.db.user.vo.UsFavouriteShopDetail" >
+    <id column="shop_id" property="shopId" jdbcType="BIGINT" />
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_tag_id" property="userTagId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="scan_pic" property="scanPic" jdbcType="BIGINT" />  
+	<result column="city_code" property="cityCode" jdbcType="INTEGER" /> 
+	<result column="show_type" property="showType" jdbcType="INTEGER" /> 
+	<result column="company_id" property="companyId" jdbcType="INTEGER" /> 
+	<result column="name_spr" property="nameSpr" jdbcType="VARCHAR" /> 
+	<result column="shop_intro" property="shopIntro" jdbcType="VARCHAR" /> 
+	<result column="option_x" property="optionX" jdbcType="DOUBLE" />  
+	<result column="option_y" property="optionY" jdbcType="DOUBLE" />  
+	<result column="big_pic" property="bigPic" jdbcType="BIGINT" />  
+	<result column="http_url" property="httpUrl" jdbcType="VARCHAR" /> 
+	<result column="web_url" property="webUrl" jdbcType="VARCHAR" /> 
+	<result column="state" property="state" jdbcType="VARCHAR" /> 
+	<result column="shop_level" property="shopLevel" jdbcType="INTEGER" /> 
+	<result column="level_good" property="levelGood" jdbcType="INTEGER" /> 
+	<result column="level_nomer" property="levelNomer" jdbcType="INTEGER" /> 
+	<result column="level_bad" property="levelBad" jdbcType="INTEGER" /> 
+  </resultMap>
+  <sql id="Base_Column_List" >
+    shop_id, user_id, user_tag_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.user.dto.UsFavouriteShopKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from us_favourite_shop
+    where shop_id = #{shopId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <select id="selectCountBySelective"  resultType="java.lang.Integer" parameterType="com.tmount.db.user.vo.UsFavouriteShopInput" >
+    select 
+    count(1)
+    from us_favourite_shop a,gd_shop_info b 
+    where a.shop_id =  b.shop_id
+      <if test="shopId != null" >
+      and a.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="userId != null" >
+      and a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+   </select>
+   <select id="selectBySelective" resultMap="usFavouriteShopDetailMap" parameterType="com.tmount.db.user.vo.UsFavouriteShopInput" >
+    select 
+    a.user_id,a.shop_id,a.user_tag_id,a.create_time,b.shop_name,b.city_code,b.show_type,b.company_id,b.name_spr,b.shop_intro,b.option_x,b.option_y,b.scan_pic,b.big_pic,b.http_url,b.web_url,b.update_time,b.state,b.update_no,b.create_time,b.pic_space,b.shop_level,b.level_good,b.level_nomer,b.level_bad
+    from us_favourite_shop a,gd_shop_info b 
+    where a.shop_id =  b.shop_id
+      <if test="shopId != null" >
+      and a.shop_id = #{shopId,jdbcType=BIGINT}
+      </if>
+      <if test="userId != null" >
+      and a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="pageSize != null" >
+        LIMIT #{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+      </if>
+  </select>
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterType="com.tmount.db.user.dto.UsFavouriteShopKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from us_favourite_shop
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.user.dto.UsFavouriteShopKey" >
+    delete from us_favourite_shop
+    where shop_id = #{shopId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.user.dto.UsFavouriteShop" >
+    insert into us_favourite_shop (shop_id, user_id, user_tag_id, 
+      create_time)
+    values (#{shopId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userTagId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.user.dto.UsFavouriteShop" >
+    insert into us_favourite_shop
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userTagId != null" >
+        user_tag_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userTagId != null" >
+        #{userTagId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.user.dto.UsFavouriteShop" >
+    update us_favourite_shop
+    <set >
+      <if test="userTagId != null" >
+        user_tag_id = #{userTagId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where shop_id = #{shopId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.user.dto.UsFavouriteShop" >
+    update us_favourite_shop
+    set user_tag_id = #{userTagId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where shop_id = #{shopId,jdbcType=BIGINT}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+</mapper>

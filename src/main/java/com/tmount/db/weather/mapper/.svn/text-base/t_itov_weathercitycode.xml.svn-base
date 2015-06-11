@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.weather.dao.WeatherReportMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.weather.dto.TItovWeathercitycode" >
+    <id column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <id column="city_name" property="cityName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    city_code,city_name
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.weather.dto.TItovWeathercitycode">
+    insert into t_itov_weathercitycode (
+        city_code,city_name
+    values (
+        #{cityCode,jdbcType=VARCHAR},#{cityName,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.weather.dto.TItovWeathercitycode">
+    update t_itov_weathercitycode
+    <set>
+      <if test="cityCode != null">
+        city_code = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null">
+        city_name = #{cityName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where city_code = #{cityCode,jdbcType=VARCHAR},
+      and city_name = #{cityName,jdbcType=VARCHAR},
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.util.Map">
+    delete from t_itov_weathercitycode
+     where city_code = #{cityCode,jdbcType=VARCHAR}
+       and city_name = #{cityName,jdbcType=VARCHAR}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select 
+    <include refid="Base_Column_List" />
+      from t_itov_weathercitycode
+     where city_code = #{cityCode,jdbcType=VARCHAR}
+       and city_name = #{cityName,jdbcType=VARCHAR}
+  </select>
+  <select id="getWeatherCityCodeByCityName" resultMap="BaseResultMap" parameterType="com.tmount.db.weather.dto.TItovWeathercitycode">
+    select <include refid="Base_Column_List" />
+      from t_itov_weathercitycode where 1=1    
+      <if test="cityCode != null">
+       and city_code = #{cityCode,jdbcType=VARCHAR}
+      </if>
+      <if test="cityName != null">
+       and  city_name = #{cityName,jdbcType=VARCHAR}
+      </if>
+    </select>
+</mapper>

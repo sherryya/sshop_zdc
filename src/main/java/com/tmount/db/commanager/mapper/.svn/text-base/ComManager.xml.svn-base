@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.commanager.dao.ComManager">
+	<resultMap id="BaseResult" type="com.tmount.db.commanager.dto.User">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="username" property="username" jdbcType="VARCHAR" />
+		<id column="password" property="password" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BaseResult_ComanyCarInfo" type="com.tmount.db.commanager.dto.CompanyCarInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="carname" property="carname" jdbcType="VARCHAR" />
+		<id column="carnum" property="carnum" jdbcType="VARCHAR" />
+		<id column="DeviceUID" property="DeviceUID" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BaseResult_DriverInfoByCarId" type="com.tmount.db.commanager.dto.CompanyCarInfo">
+		<id column="name" property="name" jdbcType="VARCHAR" />
+		<id column="tel" property="tel" jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- 得到驾驶过本车的所有驾驶员信息（签到过的） -->
+    <resultMap id="BaseResult_DriverListInfoByCarId" type="com.tmount.db.commanager.dto.DriversListInfoByCarID">
+		<id column="ds_id" property="ds_id" jdbcType="VARCHAR" />
+		<id column="ds_drivers_id" property="ds_drivers_id" jdbcType="VARCHAR" />
+		<id column="ds_car_id" property="ds_car_id" jdbcType="VARCHAR" />
+		<id column="ds_type" property="ds_type" jdbcType="VARCHAR" />
+		<id column="ds_time" property="ds_time" jdbcType="VARCHAR" />
+		<id column="name" property="name" jdbcType="VARCHAR" />	
+		<id column="tel" property="tel" jdbcType="VARCHAR" />
+		<id column="sex" property="sex" jdbcType="VARCHAR" />	
+	</resultMap>
+	
+	
+	<select id="comManagerLogin" resultMap="BaseResult"
+		parameterType="com.tmount.db.commanager.dto.User" >
+	       select id,password,username from tbl_user where username = #{username,jdbcType=VARCHAR} 
+   </select>
+   	<select id="getComanyCarInfoAll" resultMap="BaseResult_ComanyCarInfo"
+		parameterType="com.tmount.db.commanager.dto.CompanyCarInfo" >
+	      select tc.id,tc.carname,tc.carnum,ttu.DeviceUID
+          from tbl_user tu inner join   tbl_qyinfo tq  on tu.pid=tq.id inner  join tbl_carinfo tc on tq.id=tc.qyid left join 
+          tbl_terminal_user ttu on ttu.carid=tc.id  where tu.id = #{user_id,jdbcType=VARCHAR} 
+    </select>
+    <select id="getComanyCarInfoNotNULL" resultMap="BaseResult_ComanyCarInfo"
+		parameterType="com.tmount.db.commanager.dto.CompanyCarInfo" >
+	      select tc.id,tc.carname,tc.carnum,ttu.DeviceUID
+          from tbl_user tu inner join   tbl_qyinfo tq  on tu.pid=tq.id inner  join tbl_carinfo tc on tq.id=tc.qyid left join 
+          tbl_terminal_user ttu on ttu.carid=tc.id  where tu.id = #{user_id,jdbcType=VARCHAR}  and ( ttu.DeviceUID is not null)
+    </select>
+    <select id="getComanyCarInfoNULL" resultMap="BaseResult_ComanyCarInfo"
+		parameterType="com.tmount.db.commanager.dto.CompanyCarInfo" >
+	      select tc.id,tc.carname,tc.carnum,ttu.DeviceUID
+          from tbl_user tu inner join   tbl_qyinfo tq  on tu.pid=tq.id inner  join tbl_carinfo tc on tq.id=tc.qyid left join 
+          tbl_terminal_user ttu on ttu.carid=tc.id  where tu.id = #{user_id,jdbcType=VARCHAR}  and ( ttu.DeviceUID is null or ttu.DeviceUID='')
+    </select>
+    
+    <select id="getDriverInfoByCarId" resultMap="BaseResult_DriverInfoByCarId"
+		parameterType="com.tmount.db.commanager.dto.CompanyCarInfo" >
+		select distinct td.name,td.tel from  t_itov_drivers_sign id inner join 
+		tbl_driverinfo td on id.ds_drivers_id=td.id   where id.ds_car_id = #{id,jdbcType=INTEGER}    order by id.ds_time desc   LIMIT  1
+    </select>
+    <!-- 得到驾驶过本车的所有驾驶员信息（签到过的） -->
+    <select id="getDriverListInfoByCarId" resultMap="BaseResult_DriverListInfoByCarId"
+		parameterType="com.tmount.db.commanager.dto.DriversListInfoByCarID" >
+        SELECT distinct ds_drivers_id,ds.ds_car_id,'1' as ds_type ,date_format(ds.ds_time,'%Y-%m-%d') as  ds_time,di.name,di.tel,di.sex FROM itov.t_itov_drivers_sign ds inner join tbl_driverinfo di on ds.ds_drivers_id=di.id    where ds_car_id=#{ds_car_id,jdbcType=VARCHAR}  order by ds_drivers_id asc ,ds_time asc;
+    </select>
+</mapper>
+

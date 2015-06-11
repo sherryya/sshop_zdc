@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.function.dao.AActionDictMapper">
+	<resultMap id="AActionMap" type="com.tmount.db.function.dto.AActionDict">
+		<id column="action_id" property="actionId" jdbcType="INTEGER" />
+		<result column="function_code" property="functionCode"
+			jdbcType="VARCHAR" />
+		<result column="function_name" property="functionName"
+			jdbcType="VARCHAR" />
+		<result column="request_mapping" property="requestMapping"
+			jdbcType="VARCHAR" />
+		<result column="request_desc" property="requestDesc" jdbcType="VARCHAR" />
+		<result column="note" property="note" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		action_id, function_code, request_mapping, request_desc,
+		note
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="AActionMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from a_action_dict
+		where action_id = #{actionId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		a_action_dict
+		where action_id = #{actionId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.tmount.db.function.dto.AActionDict">
+		insert into a_action_dict
+		(action_id, function_code, request_mapping,
+		request_desc, note)
+		values
+		(#{actionId,jdbcType=INTEGER}, #{functionCode,jdbcType=VARCHAR},
+		#{requestMapping,jdbcType=VARCHAR},
+		#{requestDesc,jdbcType=VARCHAR},
+		#{note,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.tmount.db.function.dto.AActionDict">
+		insert into a_action_dict
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="actionId != null">
+				action_id,
+			</if>
+			<if test="functionCode != null">
+				function_code,
+			</if>
+			<if test="requestMapping != null">
+				request_mapping,
+			</if>
+			<if test="requestDesc != null">
+				request_desc,
+			</if>
+			<if test="note != null">
+				note,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="actionId != null">
+				#{actionId,jdbcType=INTEGER},
+			</if>
+			<if test="functionCode != null">
+				#{functionCode,jdbcType=VARCHAR},
+			</if>
+			<if test="requestMapping != null">
+				#{requestMapping,jdbcType=VARCHAR},
+			</if>
+			<if test="requestDesc != null">
+				#{requestDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="note != null">
+				#{note,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.function.dto.AActionDict">
+		update a_action_dict
+		<set>
+			<if test="functionCode != null">
+				function_code = #{functionCode,jdbcType=VARCHAR},
+			</if>
+			<if test="requestMapping != null">
+				request_mapping = #{requestMapping,jdbcType=VARCHAR},
+			</if>
+			<if test="requestDesc != null">
+				request_desc = #{requestDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="note != null">
+				note = #{note,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where action_id = #{actionId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.tmount.db.function.dto.AActionDict">
+		update
+		a_action_dict
+		set function_code = #{functionCode,jdbcType=VARCHAR},
+		request_mapping = #{requestMapping,jdbcType=VARCHAR},
+		request_desc =
+		#{requestDesc,jdbcType=VARCHAR},
+		note = #{note,jdbcType=VARCHAR}
+		where
+		action_id = #{actionId,jdbcType=INTEGER}
+	</update>
+	<select id="selectActionDictListByFunctionCode" parameterType="java.lang.String"
+		resultMap="AActionMap">
+		SELECT action_id,request_desc,request_mapping,note FROM
+		a_action_dict
+		WHERE function_code = #{functionCode,jdbcType=VARCHAR}
+	</select>
+	<select id="selectActionDictListByActionId" parameterType="java.lang.Integer"
+		resultMap="AActionMap">
+		SELECT
+		action_id,
+		request_desc,
+		request_mapping,
+		a.function_code,
+		b.function_name,
+		note
+		FROM a_action_dict a,
+		a_function_dict b
+		WHERE a.function_code = b.function_code
+		AND action_id
+		= #{actionId,jdbcType=INTEGER}
+	</select>
+	<select id="selectActionFilterListByRoleCodeShow"
+		parameterType="java.lang.Integer" resultMap="AActionMap">
+		SELECT
+		a.action_id,b.function_code,c.function_name,b.request_desc,b.request_mapping,b.note
+		FROM a_action_filter a ,a_action_dict b,a_function_dict c
+		WHERE
+		a.action_id = b.action_id
+		AND b.function_code = c.function_code
+		AND
+		role_code =#{roleCode,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteAActionDictByFunctionCode" parameterType="java.lang.String">
+		delete from
+		a_action_dict
+		where
+		function_code=#{functionCode,jdbcType=VARCHAR}
+	</delete>
+	<select id="selectActiondictListByRoleCode" parameterType="java.util.List"
+		resultMap="AActionMap">
+		SELECT DISTINCT a.action_id,b.request_mapping,b.request_desc FROM
+		a_action_filter a ,a_action_dict b
+		WHERE a.action_id = b.action_id AND
+		role_code IN
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item.roleCode}
+		</foreach>
+	</select>
+</mapper>

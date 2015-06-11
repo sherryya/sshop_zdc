@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.sys.dao.SySearchWordMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.sys.dto.SySearchWord" >
+    <id column="search_id" property="searchId" jdbcType="INTEGER" />
+    <result column="search_name" property="searchName" jdbcType="VARCHAR" />
+    <result column="name_spr" property="nameSpr" jdbcType="VARCHAR" />
+    <result column="acount" property="acount" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    search_id, search_name, name_spr, acount
+  </sql>
+  <select id="selectMaxId" resultType="Integer">
+    select max(search_id)
+    from sy_search_word
+  </select>
+  <select id="selectItemList" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select 
+    <include refid="Base_Column_List" />
+    from sy_search_word
+    <where>
+        <if test="searchId != null">  
+            AND search_id = #{searchId,jdbcType=INTEGER}
+        </if> 
+        <if test="searchName != null">  
+            AND search_name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')  
+        </if> 
+        <if test="nameSpr != null">  
+            AND name_spr like CONCAT('%',#{nameSpr,jdbcType=VARCHAR},'%')  
+        </if>
+        <if test="acountMin != null">
+            AND acount &gt;= #{acountMin} 
+        </if>
+        <if test="acountMax != null">  
+            AND acount &lt;= #{acountMax} 
+        </if>
+    </where>  
+  </select>
+  <select id="selectItemListCount" resultType="int" parameterType="java.util.Map">
+    select 
+    count(1)
+    from sy_search_word
+    <where>
+        <if test="searchId != null">  
+            AND search_id = #{searchId,jdbcType=INTEGER}
+        </if> 
+        <if test="searchName != null">  
+            AND search_name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')  
+        </if> 
+        <if test="nameSpr != null">  
+            AND name_spr like CONCAT('%',#{nameSpr,jdbcType=VARCHAR},'%')  
+        </if>
+        <if test="acountMin != null">
+            AND acount &gt;= #{acountMin} 
+        </if>
+        <if test="acountMax != null">  
+            AND acount &lt;= #{acountMax} 
+        </if>
+    </where>  
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sy_search_word
+    order by acount
+    limit 0, 100
+  </select>
+  <select id="selectItemListByLimit" resultMap="BaseResultMap" parameterType="com.tmount.db.sys.vo.StatisTime">
+    select 
+    <include refid="Base_Column_List" />
+    from sy_search_word
+    order by search_id
+    <if test="startLimit != null" >
+        LIMIT #{startLimit,jdbcType=INTEGER},#{countLimit,jdbcType=INTEGER}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_search_word
+    where search_id = #{searchId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sy_search_word
+    where search_id = #{searchId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.sys.dto.SySearchWord" >
+    insert into sy_search_word (search_id, search_name, name_spr, 
+      acount)
+    values (#{searchId,jdbcType=INTEGER}, #{searchName,jdbcType=VARCHAR}, #{nameSpr,jdbcType=VARCHAR}, 
+      #{acount,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.sys.dto.SySearchWord" >
+    insert into sy_search_word
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="searchId != null" >
+        search_id,
+      </if>
+      <if test="searchName != null" >
+        search_name,
+      </if>
+      <if test="nameSpr != null" >
+        name_spr,
+      </if>
+      <if test="acount != null" >
+        acount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="searchId != null" >
+        #{searchId,jdbcType=INTEGER},
+      </if>
+      <if test="searchName != null" >
+        #{searchName,jdbcType=VARCHAR},
+      </if>
+      <if test="nameSpr != null" >
+        #{nameSpr,jdbcType=VARCHAR},
+      </if>
+      <if test="acount != null" >
+        #{acount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.sys.dto.SySearchWord" >
+    update sy_search_word
+    <set >
+      <if test="searchName != null" >
+        search_name = #{searchName,jdbcType=VARCHAR},
+      </if>
+      <if test="nameSpr != null" >
+        name_spr = #{nameSpr,jdbcType=VARCHAR},
+      </if>
+      <if test="acount != null" >
+        acount = #{acount,jdbcType=INTEGER},
+      </if>
+    </set>
+    where search_id = #{searchId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.sys.dto.SySearchWord" >
+    update sy_search_word
+    set search_name = #{searchName,jdbcType=VARCHAR},
+      name_spr = #{nameSpr,jdbcType=VARCHAR},
+      acount = #{acount,jdbcType=INTEGER}
+    where search_id = #{searchId,jdbcType=INTEGER}
+  </update>
+</mapper>

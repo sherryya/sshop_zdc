@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.GdItemsDeliverMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.GdItemsDeliver" >
+    <id column="items_id" property="itemsId" jdbcType="BIGINT" />
+    <result column="data_type" property="dataType" jdbcType="INTEGER" />
+    <result column="is_use_mode" property="isUseMode" jdbcType="CHAR" />
+    <result column="deliver_id" property="deliverId" jdbcType="BIGINT" />
+    <result column="post_fee" property="postFee" jdbcType="DOUBLE" />
+    <result column="fast_post_fee" property="fastPostFee" jdbcType="DOUBLE" />
+    <result column="ems_fee" property="emsFee" jdbcType="DOUBLE" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    items_id, data_type, is_use_mode, deliver_id, post_fee, fast_post_fee, ems_fee, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gd_items_deliver
+    where items_id = #{itemsId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from gd_items_deliver
+    where items_id = #{itemsId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.GdItemsDeliver" >
+    insert into gd_items_deliver (items_id, data_type, is_use_mode, 
+      deliver_id, post_fee, fast_post_fee, 
+      ems_fee, update_time)
+    values (#{itemsId,jdbcType=BIGINT}, #{dataType,jdbcType=INTEGER}, #{isUseMode,jdbcType=CHAR}, 
+      #{deliverId,jdbcType=BIGINT}, #{postFee,jdbcType=DOUBLE}, #{fastPostFee,jdbcType=DOUBLE}, 
+      #{emsFee,jdbcType=DOUBLE}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.GdItemsDeliver" >
+    insert into gd_items_deliver
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itemsId != null" >
+        items_id,
+      </if>
+      <if test="dataType != null" >
+        data_type,
+      </if>
+      <if test="isUseMode != null" >
+        is_use_mode,
+      </if>
+      <if test="deliverId != null" >
+        deliver_id,
+      </if>
+      <if test="postFee != null" >
+        post_fee,
+      </if>
+      <if test="fastPostFee != null" >
+        fast_post_fee,
+      </if>
+      <if test="emsFee != null" >
+        ems_fee,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itemsId != null" >
+        #{itemsId,jdbcType=BIGINT},
+      </if>
+      <if test="dataType != null" >
+        #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="isUseMode != null" >
+        #{isUseMode,jdbcType=CHAR},
+      </if>
+      <if test="deliverId != null" >
+        #{deliverId,jdbcType=BIGINT},
+      </if>
+      <if test="postFee != null" >
+        #{postFee,jdbcType=DOUBLE},
+      </if>
+      <if test="fastPostFee != null" >
+        #{fastPostFee,jdbcType=DOUBLE},
+      </if>
+      <if test="emsFee != null" >
+        #{emsFee,jdbcType=DOUBLE},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.GdItemsDeliver" >
+    update gd_items_deliver
+    <set >
+      <if test="dataType != null" >
+        data_type = #{dataType,jdbcType=INTEGER},
+      </if>
+      <if test="isUseMode != null" >
+        is_use_mode = #{isUseMode,jdbcType=CHAR},
+      </if>
+      <if test="deliverId != null" >
+        deliver_id = #{deliverId,jdbcType=BIGINT},
+      </if>
+      <if test="postFee != null" >
+        post_fee = #{postFee,jdbcType=DOUBLE},
+      </if>
+      <if test="fastPostFee != null" >
+        fast_post_fee = #{fastPostFee,jdbcType=DOUBLE},
+      </if>
+      <if test="emsFee != null" >
+        ems_fee = #{emsFee,jdbcType=DOUBLE},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where items_id = #{itemsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.GdItemsDeliver" >
+    update gd_items_deliver
+    set data_type = #{dataType,jdbcType=INTEGER},
+      is_use_mode = #{isUseMode,jdbcType=CHAR},
+      deliver_id = #{deliverId,jdbcType=BIGINT},
+      post_fee = #{postFee,jdbcType=DOUBLE},
+      fast_post_fee = #{fastPostFee,jdbcType=DOUBLE},
+      ems_fee = #{emsFee,jdbcType=DOUBLE},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where items_id = #{itemsId,jdbcType=BIGINT}
+  </update>
+</mapper>

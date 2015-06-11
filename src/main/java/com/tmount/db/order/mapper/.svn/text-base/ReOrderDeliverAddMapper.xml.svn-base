@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tmount.db.order.dao.ReOrderDeliverAddMapper">
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.ReOrderDeliverAdd">
+    <result column="order_no" jdbcType="BIGINT" property="orderNo" />
+    <result column="logistics_id" jdbcType="INTEGER" property="logisticsId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="state_type" jdbcType="INTEGER" property="stateType" />
+    <result column="state_code" jdbcType="INTEGER" property="stateCode" />
+    <result column="re_state_code" jdbcType="VARCHAR" property="reStateCode" />
+    <result column="re_state_desc" jdbcType="VARCHAR" property="reStateDesc" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="staff_id" jdbcType="BIGINT" property="staffId" />
+    <result column="send_command" jdbcType="INTEGER" property="sendCommand" />
+    <result column="send_online" jdbcType="CHAR" property="sendOnline" />
+  </resultMap>
+  
+  <resultMap id="ExtendResultMap" type="com.tmount.db.order.vo.LogisticInfo">
+    <result column="order_no" jdbcType="BIGINT" property="orderNo" />
+    <result column="state_type" jdbcType="INTEGER" property="stateType" />
+    <result column="state_code" jdbcType="INTEGER" property="stateCode" />
+    <result column="logistics_id" jdbcType="INTEGER" property="logisticsId" />
+    <result column="pay_way_id" jdbcType="INTEGER" property="orderStatus" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="client_id" jdbcType="VARCHAR" property="clientId" />
+    <result column="logistic_provider_id" jdbcType="VARCHAR" property="logisticProviderId" />
+    <result column="send_prov" jdbcType="VARCHAR" property="sendProv" />
+    <result column="send_city" jdbcType="VARCHAR" property="sendCity" />
+    <result column="send_area" jdbcType="VARCHAR" property="sendArea" />
+    <result column="send_user_name" jdbcType="VARCHAR" property="sendUserName" />
+    <result column="send_mobile" jdbcType="VARCHAR" property="sendMobile" />
+    <result column="send_contact_phone" jdbcType="VARCHAR" property="sendContactPhone" />
+    <result column="send_address" jdbcType="VARCHAR" property="sendAddress" />
+    <result column="send_post_code" jdbcType="VARCHAR" property="sendPostCode" />
+    <result column="receiv_prov" jdbcType="VARCHAR" property="receivProv" />
+    <result column="receiv_city" jdbcType="VARCHAR" property="receivCity" />
+    <result column="receiv_area" jdbcType="VARCHAR" property="receivArea" />
+    <result column="receiv_user_name" jdbcType="VARCHAR" property="receivUserName" />
+    <result column="receiv_mobile" jdbcType="VARCHAR" property="receivMobile" />
+    <result column="receiv_contact_phone" jdbcType="VARCHAR" property="receivContactPhone" />
+    <result column="receiv_address" jdbcType="VARCHAR" property="receivAddress" />
+    <result column="receiv_post_code" jdbcType="VARCHAR" property="receivPostCode" />
+    <result column="send_start_time" jdbcType="TIMESTAMP" property="sendStartTime" />
+    <result column="send_end_time" jdbcType="TIMESTAMP" property="sendEndTime" />
+    <result column="send_command" jdbcType="INTEGER" property="sendCommand" />
+    <result column="send_online" jdbcType="CHAR" property="sendOnline" />
+    <result column="logistics_no" jdbcType="VARCHAR" property="logisticsNo" />
+    <result column="tx_logistics_id" jdbcType="VARCHAR" property="txLogisticID" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  
+  <resultMap id="ResultHisMap" type="com.tmount.db.order.dto.ReOrderDeliverAddHis">
+    <result column="order_no" jdbcType="BIGINT" property="orderNo" />
+    <result column="logistics_id" jdbcType="INTEGER" property="logisticsId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="state_type" jdbcType="INTEGER" property="stateType" />
+    <result column="state_code" jdbcType="INTEGER" property="stateCode" />
+    <result column="re_state_code" jdbcType="VARCHAR" property="reStateCode" />
+    <result column="re_state_desc" jdbcType="VARCHAR" property="reStateDesc" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="staff_id" jdbcType="BIGINT" property="staffId" />
+    <result column="send_command" jdbcType="INTEGER" property="sendCommand" />
+    <result column="send_online" jdbcType="CHAR" property="sendOnline" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List">
+    order_no, logistics_id, shop_id, state_code, create_time, staff_id,state_type,re_state_code,re_state_desc,
+    send_command,send_online
+  </sql>
+  <sql id="Extend_Column_List">
+   a.shop_id,a.order_no,a.logistics_id,a.state_type,b.send_start_time,b.send_end_time,b.user_name as send_user_name,
+   b.mobile as send_mobile,b.contact_phone as send_contact_phone,b.address as send_address,
+   b.post_code as send_post_code,c.city_name as send_prov,d.city_name as send_city,j.city_name as send_area,
+   e.post_code as receiv_post_code,e.user_name as receiv_user_name,e.mobile as receiv_mobile,
+   e.contact_phone as receiv_contact_phone,e.address as receiv_address,f.city_name as receiv_prov,
+   g.city_name as receiv_city,k.city_name as receiv_area,h.client_id,h.logistic_provider_id,i.pay_way_id,
+   a.send_command,a.send_online,e.logistics_no,e.tx_logistics_id,a.state_code,l.shop_name,a.create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from re_order_deliver_add
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.order.dto.ReOrderDeliverAdd">
+    delete from re_order_deliver_add
+    where order_no = #{orderNo,jdbcType=BIGINT} and state_type=#{stateType,jdbcType=INTEGER}
+    <if test="sendCommand != null">
+        and send_command=#{sendCommand,jdbcType=INTEGER}
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.ReOrderDeliverAdd">
+    insert into re_order_deliver_add (order_no, logistics_id, shop_id, 
+      state_type, state_code, re_state_code, 
+      re_state_desc, create_time, staff_id,send_command,send_online
+      )
+    values (#{orderNo,jdbcType=BIGINT}, #{logisticsId,jdbcType=INTEGER}, #{shopId,jdbcType=BIGINT}, 
+      #{stateType,jdbcType=INTEGER}, #{stateCode,jdbcType=INTEGER}, #{reStateCode,jdbcType=VARCHAR}, 
+      #{reStateDesc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{staffId,jdbcType=BIGINT},
+      #{sendCommand,jdbcType=INTEGER}, #{sendOnline,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.ReOrderDeliverAdd">
+    insert into re_order_deliver_add
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="logisticsId != null">
+        logistics_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="stateType != null">
+        state_type,
+      </if>
+      <if test="stateCode != null">
+        state_code,
+      </if>
+      <if test="reStateCode != null">
+        re_state_code,
+      </if>
+      <if test="reStateDesc != null">
+        re_state_desc,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="staffId != null">
+        staff_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=BIGINT},
+      </if>
+      <if test="logisticsId != null">
+        #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="stateType != null">
+        #{stateType,jdbcType=INTEGER},
+      </if>
+      <if test="stateCode != null">
+        #{stateCode,jdbcType=INTEGER},
+      </if>
+      <if test="reStateCode != null">
+        #{reStateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reStateDesc != null">
+        #{reStateDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffId != null">
+        #{staffId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.ReOrderDeliverAdd">
+    update re_order_deliver_add
+    <set>
+      <if test="logisticsId != null">
+        logistics_id = #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
+      </if>
+      <if test="reStateCode != null">
+        re_state_code = #{reStateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="reStateDesc != null">
+        re_state_desc = #{reStateDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="stateCode != null">
+        state_code = #{stateCode,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffId != null">
+        staff_id = #{staffId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where order_no = #{orderNo,jdbcType=BIGINT} and state_type=#{stateType,jdbcType=INTEGER}
+    <if test="sendCommand != null">
+        and send_command=#{sendCommand,jdbcType=INTEGER}
+    </if>
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.ReOrderDeliverAdd">
+    update re_order_deliver_add
+    set logistics_id = #{logisticsId,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=BIGINT},
+      state_code = #{stateCode,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      staff_id = #{staffId,jdbcType=BIGINT}
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectSendOrderList" parameterType="com.tmount.db.sys.vo.StatisTime" resultMap="ExtendResultMap">
+    select 
+    <include refid="Extend_Column_List" />
+    from re_order_deliver_add a,gd_shop_logistics b,sy_city_dict c,sy_city_dict d,
+	re_order_deliver e,sy_city_dict f,sy_city_dict g,re_logistics_dic h,re_user_order i,
+	sy_city_dict j,sy_city_dict k,gd_shop_info l 
+	where a.shop_id=b.shop_id and a.shop_id=l.shop_id and b.province_code = c.city_code and b.city_code = d.city_code
+	and a.order_no = e.order_no and e.order_id=b.order_id and e.province_code = f.city_code and 
+	e.city_code = g.city_code and e.logistics_id=h.logistics_id and a.order_no=i.order_no 
+	and b.area_code=j.city_code and e.area_code=k.city_code
+	and a.state_code!=2 and a.state_code!=1 
+	and h.logistic_provider_id=#{logisticName,jdbcType=VARCHAR}
+	order by a.order_no
+	<if test="startLimit != null">
+    	LIMIT #{startLimit,jdbcType=INTEGER},#{countLimit,jdbcType=INTEGER}
+    </if>
+  </select>
+  
+  <select id="selectByTxLogisticID" parameterType="java.lang.String" resultMap="ResultHisMap">
+    select 
+    a.order_no,a.logistics_id,a.shop_id,a.state_code,a.create_time,a.staff_id,a.state_type,a.re_state_code,a.re_state_desc,
+    a.send_command,a.send_online
+    from re_order_deliver_add a,re_order_deliver b
+    where a.order_no = b.order_no and b.tx_logistics_id=#{txLogisticID,jdbcType=VARCHAR}
+    and a.state_type=0
+  </select>
+  
+  <select id="selectByStateType" parameterType="com.tmount.db.order.dto.ReOrderDeliverAdd" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from re_order_deliver_add
+    where order_no = #{orderNo,jdbcType=BIGINT}
+    and state_type=#{stateType,jdbcType=INTEGER}
+    <if test="sendCommand != null">
+        and send_command=#{sendCommand,jdbcType=INTEGER}
+    </if>
+  </select>
+  
+  <select id="selectDeliveryHis" parameterType="long" resultMap="BaseResultMap">
+    SELECT
+  order_no,
+  logistics_id,
+  shop_id,
+  state_code,
+  create_time,
+  staff_id,
+  state_type,
+  re_state_code,
+  re_state_desc,
+  send_command,
+  send_online
+FROM (SELECT
+        order_no,
+        logistics_id,
+        shop_id,
+        state_code,
+        create_time,
+        staff_id,
+        state_type,
+        re_state_code,
+        re_state_desc,
+        send_command,
+        send_online
+      FROM re_order_deliver_add
+      WHERE order_no = #{orderNo,jdbcType=BIGINT}
+       UNION ALL SELECT
+		            order_no,
+		            logistics_id,
+		            shop_id,
+		            state_code,
+		            create_time,
+		            staff_id,
+		            state_type,
+		            re_state_code,
+		            re_state_desc,
+		            send_command,
+		            send_online
+		          FROM re_order_deliver_add_his
+		          WHERE order_no = #{orderNo,jdbcType=BIGINT}) c
+ORDER BY c.create_time
+  </select>
+  
+</mapper>

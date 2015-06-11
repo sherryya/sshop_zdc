@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.role.dao.ARolefunctionRelMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.role.dto.ARolefunctionRel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="role_code" property="roleCode" jdbcType="INTEGER" />
+    <result column="function_code" property="functionCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, role_code, function_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from a_rolefunction_rel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from a_rolefunction_rel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.role.dto.ARolefunctionRel" >
+    insert into a_rolefunction_rel (id, role_code, function_code
+      )
+    values (#{id,jdbcType=INTEGER}, #{roleCode,jdbcType=INTEGER}, #{functionCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.role.dto.ARolefunctionRel" >
+    insert into a_rolefunction_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roleCode != null" >
+        role_code,
+      </if>
+      <if test="functionCode != null" >
+        function_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleCode != null" >
+        #{roleCode,jdbcType=INTEGER},
+      </if>
+      <if test="functionCode != null" >
+        #{functionCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.role.dto.ARolefunctionRel" >
+    update a_rolefunction_rel
+    <set >
+      <if test="roleCode != null" >
+        role_code = #{roleCode,jdbcType=INTEGER},
+      </if>
+      <if test="functionCode != null" >
+        function_code = #{functionCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.role.dto.ARolefunctionRel" >
+    update a_rolefunction_rel
+    set role_code = #{roleCode,jdbcType=INTEGER},
+      function_code = #{functionCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteARoleFunctionRelByFunctionCode" parameterType="java.lang.String">
+		delete from a_rolefunction_rel where function_code = #{functionCode,jdbcType=VARCHAR}
+  </delete>
+  <select id="selectARoleFunctionRelByRoleCode" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	select role_code,function_code 
+	from a_rolefunction_rel
+	where role_code = #{roleCode,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteARoleFunctionRelByRoleCode" parameterType="java.lang.Integer">
+	delete from a_rolefunction_rel where role_code = #{roleCode,jdbcType=INTEGER}
+  </delete>
+</mapper>

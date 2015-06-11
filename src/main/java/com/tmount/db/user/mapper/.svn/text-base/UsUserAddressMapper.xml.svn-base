@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.user.dao.UsUserAddressMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.user.dto.UsUserAddress" >
+    <id column="orders" property="orders" jdbcType="INTEGER" />
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="post_addr" property="postAddr" jdbcType="CHAR" />
+    <result column="province_code" property="provinceCode" jdbcType="INTEGER" />
+    <result column="city_code" property="cityCode" jdbcType="INTEGER" />
+    <result column="area_code" property="areaCode" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="CHAR" />
+    <result column="content_phone" property="contentPhone" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="arrival_time" property="arrivalTime" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="usUserAddressExplMap" type="com.tmount.db.user.vo.UsUserAddressExpl" extends="BaseResultMap">
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+    <result column="arrival_name" property="arrivalName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    orders, user_id, post_addr, province_code, city_code, area_code, address, post_code, content_phone, 
+    mobile, user_name, arrival_time, create_time, update_time
+  </sql>
+  <update id="updateUndefaultPostAddr" parameterType="java.lang.Long" >
+    update us_user_address
+       set post_addr = '0'
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <select id="selectBySelective" resultMap="usUserAddressExplMap" parameterType="com.tmount.db.user.dto.UsUserAddress" >
+    select 
+    a.orders, a.user_id, a.post_addr, a.province_code, a.city_code, a.area_code, a.address, a.post_code, a.content_phone, 
+    a.mobile, a.user_name, a.arrival_time, a.create_time, a.update_time, b.city_name as province_name, c.city_name, d.city_name as area_name, e.arrival_name
+    from us_user_address a, sy_city_dict b, sy_city_dict c, sy_city_dict d, re_arrival_time_dic e
+    where a.province_code = b.city_code
+      and a.city_code = c.city_code
+      and a.area_code = d.city_code
+      and a.arrival_time = e.arrival_time
+      <if test="userId != null" >
+          and a.user_id = #{userId,jdbcType=BIGINT}
+      </if>
+      <if test="updateTime != null" >
+          and a.update_time &gt; #{updateTime,jdbcType=BIGINT}
+      </if>
+    order by a.orders
+  </select>
+  <select id="selectMaxOrders" resultType="java.lang.Integer" parameterType="java.lang.Long" >
+    select max(orders)
+    from us_user_address
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.user.dto.UsUserAddressKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from us_user_address
+    where orders = #{orders,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.user.dto.UsUserAddressKey" >
+    delete from us_user_address
+    where orders = #{orders,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.user.dto.UsUserAddress" >
+    insert into us_user_address (orders, user_id, post_addr, 
+      province_code, city_code, area_code, address, 
+      post_code, content_phone, mobile, 
+      user_name, arrival_time, create_time, 
+      update_time)
+    values (#{orders,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, #{postAddr,jdbcType=CHAR}, 
+      #{provinceCode,jdbcType=INTEGER}, #{cityCode,jdbcType=INTEGER}, #{areaCode,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{postCode,jdbcType=CHAR}, #{contentPhone,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{arrivalTime,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.user.dto.UsUserAddress" >
+    insert into us_user_address
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orders != null" >
+        orders,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="postAddr != null" >
+        post_addr,
+      </if>
+      <if test="provinceCode != null" >
+        province_code,
+      </if>
+      <if test="cityCode != null" >
+        city_code,
+      </if>
+      <if test="areaCode != null" >
+        area_code,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="postCode != null" >
+        post_code,
+      </if>
+      <if test="contentPhone != null" >
+        content_phone,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="arrivalTime != null" >
+        arrival_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orders != null" >
+        #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="postAddr != null" >
+        #{postAddr,jdbcType=CHAR},
+      </if>
+      <if test="provinceCode != null" >
+        #{provinceCode,jdbcType=INTEGER},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        #{postCode,jdbcType=CHAR},
+      </if>
+      <if test="contentPhone != null" >
+        #{contentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="arrivalTime != null" >
+        #{arrivalTime,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.user.dto.UsUserAddress" >
+    update us_user_address
+    <set >
+      <if test="postAddr != null" >
+        post_addr = #{postAddr,jdbcType=CHAR},
+      </if>
+      <if test="provinceCode != null" >
+        province_code = #{provinceCode,jdbcType=INTEGER},
+      </if>
+      <if test="cityCode != null" >
+        city_code = #{cityCode,jdbcType=INTEGER},
+      </if>
+      <if test="areaCode != null" >
+        area_code = #{areaCode,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        post_code = #{postCode,jdbcType=CHAR},
+      </if>
+      <if test="contentPhone != null" >
+        content_phone = #{contentPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="arrivalTime != null" >
+        arrival_time = #{arrivalTime,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where orders = #{orders,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.user.dto.UsUserAddress" >
+    update us_user_address
+    set post_addr = #{postAddr,jdbcType=CHAR},
+      province_code = #{provinceCode,jdbcType=INTEGER},
+      city_code = #{cityCode,jdbcType=INTEGER},
+      area_code = #{areaCode,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      post_code = #{postCode,jdbcType=CHAR},
+      content_phone = #{contentPhone,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      arrival_time = #{arrivalTime,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where orders = #{orders,jdbcType=INTEGER}
+      and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+   <select id="selectOrdersByUserId"  resultType="java.lang.Integer" parameterType="java.lang.Long" >
+   select ifnull(max(orders),0)+1 as order_num 
+   from us_user_address
+   where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+</mapper>

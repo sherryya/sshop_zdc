@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.function.dao.AFunctionDictMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.function.dto.AFunctionDict" >
+    <id column="function_code" property="functionCode" jdbcType="VARCHAR" />
+    <result column="parent_function_code" property="parentFunctionCode" jdbcType="VARCHAR" />
+    <result column="sys_code" property="sysCode" jdbcType="CHAR" />
+    <result column="function_name" property="functionName" jdbcType="VARCHAR" />
+    <result column="page_path" property="pagePath" jdbcType="VARCHAR" />
+    <result column="rel" property="rel" jdbcType="VARCHAR" />
+    <result column="target" property="target" jdbcType="VARCHAR" />
+    <result column="create_staff_id" property="createStaffId" jdbcType="VARCHAR" />
+    <result column="op_date" property="opDate" jdbcType="TIMESTAMP" />
+    <result column="parent_function_name" property="parentFunctionName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    a.function_code, a.parent_function_code, a.sys_code, a.function_name, a.page_path, a.rel, a.target, 
+    a.create_staff_id, a.op_date,
+    (select function_name from a_function_dict where function_code = a.parent_function_code) parent_function_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from a_function_dict a
+    where a.function_code = #{functionCode,jdbcType=VARCHAR} 
+    order by a.function_code
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from a_function_dict
+    where function_code = #{functionCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.function.dto.AFunctionDict" >
+    insert into a_function_dict (function_code, parent_function_code, 
+      sys_code, function_name, page_path, 
+      rel, target, create_staff_id, 
+      op_date)
+    values (#{functionCode,jdbcType=VARCHAR}, #{parentFunctionCode,jdbcType=VARCHAR}, 
+      #{sysCode,jdbcType=CHAR}, #{functionName,jdbcType=VARCHAR}, #{pagePath,jdbcType=VARCHAR}, 
+      #{rel,jdbcType=VARCHAR}, #{target,jdbcType=VARCHAR}, #{createStaffId,jdbcType=VARCHAR}, 
+      #{opDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.function.dto.AFunctionDict" >
+    insert into a_function_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="functionCode != null" >
+        function_code,
+      </if>
+      <if test="parentFunctionCode != null" >
+        parent_function_code,
+      </if>
+      <if test="sysCode != null" >
+        sys_code,
+      </if>
+      <if test="functionName != null" >
+        function_name,
+      </if>
+      <if test="pagePath != null" >
+        page_path,
+      </if>
+      <if test="rel != null" >
+        rel,
+      </if>
+      <if test="target != null" >
+        target,
+      </if>
+      <if test="createStaffId != null" >
+        create_staff_id,
+      </if>
+      <if test="opDate != null" >
+        op_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="functionCode != null" >
+        #{functionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentFunctionCode != null" >
+        #{parentFunctionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sysCode != null" >
+        #{sysCode,jdbcType=CHAR},
+      </if>
+      <if test="functionName != null" >
+        #{functionName,jdbcType=VARCHAR},
+      </if>
+      <if test="pagePath != null" >
+        #{pagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="rel != null" >
+        #{rel,jdbcType=VARCHAR},
+      </if>
+      <if test="target != null" >
+        #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="createStaffId != null" >
+        #{createStaffId,jdbcType=VARCHAR},
+      </if>
+      <if test="opDate != null" >
+        #{opDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.function.dto.AFunctionDict" >
+    update a_function_dict
+    <set >
+      <if test="parentFunctionCode != null" >
+        parent_function_code = #{parentFunctionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sysCode != null" >
+        sys_code = #{sysCode,jdbcType=CHAR},
+      </if>
+      <if test="functionName != null" >
+        function_name = #{functionName,jdbcType=VARCHAR},
+      </if>
+      <if test="pagePath != null" >
+        page_path = #{pagePath,jdbcType=VARCHAR},
+      </if>
+      <if test="rel != null" >
+        rel = #{rel,jdbcType=VARCHAR},
+      </if>
+      <if test="target != null" >
+        target = #{target,jdbcType=VARCHAR},
+      </if>
+      <if test="createStaffId != null" >
+        create_staff_id = #{createStaffId,jdbcType=VARCHAR},
+      </if>
+      <if test="opDate != null" >
+        op_date = #{opDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where function_code = #{functionCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.function.dto.AFunctionDict" >
+    update a_function_dict
+    set parent_function_code = #{parentFunctionCode,jdbcType=VARCHAR},
+      sys_code = #{sysCode,jdbcType=CHAR},
+      function_name = #{functionName,jdbcType=VARCHAR},
+      page_path = #{pagePath,jdbcType=VARCHAR},
+      rel = #{rel,jdbcType=VARCHAR},
+      target = #{target,jdbcType=VARCHAR},
+      create_staff_id = #{createStaffId,jdbcType=VARCHAR},
+      op_date = #{opDate,jdbcType=TIMESTAMP}
+    where function_code = #{functionCode,jdbcType=VARCHAR}
+  </update>
+  <select id="queryFunctionForListByRoleCode" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT a.function_code ,b.parent_function_code,b.function_name,
+		(SELECT function_name FROM a_function_dict WHERE function_code = b.parent_function_code) parent_function_name
+		FROM a_rolefunction_rel a ,a_function_dict b
+		WHERE 
+		a.function_code = b.function_code AND 
+		role_code = #{roleCode,jdbcType=INTEGER}
+		ORDER BY b.function_code
+	</select>
+	<select id="queryChildFunction" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select a.function_code,a.parent_function_code,a.target,a.rel,
+		(select function_name from a_function_dict where function_code = a.parent_function_code) parent_function_name,
+		a.sys_code,a.function_name,a.page_path 
+		from a_function_dict a
+		where a.parent_function_code =  #{functionCode,jdbcType=VARCHAR}
+	</select>
+	<select id="selectParentFunctionCode" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT parent_function_code FROM a_function_dict WHERE function_code = #{functionCode,jdbcType=VARCHAR}
+	</select>
+	<select id="queryFunctionListForLogin" resultMap="BaseResultMap">
+		SELECT DISTINCT
+		  a.function_code,
+		  a.function_name,
+		  a.page_path,
+		  a.parent_function_code,
+		  a.sys_code,
+		  a.rel
+		FROM a_function_dict a,
+		  a_rolefunction_rel b
+		WHERE a.function_code = b.function_code
+		    AND b.role_code IN
+		    <foreach item="roleList" index="index" collection="list" open="(" separator="," close=")">
+				#{roleList.roleCode}
+			</foreach>
+		ORDER BY a.function_code
+	</select>
+	<select id="queryFunctionForList" resultMap="BaseResultMap">
+		select a.function_code,a.parent_function_code,a.target,a.rel,
+		(select function_name from a_function_dict where function_code = a.parent_function_code) parent_function_name,
+		a.sys_code,a.function_name,a.page_path 
+		from a_function_dict a 
+		order by a.function_code
+	</select>
+	<select id="queryFunctionForListByOpStaffId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		a.function_code,
+		a.parent_function_code,
+		a.target,a.rel,
+		(select function_name from a_function_dict where function_code = a.parent_function_code) parent_function_name,
+		a.sys_code,a.function_name,a.page_path 
+		from a_function_dict a 
+		where 
+		exists (select 1 
+		       from a_rolefunction_rel  b , a_loginrole_rel c 
+		       where a.function_code  = b.function_code 
+		      and b.role_code = c.role_code 
+		      and c.staff_id = #{staffId,jdbcType=INTEGER})
+		order by a.function_code
+	</select>
+</mapper>

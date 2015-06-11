@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.order.dao.BkBankChangeAcceptMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.order.dto.BkBankChangeAccept" >
+    <id column="bank_accept" property="bankAccept" jdbcType="BIGINT" />
+    <id column="org_id" property="orgId" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="change_type" property="changeType" jdbcType="INTEGER" />
+    <result column="change_fee" property="changeFee" jdbcType="DOUBLE" />
+    <result column="pay_id" property="payId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    bank_accept, org_id, price, pay_time, change_type, change_fee, pay_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.order.dto.BkBankChangeAcceptKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from bk_bank_change_accept
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.order.dto.BkBankChangeAcceptKey" >
+    delete from bk_bank_change_accept
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.order.dto.BkBankChangeAccept" >
+    insert into bk_bank_change_accept (bank_accept, org_id, price, 
+      pay_time, change_type, change_fee, 
+      pay_id)
+    values (#{bankAccept,jdbcType=BIGINT}, #{orgId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, 
+      #{payTime,jdbcType=TIMESTAMP}, #{changeType,jdbcType=INTEGER}, #{changeFee,jdbcType=DOUBLE}, 
+      #{payId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.order.dto.BkBankChangeAccept" >
+    insert into bk_bank_change_accept
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bankAccept != null" >
+        bank_accept,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="changeType != null" >
+        change_type,
+      </if>
+      <if test="changeFee != null" >
+        change_fee,
+      </if>
+      <if test="payId != null" >
+        pay_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bankAccept != null" >
+        #{bankAccept,jdbcType=BIGINT},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="changeType != null" >
+        #{changeType,jdbcType=INTEGER},
+      </if>
+      <if test="changeFee != null" >
+        #{changeFee,jdbcType=DOUBLE},
+      </if>
+      <if test="payId != null" >
+        #{payId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.order.dto.BkBankChangeAccept" >
+    update bk_bank_change_accept
+    <set >
+      <if test="price != null" >
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="changeType != null" >
+        change_type = #{changeType,jdbcType=INTEGER},
+      </if>
+      <if test="changeFee != null" >
+        change_fee = #{changeFee,jdbcType=DOUBLE},
+      </if>
+      <if test="payId != null" >
+        pay_id = #{payId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.order.dto.BkBankChangeAccept" >
+    update bk_bank_change_accept
+    set price = #{price,jdbcType=DOUBLE},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      change_type = #{changeType,jdbcType=INTEGER},
+      change_fee = #{changeFee,jdbcType=DOUBLE},
+      pay_id = #{payId,jdbcType=BIGINT}
+    where bank_accept = #{bankAccept,jdbcType=BIGINT}
+      and org_id = #{orgId,jdbcType=INTEGER}
+  </update>
+</mapper>

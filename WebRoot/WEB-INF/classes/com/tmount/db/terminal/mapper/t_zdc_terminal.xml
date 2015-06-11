@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.terminal.dao.TZdcTerminalMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.terminal.dto.TZdcTerminal" >
+    <id column="user_id" property="user_id" jdbcType="BIGINT" />
+    <result column="terminal_name" property="terminal_name" jdbcType="VARCHAR" />
+    <result column="terminal_imei" property="terminal_imei" jdbcType="VARCHAR" />
+    <result column="terminal_device_type" property="terminal_device_type" jdbcType="VARCHAR" />
+    <result column="terminal_status" property="terminal_status" jdbcType="INTEGER" />
+    <result column="terminal_binding_date" property="terminal_binding_date" jdbcType="DATE" />
+    <result column="terminal_producer" property="terminal_producer" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMap2" type="com.tmount.db.terminal.dto.TZdcTerminal" >
+    <id column="user_id" property="user_id" jdbcType="BIGINT" />
+    <result column="terminal_name" property="terminal_name" jdbcType="VARCHAR" />
+    <result column="terminal_imei" property="terminal_imei" jdbcType="VARCHAR" />
+    <result column="terminal_device_type" property="terminal_device_type" jdbcType="VARCHAR" />
+    <result column="terminal_binding_date" property="terminal_binding_date" jdbcType="DATE" />
+    <result column="account_name" property="phoneNo" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.tmount.db.terminal.dto.TZdcTerminal">
+    insert into t_itov_terminal (
+        terminal_name,terminal_imei,terminal_device_type,terminal_producer,terminal_out_storage)
+    values (
+        #{terminal_name,jdbcType=VARCHAR},#{terminal_imei,jdbcType=VARCHAR},
+        #{terminal_device_type,jdbcType=VARCHAR},#{terminal_producer,jdbcType=VARCHAR},
+		#{terminal_binding_date,jdbcType=DATE}
+    )
+  </insert>
+  
+    
+  <update id="updateTerminal" parameterType="com.tmount.db.terminal.dto.TZdcTerminal">
+  	update t_itov_terminal 
+	set     terminal_name=#{terminal_name,jdbcType=VARCHAR},	
+	  		terminal_imei=#{terminal_imei,jdbcType=VARCHAR},
+	  		terminal_device_type=#{terminal_device_type,jdbcType=VARCHAR},
+	  		terminal_producer=#{terminal_producer,jdbcType=VARCHAR}
+  	where   user_id=#{user_id,jdbcType=BIGINT}
+  </update>
+
+
+  <delete id="delTerminal" parameterType="java.lang.Integer">
+    delete from t_itov_terminal
+     where user_id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    
+    <!-- 查询所有设备信息-->
+  <select id="selectByWhere" resultMap="BaseResultMap" parameterType="com.tmount.db.terminal.dto.TZdcTerminal">
+	   SELECT t.user_id,t.`terminal_name`, t.`terminal_imei`,t.`terminal_device_type`,t.`terminal_status` ,t.`terminal_producer`,t.`terminal_binding_date` 
+	   FROM `t_itov_terminal` t where 1=1 
+	  <if test="terminal_name != null and terminal_name!='' ">
+        and t.terminal_name = #{terminal_name,jdbcType=VARCHAR}
+      </if>
+      <if test="terminal_imei != null and terminal_imei!='' ">
+       and  t.terminal_imei = #{terminal_imei,jdbcType=VARCHAR}
+      </if>
+       <if test="terminal_device_type != null and terminal_device_type!='' ">
+        and t.terminal_device_type = #{terminal_device_type,jdbcType=VARCHAR}
+      </if>
+      <if test="terminal_status_query != null and terminal_status_query!='' ">
+        and t.terminal_status= #{terminal_status_query,jdbcType=VARCHAR}
+      </if>
+      ORDER BY  t.`user_id` DESC LIMIT #{startLimit},#{pageSize}
+  </select> 
+   <!-- 查询所有设备信息   数量  -->
+  <select id="selectSizeByWhere" resultType="java.lang.Integer" parameterType="com.tmount.db.terminal.dto.TZdcTerminal">
+  	  SELECT count(t.user_id)
+	   FROM `t_itov_terminal` t where 1=1  
+	  <if test="terminal_name != null and terminal_name!='' ">
+        and t.terminal_name = #{terminal_name,jdbcType=VARCHAR}
+      </if>
+      <if test="terminal_imei != null and terminal_imei!='' ">
+       and  t.terminal_imei = #{terminal_imei,jdbcType=VARCHAR}
+      </if>
+       <if test="terminal_device_type != null and terminal_device_type!='' ">
+        and t.terminal_device_type = #{terminal_device_type,jdbcType=VARCHAR}
+      </if>
+      <if test="terminal_status_query != null and terminal_status_query!='' ">
+        and t.terminal_status = #{terminal_status_query,jdbcType=VARCHAR}
+      </if>
+  </select> 
+     <!-- 根据terminalId查询设备信息 -->
+  <select id="selectTerminalById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	  SELECT t.user_id,t.`terminal_name`, t.`terminal_imei`,t.`terminal_device_type`,t.`terminal_status` ,t.`terminal_producer`,t.`terminal_binding_date` 
+	   FROM `t_itov_terminal` t where 1=1  
+        and t.user_id = #{id,jdbcType=INTEGER}
+  </select> 
+  <!-- 查询次设备是否绑定 -->
+   <select id="selectCountByStatus" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+  	  select  count(t.user_id)
+	  from `t_itov_terminal` t where 1=1  
+	  and 	t.terminal_status=1 and t.user_id= #{id,jdbcType=INTEGER}
+  </select> 
+  
+  <!-- 查询绑定设备 -->
+    <select id="selectBindingByWhere" resultMap="BaseResultMap2" parameterType="com.tmount.db.terminal.dto.TZdcTerminal">
+		   SELECT t.user_id,t.`terminal_name`, t.`terminal_imei`,t.`terminal_device_type`,t.terminal_binding_date,acc.`account_name`
+	   		FROM `t_itov_terminal` t  INNER JOIN `t_itov_user` u ON t.`user_id`=u.`user_id` INNER JOIN `t_itov_account` acc ON u.`account_id`=acc.`account_id`
+	 		where 1=1 and t.terminal_status='1'
+
+      <if test="terminal_imei != null and terminal_imei!='' ">
+       and  t.terminal_imei = #{terminal_imei,jdbcType=VARCHAR}
+      </if>
+
+      <if test="phoneNo != null and phoneNo!='' ">
+        and acc.account_name= #{phoneNo,jdbcType=VARCHAR}
+      </if>
+      ORDER BY  t.`user_id` DESC LIMIT #{startLimit},#{pageSize}
+  </select> 
+  
+     <!-- 查询所有绑定设备 数量  -->
+  <select id="selectBindingSizeByWhere" resultType="java.lang.Integer" parameterType="com.tmount.db.terminal.dto.TZdcTerminal">
+		   SELECT count(t.user_id)
+	   		FROM `t_itov_terminal` t  INNER JOIN `t_itov_user` u ON t.`user_id`=u.`user_id` INNER JOIN `t_itov_account` acc ON u.`account_id`=acc.`account_id`
+	 		where 1=1  and t.terminal_status='1'
+
+      <if test="terminal_imei != null and terminal_imei!='' ">
+       and  t.terminal_imei = #{terminal_imei,jdbcType=VARCHAR}
+      </if>
+
+      <if test="phoneNo != null and phoneNo!='' ">
+        and acc.account_name= #{phoneNo,jdbcType=VARCHAR}
+      </if>
+  </select> 
+</mapper>

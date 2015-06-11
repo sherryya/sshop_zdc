@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.apnuser.dao.TBaiduMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.apnuser.dto.TBaidu" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="a" property="a" jdbcType="VARCHAR" />
+    <result column="b" property="b" jdbcType="VARCHAR" />
+    <result column="c" property="c" jdbcType="VARCHAR" />
+    <result column="d" property="d" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,a,b,c,d
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.apnuser.dto.TBaidu">
+    insert into t_baidu (
+        id,a,b,c,d)
+    values (
+        #{id,jdbcType=INTEGER},#{a,jdbcType=VARCHAR},#{b,jdbcType=VARCHAR},
+        #{c,jdbcType=VARCHAR},#{d,jdbcType=VARCHAR}
+    )
+  </insert>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select 
+    <include refid="Base_Column_List" />
+      from t_baidu
+     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="com.tmount.db.apnuser.dto.TBaidu">
+    select <include refid="Base_Column_List" /> from
+     t_baidu limit #{startLimit},#{num}
+    </select>
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.product.dao.SyResourceSizeDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.product.dto.SyResourceSizeDetail" >
+    <id column="orders" property="orders" jdbcType="INTEGER" />
+    <id column="pic_size_id" property="picSizeId" jdbcType="INTEGER" />
+    <result column="pic_size_type" property="picSizeType" jdbcType="VARCHAR" />
+    <result column="pic_width" property="picWidth" jdbcType="INTEGER" />
+    <result column="pic_height" property="picHeight" jdbcType="INTEGER" />
+    <result column="pic_dec" property="picDec" jdbcType="VARCHAR" />
+    <result column="pre_char" property="preChar" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    orders, pic_size_id, pic_size_type, pic_width, pic_height, pic_dec, pre_char
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tmount.db.product.dto.SyResourceSizeDetailKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_resource_size_detail
+    where orders = #{orders,jdbcType=INTEGER}
+      and pic_size_id = #{picSizeId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPicSizeId" resultMap="BaseResultMap" parameterType="int" >
+    select 
+    <include refid="Base_Column_List" />
+    from sy_resource_size_detail
+    where pic_size_id = #{picSizeId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sy_resource_size_detail
+    order by pic_size_id, orders, pic_width
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tmount.db.product.dto.SyResourceSizeDetailKey" >
+    delete from sy_resource_size_detail
+    where orders = #{orders,jdbcType=INTEGER}
+      and pic_size_id = #{picSizeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.tmount.db.product.dto.SyResourceSizeDetail" >
+    insert into sy_resource_size_detail (orders, pic_size_id, pic_size_type, 
+      pic_width, pic_height, pic_dec, 
+      pre_char)
+    values (#{orders,jdbcType=INTEGER}, #{picSizeId,jdbcType=INTEGER}, #{picSizeType,jdbcType=VARCHAR}, 
+      #{picWidth,jdbcType=INTEGER}, #{picHeight,jdbcType=INTEGER}, #{picDec,jdbcType=VARCHAR}, 
+      #{preChar,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tmount.db.product.dto.SyResourceSizeDetail" >
+    insert into sy_resource_size_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orders != null" >
+        orders,
+      </if>
+      <if test="picSizeId != null" >
+        pic_size_id,
+      </if>
+      <if test="picSizeType != null" >
+        pic_size_type,
+      </if>
+      <if test="picWidth != null" >
+        pic_width,
+      </if>
+      <if test="picHeight != null" >
+        pic_height,
+      </if>
+      <if test="picDec != null" >
+        pic_dec,
+      </if>
+      <if test="preChar != null" >
+        pre_char,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orders != null" >
+        #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="picSizeId != null" >
+        #{picSizeId,jdbcType=INTEGER},
+      </if>
+      <if test="picSizeType != null" >
+        #{picSizeType,jdbcType=VARCHAR},
+      </if>
+      <if test="picWidth != null" >
+        #{picWidth,jdbcType=INTEGER},
+      </if>
+      <if test="picHeight != null" >
+        #{picHeight,jdbcType=INTEGER},
+      </if>
+      <if test="picDec != null" >
+        #{picDec,jdbcType=VARCHAR},
+      </if>
+      <if test="preChar != null" >
+        #{preChar,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.product.dto.SyResourceSizeDetail" >
+    update sy_resource_size_detail
+    <set >
+      <if test="picSizeType != null" >
+        pic_size_type = #{picSizeType,jdbcType=VARCHAR},
+      </if>
+      <if test="picWidth != null" >
+        pic_width = #{picWidth,jdbcType=INTEGER},
+      </if>
+      <if test="picHeight != null" >
+        pic_height = #{picHeight,jdbcType=INTEGER},
+      </if>
+      <if test="picDec != null" >
+        pic_dec = #{picDec,jdbcType=VARCHAR},
+      </if>
+      <if test="preChar != null" >
+        pre_char = #{preChar,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where orders = #{orders,jdbcType=INTEGER}
+      and pic_size_id = #{picSizeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tmount.db.product.dto.SyResourceSizeDetail" >
+    update sy_resource_size_detail
+    set pic_size_type = #{picSizeType,jdbcType=VARCHAR},
+      pic_width = #{picWidth,jdbcType=INTEGER},
+      pic_height = #{picHeight,jdbcType=INTEGER},
+      pic_dec = #{picDec,jdbcType=VARCHAR},
+      pre_char = #{preChar,jdbcType=VARCHAR}
+    where orders = #{orders,jdbcType=INTEGER}
+      and pic_size_id = #{picSizeId,jdbcType=INTEGER}
+  </update>
+</mapper>

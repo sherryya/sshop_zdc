@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.zdc.dao.VideoInfoGainnerMapper">
+	<resultMap id="BaseResultMap" type="com.tmount.db.zdc.dto.VideoSub">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="type_category_t" property="type_category_t"
+			jdbcType="VARCHAR" />
+		<result column="type_classify_l" property="type_classify_l"
+			jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="url_file" property="url_file" jdbcType="VARCHAR" />
+		<result column="duration" property="duration" jdbcType="VARCHAR" />
+		<result column="point" property="point" jdbcType="VARCHAR" />
+		<result column="url_image" property="url_image" jdbcType="VARCHAR" />
+		<result column="time_add" property="time_add" jdbcType="VARCHAR" />
+		<result column="pageSize" property="pageSize" jdbcType="BIGINT" />
+		<result column="startLimit" property="startLimit" jdbcType="BIGINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,type_category_t,type_classify_l,title,url_file,duration,point,url_image,time_add
+	</sql>
+
+	<insert id="insertVideo" parameterType="com.tmount.db.zdc.dto.VideoSub">
+		insert into t_zdc_video
+		(type_category_t,type_classify_l,title,url_file,duration,point,url_image,time_add)
+		values (
+		#{type_category_t,jdbcType=VARCHAR},
+		#{type_classify_l,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR},
+		#{url_file,jdbcType=VARCHAR},
+		#{duration,jdbcType=VARCHAR},
+		#{point,jdbcType=VARCHAR},
+		#{url_image,jdbcType=VARCHAR},
+		#{time_add,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="selectVideoTypeLimited" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.zdc.dto.VideoSub">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_zdc_video
+		<if test="type_category_t != null">
+			where type_category_t =
+			#{type_category_t,jdbcType=VARCHAR}
+		</if>
+		<if test="type_classify_l != null">
+			where type_classify_l =
+			#{type_classify_l,jdbcType=VARCHAR}
+		</if>
+		ORDER BY id ASC LIMIT
+		#{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectVideoTitleLimited" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.zdc.dto.VideoSub">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_zdc_video
+		where title like
+		CONCAT('%',#{title,jdbcType=VARCHAR},'%')
+		ORDER BY id ASC LIMIT
+		#{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+
+
+	<select id="selectVideoAll" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.zdc.dto.VideoSub">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_zdc_video ORDER BY id ASC LIMIT
+		#{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectVideoLimited" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.zdc.dto.VideoSub">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_zdc_video
+		ORDER BY id ASC LIMIT
+		#{startLimit,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+
+	<!-- 增加查询条件title type_category_t type_classify_l -->
+
+	<select id="selectVideoSize" resultType="java.lang.Integer">
+		SELECT count(id) FROM
+		t_zdc_video
+	</select>
+
+	<select id="selectVideoID" resultMap="BaseResultMap"
+		parameterType="com.tmount.db.zdc.dto.VideoSub">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_zdc_video where id=#{id,jdbcType=BIGINT}
+	</select>
+
+</mapper>

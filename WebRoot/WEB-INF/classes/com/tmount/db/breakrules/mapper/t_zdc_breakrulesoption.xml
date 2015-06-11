@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.breakrules.dao.BreakRulesServiceMapper">
+
+	<resultMap id="BaseResultMap" type="com.tmount.db.breakrules.dto.TZdcBreakrules">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="hphm" property="hphm" jdbcType="VARCHAR" />
+		<result column="date" property="date" jdbcType="VARCHAR" />
+		<result column="area" property="area" jdbcType="VARCHAR" />
+		<result column="act" property="act" jdbcType="VARCHAR" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="fen" property="fen" jdbcType="VARCHAR" />
+		<result column="money" property="money" jdbcType="VARCHAR" />
+		<result column="handled" property="handled" jdbcType="VARCHAR" />
+		<result column="is_push" property="isPush" jdbcType="VARCHAR" />
+		<result column="is_lookup" property="isLookup" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="BaseResultLandMap"
+		type="com.tmount.db.breakrules.dto.TZdcBreakrulescitylist">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="province_code" property="provinceCode"
+			jdbcType="VARCHAR" />
+		<result column="city_name" property="cityName" jdbcType="VARCHAR" />
+		<result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+		<result column="engine" property="engine" jdbcType="INTEGER" />
+		<result column="engineno" property="engineno" jdbcType="INTEGER" />
+		<result column="classt" property="classt" jdbcType="INTEGER" />
+		<result column="classa" property="classa" jdbcType="INTEGER" />
+		<result column="classno" property="classno" jdbcType="INTEGER" />
+		<result column="regist" property="regist" jdbcType="INTEGER" />
+		<result column="registno" property="registno" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,province,city,hphm,date,area,act,code,fen,money,handled,is_push,is_lookup
+	</sql>
+	
+	<sql id="Base_Column_Lists">
+		id,province,province_code,city_name,city_code,engine,engineno,classt,classa,classno,regist,registno
+	</sql>
+	<!-- 修改指定ID的字段值 -->
+	<update id="update">
+		update t_zdc_breakrules set is_lookup=1 where id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<!-- 根据指定ID查询违章信息 -->
+	<select id="select" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_zdc_breakrules where id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!-- 查询省市地区相关信息 -->
+	<select id="selectbreakerLandInfo" resultMap="BaseResultLandMap">
+		select
+		<include refid="Base_Column_Lists" />
+		from t_zdc_breakrulescitylist
+	</select>
+
+
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tmount.db.zdjs.dao.TItovViewspotPictureMapper" >
+  <resultMap id="BaseResultMap" type="com.tmount.db.zdjs.dto.TItovViewspotPicture" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="lonlat_id" property="lonlatId" jdbcType="VARCHAR" />
+    <result column="pic_id" property="picId" jdbcType="VARCHAR" />
+    <result column="pic_path_name" property="picPathName" jdbcType="VARCHAR" />
+    <result column="pic_introduction" property="picIntroduction" jdbcType="VARCHAR" />
+    <result column="pic_note" property="picNote" jdbcType="VARCHAR" />
+    <result column="pic_name" property="picName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,lonlat_id,pic_id,pic_path_name,pic_introduction,pic_note,pic_name
+  </sql>
+  <insert id="insert" parameterType="com.tmount.db.zdjs.dto.TItovViewspotPicture">
+    insert into t_itov_viewspot_picture (
+        lonlat_id,pic_id,pic_path_name,pic_introduction,pic_note,pic_name)
+    values (
+       #{lonlatId,jdbcType=VARCHAR},#{picId,jdbcType=VARCHAR},
+        #{picPathName,jdbcType=VARCHAR},#{picIntroduction,jdbcType=VARCHAR},#{picNote,jdbcType=VARCHAR},
+        #{picName,jdbcType=VARCHAR}
+    )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tmount.db.zdjs.dto.TItovViewspotPicture">
+    update t_itov_viewspot_picture
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=BIGINT},
+      </if>
+      <if test="lonlatId != null">
+        lonlat_id = #{lonlatId,jdbcType=VARCHAR},
+      </if>
+      <if test="picId != null">
+        pic_id = #{picId,jdbcType=VARCHAR},
+      </if>
+      <if test="picPathName != null">
+        pic_path_name = #{picPathName,jdbcType=VARCHAR},
+      </if>
+      <if test="picIntroduction != null">
+        pic_introduction = #{picIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="picNote != null">
+        pic_note = #{picNote,jdbcType=VARCHAR},
+      </if>
+      <if test="picName != null">
+        pic_name = #{picName,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <delete id="deleteByLonlat_id" parameterType="com.tmount.db.zdjs.dto.TItovViewspotPicture">
+    delete from t_itov_viewspot_picture
+     where lonlat_id = #{lonlatId,jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="deleteByPic_id" parameterType="com.tmount.db.zdjs.dto.TItovViewspotPicture">
+    delete from t_itov_viewspot_picture
+     where pic_id = #{picId,jdbcType=VARCHAR}
+  </delete>
+    
+  <select id="selectBylonlat_id" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+      from t_itov_viewspot_picture
+      where lonlat_id = #{lonlatId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+      from t_itov_viewspot_picture
+    </select>
+</mapper>
